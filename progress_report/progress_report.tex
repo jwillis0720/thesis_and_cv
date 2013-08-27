@@ -8,7 +8,7 @@
 \usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
 								% TeX will automatically convert eps --> pdf in pdflatex		
 \usepackage{amssymb}
-
+\newcommand{\rhts}{\textsc{RosettaHTS}\ } 
 \title{Progress Report}
 \author{Sam DeLuca}
 %\date{}							% Activate to display a given date or no date
@@ -16,21 +16,21 @@
 \begin{document}
 \maketitle
 \section{Aim I: Develop protein-ligand docking guided by QSAR-derived pharmacorphore maps}
-Optimization of the RosettaHTS docking algorithm has continued, with the current version capable of frequently obtaining a \textless 2.0 \AA\ pose within 25 models during a self docking study.
+Optimization of the \rhts docking algorithm has continued, with the current version capable of frequently obtaining a \textless 2.0 \AA\ pose within 25 models during a self docking study.
 The current protocol initially uses coarse grained docking with a grid based encoding shape complimentarily and hydrogen bonding information.  
 Based on the initial prediction, fine grained docking using the Rosetta energy function is performed.  
 During fine grained docking, the backbone, side chains, and ligand are flexible. 
 The current docking protocol can process a single ligand in 15-30 minutes, depending on the size of the protein.
 
-\section{The Rosetta energy function has a limited ability to perform rank order prediction.}
+\subsection{The Rosetta energy function has a limited ability to perform rank order prediction.}
 The current implementation of the Rosetta energy function is limited in its ability to accurately predict binding affinity.
 While correct poses of a single ligand can frequently be distinguished using binding energy\citep{Davis:2009fx}, comparison of the energies of different ligands is generally poor\citep{Kaufmann:2009cq}.
 
-Optimization studies the RosettaHTS algorithm suggest that in many cases, normalization can be effective in improving the quality of rank order prediction for specific protein targets.  
+Optimization studies the \rhts algorithm suggest that in many cases, normalization can be effective in improving the quality of rank order prediction for specific protein targets.  
 However the optimal parameters of the normalization method were found to be substantially different for each protein target.  
 Given this, it is unlikely that a optimal scoring function will be obtained using a linear combination of weighted scoring terms. 
 
-\section{Integration of Chemical Information with RosettaHTS}
+\subsection{Integration of Chemical Information with \rhts}
 To address the problem described above, a machine learning approach was undertaken that allows the ligand binding pose to be directly combined with chemical information.
 A set of fingerprint descriptors describing the protein-ligand interface and protein binding site were developed based on Radial Distribution Functions (RDFs).  
 The RDF represents the probability distribution of atoms existing at varying distances from each other with the protein ligand interface and protein binding site.  
@@ -41,22 +41,46 @@ The Rosetta RDF fingerprints are computed using 100 bins, with the radius of eac
 The RDFs computed by Rosetta represent only the protein interface and protein pocket, but do not directly encode information about the ligand itself.  
 To accomplish this, a set of cheminformatics descriptors\citep{Mueller:2012gn} were computed. 
 These descriptors are a combination of scalar, 2D and 3D descriptors representing a range of chemical and geometric properties of the ligand. 
-The complete set of 6800 descriptor columns is used as the input of a neural network which is trained to predict -log(Ki). 
+The complete set of 6800 descriptor columns is used as the input of a neural network which is trained to predict $-log(K_{i})$. 
 
 While neural networks are frequently used to predict small molecule activity\citep{Hecht:2008gs, Mueller:2012gn, Gohlke:2002in}, these networks are typically trained to predict activity with respect to a single drug target or narrow class of targets.  
 By integrating information about the protein binding site and protein-ligand interface, we hope to be able to train the network to recognize general patterns associated with binding activity.  
 The ability to recognize these general patterns would result in a single model with predictive power over a wide range of protein targets and ligand chemical space.  
 This would improve the quality of perform vHTS screens and QSAR studies on targets for which protein structures exist, but few active and inactive compounds are known. 
 
-A neural network was trained using a set of 209 protein-ligand pairs from the Community Structure Activity Resource (CSAR).  
-The ligands in this training set have experimentally determined -log(Ki) between 2 and 11.  
+A neural network was trained using a set of 209 protein-ligand pairs from the Community Structure Activity Resource (CSAR)\citep{Smith:2011gb}.  
+The ligands in this training set have experimentally determined $-log(K_{i})$ between 2 and 11.  
 Each ligand was docked into the protein 100 times, and the top 10 binding poses by Rosetta interface energy were selected for training. 
-The initial neural network was trained using the full set of 6800 descriptors using a 72 fold cross validation with seperate independent and monitoring partitions.  
-Ligand poses from the independent partitions exhibited an $R^{2}$ correlation of 0.50 between the predicted and experimental -log(Ki). (figure)
+The initial neural network was trained using the full set of 6800 descriptors using a 72 fold cross validation with separate independent and monitoring partitions.  
+Ligand poses from the independent partitions exhibited an $R^{2}$ correlation of 0.50 between the predicted and experimental $-log(K_{i})$.
 
 While this correlation is not unreasonable, the possibility exists that the model is of limited general applicability.  
 To determine if the model is capable of making predictions outside the 209 systems in the training set, an additional 33 systems were selected from the Pdbbind database.  
-These systems were docked 100 times, and the top scoring pose by Rosetta binding energy was scored using the Rosetta energy 
+These systems were docked 100 times, and the top scoring pose by Rosetta binding energy was scored using the neural network.
+The resulting predicted $-log(K_{i})$ was plotted against the actual Ki.
+The resulting correlation had an $R^{2}$ of 0.47, similar to that of the independent cross validation partition, indicating that the network has some ability to generalize.
+This correlation is sufficient to accurate identify nano-molar binding compounds, though the classification ability of micro-molar and milli-molar compounds is more limited(figure).
+
+\subsection{Future Directions}
+The current neural network was trained on only a small subset of chemical and protein space, and includes only compounds with measurable binding affinities.  
+While the network does exhibit some ability to predict binding affinity across a range of targets, its ability is likely limited. 
+To assess the extent of these limitations, two large screening benchmark sets, Directory of Useful Decoys - Enhanced(DUD-E)\citep{Mysinger:2012hu} and DEKOIS 2.0\citep{Bauer:2013de} are being prepared for screening using \rhts.
+These libraries consist of a large set of known inhibitors for a wide range of protein targets, and a set of predicted inactive "decoys".  
+In both cases, the decoys are derived through property matching of a range of chemical property descriptors, and structure based filtering to remove structural analogs of known actives.   
+The advantage of this approach is that a large set of inactive compounds can easily be assembled.
+The disadvantage of decoy prediction approach is that active compounds can be inadvertently included in the dataset, skewing the measured performance of the metric.
+By testing \rhts using multiple benchmark sets compiled using different decoy generation methods, it will be more possible to determine if performance is being majorly impacted by pathologies in the decoy generation process. 
+
+To improve the quality of the neural network, the size of the training dataset is being increased.  
+In addition to the 209 compounds from the CSAR dataset,  approximately 8500 compounds were selected from ChEMBL\citep{Gaulton:va}.
+Compounds were selected to have known $-log(K_{i})$ values when docked into targets with crystal structures of \textless 2.0 \AA resolution and high quality binding sites that did not contain cofactors.
+Additionally, compounds were filtered to have atoms with assignable Rosetta atomtypes, assignable BCL atomtypes, and molecular weight of 150-500.
+While the compounds selected with known $-log(K_{i})$ values had a relatively wide range of binding affinity, it will be useful to have a set of compounds which are experimentally confirmed to be inactive.
+A set of 1800 additional compounds were selected from ChEMBL which were reported to have 0\% activity vs targets in the CSAR and ChEMBL active datasets.
+As these compounds were verified to have no binding activity, but typically do not have measured $-log(K_{i})$ values, the $-log(K_{i})$ value was set to 0.0. 
+The combined active and inactive compounds from the CSAR and ChEMBL datasets will be used to train a new neural network which will hopefully exhibit more accurate predictions across a wider range of chemical and protein conformational space. 
+
+\subsection{
 
 \bibliographystyle{ieeetr}
 \bibliography{bibliography}
