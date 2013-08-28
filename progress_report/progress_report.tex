@@ -61,7 +61,6 @@ The resulting predicted $-log(K_{i})$ was plotted against the actual Ki.
 The resulting correlation had an $R^{2}$ of 0.47, similar to that of the independent cross validation partition, indicating that the network has some ability to generalize.
 This correlation is sufficient to accurate identify nano-molar binding compounds, though the classification ability of micro-molar and milli-molar compounds is more limited(figure).
 
-\subsection{Future Directions}
 The current neural network was trained on only a small subset of chemical and protein space, and includes only compounds with measurable binding affinities.  
 While the network does exhibit some ability to predict binding affinity across a range of targets, its ability is likely limited. 
 To assess the extent of these limitations, two large screening benchmark sets, Directory of Useful Decoys - Enhanced(DUD-E)\citep{Mysinger:2012hu} and DEKOIS 2.0\citep{Bauer:2013de} are being prepared for screening using \rhts.
@@ -71,8 +70,9 @@ The advantage of this approach is that a large set of inactive compounds can eas
 The disadvantage of decoy prediction approach is that active compounds can be inadvertently included in the dataset, skewing the measured performance of the metric.
 By testing \rhts using multiple benchmark sets compiled using different decoy generation methods, it will be more possible to determine if performance is being majorly impacted by pathologies in the decoy generation process. 
 
+\subsection{Future Directions}
 To improve the quality of the neural network, the size of the training dataset is being increased.  
-In addition to the 209 compounds from the CSAR dataset,  approximately 8500 compounds were selected from ChEMBL\citep{Gaulton:va}.
+In addition to the 209 compounds from the CSAR dataset,  approximately 8500 compounds were selected from ChEMBL\citep{Gaulton:vaa}.
 Compounds were selected to have known $-log(K_{i})$ values when docked into targets with crystal structures of \textless 2.0 \AA resolution and high quality binding sites that did not contain cofactors.
 Additionally, compounds were filtered to have atoms with assignable Rosetta atomtypes, assignable BCL atomtypes, and molecular weight of 150-500.
 While the compounds selected with known $-log(K_{i})$ values had a relatively wide range of binding affinity, it will be useful to have a set of compounds which are experimentally confirmed to be inactive.
@@ -80,7 +80,17 @@ A set of 1800 additional compounds were selected from ChEMBL which were reported
 As these compounds were verified to have no binding activity, but typically do not have measured $-log(K_{i})$ values, the $-log(K_{i})$ value was set to 0.0. 
 The combined active and inactive compounds from the CSAR and ChEMBL datasets will be used to train a new neural network which will hopefully exhibit more accurate predictions across a wider range of chemical and protein conformational space. 
 
-\subsection{
+
+\subsection{Publication and Defense Plan}
+Following the completion of the benchmarking work described above, a paper describing the \rhts method will be published.
+This paper will describe the implementation of \rhts as well as the results of the DUD-E and DEKOIS benchmarks.
+The paper will be targeted for publication in PLoS Computational Biology or Journal of Medicinal Chemistry.
+
+The PhRMA foundation pre-doctoral fellowship which funds my current work expires at the end of the year.  
+As a result, I would like to defend my thesis describing \rhts in January. 
+Following the defense of my thesis, I will begin a 1 year post-doctoral position in the Meiler lab.
+The purpose of this position will be to continue to advance the development and application of Rosetta ligand docking technology.
+After this short post-doctoral position, I plan on pursuing an academic postdoc. 
 
 \bibliographystyle{ieeetr}
 \bibliography{bibliography}
