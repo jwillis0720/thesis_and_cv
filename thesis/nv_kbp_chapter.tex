@@ -34,15 +34,46 @@ The NV environment KBP encapsulates both desolvation energy and evolutionary bia
 The usefulness of an environment potential based on burial is contingent on an accurate measure of burial.
 Solvent Accessible Surface Area (SASA) is the most accurate means of calculating amino acid burial but is generally time-consuming to compute, limiting its usefulness in protein design.
 RosettaDesign currently uses a Neighbor Count method (NCR) for estimating solvent accessibility in the pair potential.
-While the NCR method correlates with residue burial, high inaccuracies are common in surface and partially exposed positions (Figure 1). 
+While the NCR method correlates with residue burial, high inaccuracies are common in surface and partially exposed positions (Figure \ref{fig:nv_ncr_comparison}). 
+
+\begin{figure}
+\centering
+\includegraphics[width=4in]{figures/nv_kbp/nv_ncr_comparison}
+\caption{
+Comparison of NV and NCR measures to rSASA.
+In both panels, a color map plots the difference between a surface approximation method and the normalized rSASA value.
+A residue for which the SASA approximation matches rSASA exactly would have a score of 0 and be colored white.
+Regions of the surface in red are categorized as more solvent exposed than by rSASA, while regions in blue are categorized as less solvent exposed than by rSASA.
+(A) protein 7DFR colored by the Neighbor Count approximation of surface accessibility as used in ROSETTA (NCR).
+(B) protein 7DFR colored using the Neighbor Vector approximation (NV).
+The NV measure has significantly smaller deviations from the rSASA standard with a mean of 0.14 compared to the mean deviation of 0.20 seen with the NCR measure.
+Additionally, the NV measure is more consistent, with a standard deviation of 0.11 compared to the standard deviation of 0.46 seen with the NCR metric.
+Panels A and B illustrate the improvement in consistency, as areas of score deviation in Panel B are smaller and generally less "patchy" in their appearance.
+}
+\label{fig:nv_ncr_comparison}
+\end{figure}
 
 To overcome the limitations of the NCR burial approximation, an NV approximation of residue burial was implemented.
-For a schematic representation of the NV algorithm, see Supplementary Figure 2.
+For a schematic representation of the NV algorithm, see Figure \ref{fig:nv_schematic}.
 The NV algorithm and KBP generated and described by Durham et al\citep{Durham:2009kt}.
 was used in our implementation.
 Proteins selected for deriving the KBP were monomeric, globular proteins, which do not engage in obligate, and therefore strong, protein-protein interactions.
 It is expected that some of these proteins will engage in transient interactions with other proteins, however, these interactions will be weaker.
 As a result, the noise added to the KBP by these interactions will be of low magnitude and uniform.
+
+\begin{figure}
+\centering
+\includegraphics[width=4in]{figures/nv_kbp/nv_schematic}
+\caption{
+(A) The left and right panels both have the same ROSETTA neighbor count \citep{Dantas:2003vt} but very different degrees of burial.
+The neighbor vector method is able to distinguish between these cases by calculating the vectors between the query residue and its neighbors.
+The length of the vector indicates the degree of burial, with shorter vectors representing more buried residues. 
+(B) The weighted NCR (WNCR) method gives a higher weight to neighbors near the query residue, smoothing the effect of small changes in composition on the measured degree of burial. 
+(C) The combination of the NV and WNCR methods results in a more accurate measure of residue distribution. 
+In all panels, dotted lines represent lower and upper bounds for counts, the X marks the query residue, and circles represent residues surrounding the query residue.
+}
+\label{fig:nv_schematic}
+\end{figure}
 
 The half sphere approximation method developed by Hamelryck in 2005 \citep{Hamelryck:2005kt} approximates surface accessibility by counting the number of residues in a half sphere below the side chain of each amino acid.
 The half sphere count is directly related to residue burial.
@@ -123,7 +154,7 @@ A residue was counted as recovered if it was mutated to another residue within t
 
 Percent sequence composition change per amino acid type was calculated as $\frac{d-n}{num\ designed}$ where $d$ is the count of designed residues of a given type, and $n$ is the count of native residues.
 To compute the change in overall sequence composition, a root mean square (RMS) deviation method was used.
-RMS percent sequence composition change was calculated as follows, where $statistical\ metric$ is one of the metrics described above (shown as black bars in figures 2 and 3):
+RMS percent sequence composition change was calculated as follows, where $statistical\ metric$ is one of the metrics described above (shown as black bars in figures \ref{fig:overall_crossval_changes} and \ref{fig:overall_independent_changes}):
 
 \begin{equation}
 RMS=\sqrt{\frac{1}{20}\sum^{20}_{i=1..20}(statistical\ metric)^{2}}
@@ -144,10 +175,23 @@ The percent PSSM recovery and percent sequence recovery calculated for the 100 p
 The results of PSSM recovery and sequence recovery analysis show that the optimized NV environment KBP energy function exhibits a 5.2\% improvement in percent PSSM recovery compared to the standard energy function and that 3.6\% of this improvement was a result of reference energy optimization.
 The NV environment KBP energy function showed a 1.6\% improvement in percent sequence recovery compared to the standard RosettaDesigne energy function and a 2.4\% improvement if only reference energies are optimized.  
 
-The percent change in composition between native and designed sequences for the 100 proteins used in the five-fold cross-validation is shown in Figure 2A.
+The percent change in composition between native and designed sequences for the 100 proteins used in the five-fold cross-validation is shown in Figure \ref{fig:overall_crossval_changes}A.
 Proteins designed with the NV environment KBP energy function show a decrease in the average magnitude of sequence composition biases introduced during design compared to proteins designed with the standard energy function.
 Proteins designed with the standard energy function exhibit an RMS percent change in sequence composition of 2.0\%, while proteins designed with the NV environment KBP show an RMS percent change in sequence composition of 1.0\%.
-Figure 2B shows that RMS per residue PSSM recovery increased from 3.8\% with the standard energy function to 4.2\% with the NV environment KBP, and 3C shows that RMS per residue sequence recovery remained relatively constant between the standard energy function and NV environment KBP. 
+Figure \ref{fig:overall_crossval_changes}B shows that RMS per residue PSSM recovery increased from 3.8\% with the standard energy function to 4.2\% with the NV environment KBP, and \ref{fig:overall_crossval_changes}C shows that RMS per residue sequence recovery remained relatively constant between the standard energy function and NV environment KBP. 
+
+\begin{figure}
+\centering
+\includegraphics[width=4in]{figures/nv_kbp/overall_crossval_changes}
+\caption{
+A) shows the percent change in overall sequence composition between native and designed proteins for all 100 structures in the five-way cross-validation set.
+The black bars show the RMS percent composition change.
+B) shows the percent PSSM recovery for all 100 structures in the five-way cross-validation set.  The black bars show RMS percent PSSM recovery.
+C) percent sequence recovery for all 100 structures in the five-way cross-validation set.  The black bars show RMS percent sequence recovery.	
+}
+\label{fig:overall_crossval_changes}
+\end{figure}
+
 
 The energy functions produced with the five-way validation were averaged to produce a single energy function, the reference energies of this averaged function were optimized, and the benchmarking analysis used above was repeated using the averaged energy function.
 In this case, the independent benchmark set of 42 proteins was used.
@@ -155,13 +199,25 @@ Table 2 shows the percent PSSM recovery and percent sequence recovery calculated
 The NV environment KBP showed an 8.8\% improvement in PSSM recovery compared to the standard energy function and that 3.8\% of this improvement was a result of the reference energy optimization.
 The NV environment KBP showed a 3.2\% overall improvement in sequence recovery of which 1.9\% was due to the reference energy optimization. 
 
-When sequence recovery is broken down by group (Figure 5), a large improvement (decrease) in the percentage of unrecovered buried charged residues is observed, from 8.78\% to 1.96\% unrecovered residues function in the 100 protein benchmark set.
+When sequence recovery is broken down by group (Figure \ref{fig:recovery_by_group} ), a large improvement (decrease) in the percentage of unrecovered buried charged residues is observed, from 8.78\% to 1.96\% unrecovered residues function in the 100 protein benchmark set.
 Additionally, a decrease from 8.77\% to 3.46\% unrecovered non-polar residues on the surface is observed.
-Additionally, Figure 5 reveals a fundamental difference in the two datasets.
+Additionally, Figure \ref{fig:recovery_by_group} reveals a fundamental difference in the two datasets.
 The lower recovery values seen in all categories in the 42-protein benchmark set suggest that it is a much more challenging target for design than the 100-protein benchmark set used in optimization.
 The proteins of the 42-protein benchmark set are substantially larger (average length of 207 residues) than those in the 100-protein benchmark set (average length of 120 residues).
 Each additional residue drastically increases the number of possible sequences to consider, decreasing the probability of a high quality design.
 Despite this more challenging independent benchmark, improvement was still observed. 
+
+\begin{figure}
+\centering
+\includegraphics[width=4in]{figures/nv_kbp/recovery_by_group}
+\caption{
+Percentage of unrecovered residues (number of recovered residues divided by total number of residues in the benchmark set) by amino acid category in the 100 and 42 protein benchmark sets.
+The color scale ranges from white (small number of mistakes) to red (large number of mistakes).
+In this metric, residues were grouped into the categories polar (Ser, Thr, Asn, Gln), non-polar (Ala, Val, Leu, Met, Ile), aromatic (Phe, Tyr, Trp), charged (Lys, Arg, His, Asp, Glu), and other (Cys, Pro, Gly).
+A residue was counted as recovered if it was mutated to another residue within the same group.
+}
+\label{fig:recovery_by_group}
+\end{figure}
 
 \section{Discussion}
 
@@ -176,7 +232,7 @@ Due to the lack of an explicit water model in RosettaDesign, the standard Rosett
 As a result, there are few constraints on amino acid mutations on the protein surface.
 Due to this lack of constraints, proteins designed with the standard energy function exhibit large biases in sequence composition on the protein surface.
 Proteins designed with the standard energy function show large numbers of aromatic residues on the protein surface.
-Specifically, there is a 3.1\% increase in phenylalanines, a 1.9\% increase in tryptophans, and a 2.5\% increase in tyrosines on the protein surface in the benchmark set designed with the standard ROSETTADESIGN energy function compared to the native structure.
+Specifically, there is a 3.1\% increase in phenylalanines, a 1.9\% increase in tryptophans, and a 2.5\% increase in tyrosines on the protein surface in the benchmark set designed with the standard RosettaDesign energy function compared to the native structure.
 Proteins designed with the NV environment KBP show a large reduction in these biases.
 Proteins designed with the NV environment KBP showed a 1.4\% increase in phenylalanines, 0.8\% increase in tryptophans, and 1.5\% increase in tyrosines compared to native proteins.
 While still large, these biases are much smaller than the biases observed with the standard energy function. 
@@ -224,16 +280,30 @@ The proteins in the 42 protein benchmark set are larger than those in the 100 pr
 
 Despite the difference inherent to different design targets, these values are similar to those obtained in the literature.
 Schneider et al. designed a set of proteins of size between 89-223 amino acids based on high resolution crystal structures.
-They observed surface sequence recovery rates of 22\%+/- 11\%, and buried recovery rates of 56\%+/- 13.7\% when designing with ROSETTADESIGN \citep{Schneider:2009ig}.
+They observed surface sequence recovery rates of 22\%+/- 11\%, and buried recovery rates of 56\%+/- 13.7\% when designing with RosettaDesign \citep{Schneider:2009ig}.
 These values are similar to those seen in Tables 1 and 2.
 Additionally, Sharabi et al. reported overall sequence recovery values of between 40\% and 70\% depending on the weights of the scoring function used during their design \citep{Sharabi:2011ev}.
 These numbers are within the range of the sequence recovery values obtained during the experiments described in this manuscript.
 
 In addition to improvements in PSSM and sequence recovery, the degree of sequence bias seen in the buried and boundary regions of designs made using the NV environment KBP decreased.
-When all residues in the benchmark set are considered, proteins designed with the NV environment KBP have an RMS percent composition change of 2.8\% compared to the native protein, while proteins designed with the standard energy function have an RMS percent composition change of 2.9\% (Figure 3A).
+When all residues in the benchmark set are considered, proteins designed with the NV environment KBP have an RMS percent composition change of 2.8\% compared to the native protein, while proteins designed with the standard energy function have an RMS percent composition change of 2.9\% (Figure \ref{fig:overall_independent_changes}A).
 When this overall value is broken down by region, the buried region designed with the NV environment KBP shows an increase in RMS percent composition change compared to the standard energy function from 4.2\% to 4.5\%, the boundary region shows a decrease from 3.4\% to 2.7\%, and the surface region shows a reduction from 2.9\% to 2.4\%.
-While the improvements in sequence composition bias are minimal, Figure 3B shows an increase in RMS per residue PSSM recovery from 3.8\% with the standard energy function to 4.2\% with the NV environment KBP.
-Additionally, Figure 3C shows an increase in RMS per residue sequence recovery from 2.4\% with the standard energy function to 2.6\% with the NV environment KBP energy function, which is expected given the optimization of the scoring function towards PSSM improvement. 
+While the improvements in sequence composition bias are minimal, Figure \ref{fig:overall_independent_changes}B shows an increase in RMS per residue PSSM recovery from 3.8\% with the standard energy function to 4.2\% with the NV environment KBP.
+Additionally, Figure \ref{fig:overall_independent_changes}C shows an increase in RMS per residue sequence recovery from 2.4\% with the standard energy function to 2.6\% with the NV environment KBP energy function, which is expected given the optimization of the scoring function towards PSSM improvement. 
+
+\begin{figure}
+\centering
+\includegraphics[width=4in]{figures/nv_kbp/overall_independent_changes}
+\caption{
+A) shows the percent change in overall sequence composition between native and designed proteins for all 42 structures in the independent benchmark set.
+The black bars show the RMS percent composition change. 
+B) shows the percent PSSM recovery for all 42 structures in the independent benchmark set.
+The black bars show RMS percent PSSM recovery.  
+C) percent sequence recovery for all 42 structures in the independent benchmark set.
+The black bars show RMS percent sequence recovery.
+}
+\label{fig:overall_independent_changes}
+\end{figure}
  
 An investigation of the optimized weights lends some insight into the cause of the improvements in sequence design.
 Supplementary Table 1 and 2 show the scoring function and reference energy weights of the standard energy function and the optimized NV environment KBP.
@@ -245,7 +315,18 @@ However, because the energy function is applied evenly, regardless of degree of 
 As the burial level increases, the number of inter-residue interactions will also increase, which explains the decrease in improvement in sequence bias seen at more highly buried regions of the protein.
 This idea is supported by the decrease in free energy solvation potential weight observed in the NV environment KBP energy function.
 The NV environment KBP provides additional information about protein surface composition, reducing the dominance of the free energy solvation potential.
-Figure 4 shows the effect of the NV environment KBP on the overall scoring function.
+
+\begin{figure}
+\centering
+\includegraphics[width=4in]{figures/nv_kbp/term_contribution}
+\caption{
+The contribution of individual scoring terms towards the overall score of buried and surface residues.
+The introduction of the NV environment KBP reduces the reliance on solvation free energy and the attractive/repulsive forces at both levels of exposure. 
+}
+\label{fig:term_contribution}
+\end{figure}
+
+Figure \ref{fig:term_contribution} shows the effect of the NV environment KBP on the overall scoring function.
 All proteins used in the 100 protein benchmark set were scored using both the standard RosettaDesign energy function and the optimized NV environment KBP energy function. 
 The average magnitude of each scoring term for each buried and surface residue was calculated, and converted to percentage of the total energy for each residue to measure the influence of each scoring term.
 We observe that the addition of the NV environment KBP term decreases the influence of the reference energies, solvation free energy term, and the attractive and repulsive terms throughout all degrees of burial.

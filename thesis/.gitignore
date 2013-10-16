@@ -5,5 +5,7 @@
 *.log
 *.nlo
 *.out
-*.pdf
+thesis.pdf
+*.blg
+*.bbl
 *.synctex.gz
