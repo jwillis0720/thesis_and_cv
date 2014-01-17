@@ -204,9 +204,18 @@ C) percent sequence recovery for all 100 structures in the five-way cross-valida
 
 The energy functions produced with the five-way validation were averaged to produce a single energy function, the reference energies of this averaged function were optimized, and the benchmarking analysis used above was repeated using the averaged energy function.
 In this case, the independent benchmark set of 42 proteins was used.
-Table 2 shows the percent PSSM recovery and percent sequence recovery calculated for the 42 proteins designed using the averaged energy function.
+Table \ref{table:burial_42} shows the percent PSSM recovery and percent sequence recovery calculated for the 42 proteins designed using the averaged energy function.
 The NV environment KBP showed an 8.8\% improvement in PSSM recovery compared to the standard energy function and that 3.8\% of this improvement was a result of the reference energy optimization.
 The NV environment KBP showed a 3.2\% overall improvement in sequence recovery of which 1.9\% was due to the reference energy optimization. 
+
+\begin{table}
+\scriptsize
+\renewcommand{\tabcolsep}{0.09cm}
+\centering
+\input{tables/nv_kbp/percent_pssm_by_burial_42.tex}
+\caption{Percent PSSM recovery and percent sequence recovery by degree of burial for 42 proteins used in benchmarking. "Standard" refers to the standard energy function, "Reference" refers to the modified standard energy function in which the reference energies were reoptimized, and ?NV environment KBP? refers to the optimized energy function incorporating the NV environment energy term.}
+\label{table:burial_42}
+\end{table}
 
 When sequence recovery is broken down by group (Figure \ref{fig:recovery_by_group} ), a large improvement (decrease) in the percentage of unrecovered buried charged residues is observed, from 8.78\% to 1.96\% unrecovered residues function in the 100 protein benchmark set.
 Additionally, a decrease from 8.77\% to 3.46\% unrecovered non-polar residues on the surface is observed.
