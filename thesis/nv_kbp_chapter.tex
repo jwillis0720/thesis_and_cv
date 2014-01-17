@@ -171,9 +171,18 @@ Finally, we expect that a well-optimized energy function will exhibit smaller bi
 
 \section{results}
 
-The percent PSSM recovery and percent sequence recovery calculated for the 100 proteins used in the five-way cross validation are shown in Table 1.
+The percent PSSM recovery and percent sequence recovery calculated for the 100 proteins used in the five-way cross validation are shown in Table \ref{table:burial_100}.
 The results of PSSM recovery and sequence recovery analysis show that the optimized NV environment KBP energy function exhibits a 5.2\% improvement in percent PSSM recovery compared to the standard energy function and that 3.6\% of this improvement was a result of reference energy optimization.
 The NV environment KBP energy function showed a 1.6\% improvement in percent sequence recovery compared to the standard RosettaDesigne energy function and a 2.4\% improvement if only reference energies are optimized.  
+
+\begin{table}
+\scriptsize
+\renewcommand{\tabcolsep}{0.09cm}
+\centering
+\input{tables/nv_kbp/percent_pssm_by_burial_100.tex}
+\caption{Percent PSSM recovery and percent sequence recovery by degree of burial for 100 proteins used in optimization. "Standard" refers to the standard energy function, "Reference" refers to the modified standard energy function in which the reference energies were reoptimized, and ?NV environment KBP? refers to the optimized energy function incorporating the NV environment energy term.}
+\label{table:burial_100}
+\end{table}
 
 The percent change in composition between native and designed sequences for the 100 proteins used in the five-fold cross-validation is shown in Figure \ref{fig:overall_crossval_changes}A.
 Proteins designed with the NV environment KBP energy function show a decrease in the average magnitude of sequence composition biases introduced during design compared to proteins designed with the standard energy function.
