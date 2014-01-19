@@ -119,10 +119,19 @@ In statistics generated from the benchmarking phase of the optimization process,
 An iterative particle swarm approach \citep{Chen:2007ua} was used to optimize the weights.
 The RosettaDesign standard energy function was used as an initial point for optimization, and the weight of the NV environment KBP was arbitrarily given an initial weight of 1.0.
 Twenty rounds of particle swarm optimization were performed for each component of the five-way cross validation described above.
-The weights were optimized to maximize the PSSM score of proteins designed using the energy function (Supplemental Table 1).
+The weights were optimized to maximize the PSSM score of proteins designed using the energy function (Table \ref{table:energy_weights}).
 The PSSM for each protein was generated from a PSI-PRED BLAST query of the protein structure sequence using an e threshold of 0.001 and 3 iterations.
 The non-redundant (NR) sequence database was used.
 The average sequence identity between the query sequence and all other sequences in the generated PSSMs was 30\% for both benchmark sets.
+
+\begin{table}
+\scriptsize
+\renewcommand{\tabcolsep}{0.09cm}
+\centering
+\input{tables/nv_kbp/energy_function_weights.tex}
+\caption{A tablle showing the individual weights included in the optimization, and their values in each of the five cross validation sets.  The mean and standard deviation of each free weight is also shown. }
+\label{table:energy_weights}
+\end{table}
 
 Because the standard deviation of the averaged reference averaged reference energies was relatively high, the reference energies of the averaged energy function are optimized to reduce the overall sequence composition biases introduced during design (Supplemental Table 2).
 
@@ -134,6 +143,8 @@ While both NV environment KBP and the solvation free energy potential describe o
 It is a measure at amino acid resolution and will be independent of side chain conformation.
 In contrast, the solvation free energy potential is at atomic resolution incorporating a specific model of solvation.
 While the solvation free energy potential does an inadequate job of accounting for biases against aggregation on the protein surface, it is highly accurate in avoiding burial of polar atoms, and is important to determine side chain conformation.
+
+
 
 The optimization experiments described above produce 5 individual energy functions, each generated from one section of the five-way cross validation.
 To produce a single optimized scoring function for general use, the weights from the 5 optimized energy functions are averaged together, and the reference energies of the averaged energy function are optimized using the set of 100 proteins used in the initial  cross validation.
@@ -324,7 +335,7 @@ The black bars show RMS percent sequence recovery.
 \end{figure}
  
 An investigation of the optimized weights lends some insight into the cause of the improvements in sequence design.
-Supplementary Table 1 and 2 show the scoring function and reference energy weights of the standard energy function and the optimized NV environment KBP.
+ Table \ref{table:energy_weights} and 2 show the scoring function and reference energy weights of the standard energy function and the optimized NV environment KBP.
 When the NV environment KBP term is added to the energy function, the weight of the free energy solvation potential decreases from 0.65 in the standard energy function to 0.56 in the NV environment KBP. 
 The NV environment KBP term has a value of 1.01.
 As discussed earlier, in the standard energy function, the reference energies and solvation free energy potential are the dominant forces on surface residues due to the lack of explicit inter-residue interactions.
