@@ -232,7 +232,8 @@ The NV environment KBP showed a 3.2\% overall improvement in sequence recovery o
 \renewcommand{\tabcolsep}{0.09cm}
 \centering
 \input{tables/nv_kbp/percent_pssm_by_burial_42.tex}
-\caption{Percent PSSM recovery and percent sequence recovery by degree of burial for 42 proteins used in benchmarking. "Standard" refers to the standard energy function, "Reference" refers to the modified standard energy function in which the reference energies were reoptimized, and ?NV environment KBP? refers to the optimized energy function incorporating the NV environment energy term.}
+\caption{Percent PSSM recovery and percent sequence recovery by degree of burial for 42 proteins used in benchmarking. 
+"Standard" refers to the standard energy function, "Reference" refers to the modified standard energy function in which the reference energies were reoptimized, and "NV environment KBP" refers to the optimized energy function incorporating the NV environment energy term.}
 \label{table:burial_42}
 \end{table}
 
@@ -276,11 +277,11 @@ While still large, these biases are much smaller than the biases observed with t
 
 It was expected that improvements in the quality of surface sequence design would be the primary benefit of the NV environment KBP.
 However, an analysis of the overall PSSM recovery, sequence recovery, and sequence composition biases suggest that the improvement given by the NV environment KBP implementation occurred across the board rather than merely at the protein surface.
-Table 2 shows the overall impact of the NV environment KBP at various levels of burial.
+Table \ref{table:burial_42} shows the overall impact of the NV environment KBP at various levels of burial.
 The percent PSSM recovery improved using the NV environment KBP by 8.0\% in the buried region, 9.6\% in the boundary region, and 8.5\% on the surface region compared to the standard energy function.
 The percent sequence recovery improved by 2.0\% in the buried region, 3.2\% in the boundary region, and 4.6\% in the surface region compared to the standard energy function.
  
- When percent sequence recovery is broken down by group (Table 4), a large increase in the recovery of buried charged residues is observed, with a 6.2\% increase compared to the standard energy function. 
+ When percent sequence recovery is broken down by group (Figure \ref{fig:recovery_by_group}), a large increase in the recovery of buried charged residues is observed, with a 6.2\% increase compared to the standard energy function. 
  Additionally, a 3.8\% increase in recovery of non-polar residues is observed on the surface.
  Not all groups show improvement, and this is expected, as the scoring function was not directly optimized for percent sequence recovery.
  
@@ -289,7 +290,7 @@ To assess the statistical significance of the data, standard deviations were cal
 The standard deviations were calculated for both percent PSSM recovery and percent sequence recovery.
 Each of the five scoring functions generated during the five-way cross validation weight optimization using 100 proteins was used to design the independent set of 42 proteins.
 The standard deviations of PSSM and sequence recovery are listed in supplementary tables \ref{table:100_protein_stdev} and \ref{table:42_protein_stdev}.
-The standard deviations calculated in supplementary tables 3 and 4 range from 0.1-1.2\%. 
+The standard deviations range from 0.1-1.2\%. 
 The average error is 0.4\% and therefore smaller that the improvements in recovery rates observed. 
 
 \begin{table}
@@ -315,7 +316,7 @@ In the case of sequence recovery, the maximum possible sequence recovery can be 
 In this case, the average percentage of time that the native residue is seen in the PSSM is used as an estimate for expected sequence recovery.
 For the 100 protein benchmark set, the average was 34\%, with a standard deviation of 12\%, while in the 42 protein benchmark set, the average was 34\% with a standard deviation of 7\%.
 While the achievable sequence recovery is somewhat higher due to correlation between individual positions, these values suggest that obtaining sequence recovery rates of 40-50\% would approach the maximum.
-Tables 1 and 2 show that for the 100 protein benchmark set, total overall sequence recovery is 45.7\% with the standard energy function and 47.0\% with the NV environment KBP.
+Tables \ref{table:burial_100} and \ref{table:burial_42} show that for the 100 protein benchmark set, total overall sequence recovery is 45.7\% with the standard energy function and 47.0\% with the NV environment KBP.
 For the 42 protein benchmark set, total overall sequence recovery is 35.7\% with the standard energy function and 38.9\% with the NV environment KBP.
 This explains the relatively small increases in sequence recovery, as current recovery values are approaching the practical maximum.
 For that reason we introduce the PSSM recovery value.
@@ -328,7 +329,7 @@ The observed increase to 77.2\% with the NV environment KBP represents a substan
 Generally, improvements in sequence recovery rates have been moderate when altering the energy function \citep{Kortemme:2003td}, as the major contributors to the overall energy are already fine-tuned and remain unaltered. 
 
 Comparison of PSSM and sequence recovery results between the 42 protein benchmark set and the 100 protein set illustrates that the performance of the RosettaDesign algorithm varies based on the characteristics of the protein being designed.
-For example, Table 1 and 2 show the overall sequence recovery for proteins designed with the standard energy function.
+For example, Table \ref{table:burial_100} and \ref{table:burial_42} show the overall sequence recovery for proteins designed with the standard energy function.
 The overall recovery for the 42 protein benchmark set was 35.7\%, while the overall recovery for the 100 protein benchmark set was 45.7\%.
 This substantial difference is likely a result of the different criteria used to select the proteins in each set.
 The proteins in the 42 protein benchmark set are larger than those in the 100 protein set, and will therefore have a larger total surface area and thus be more challenging targets for design.
@@ -336,7 +337,7 @@ The proteins in the 42 protein benchmark set are larger than those in the 100 pr
 Despite the difference inherent to different design targets, these values are similar to those obtained in the literature.
 Schneider et al. designed a set of proteins of size between 89-223 amino acids based on high resolution crystal structures.
 They observed surface sequence recovery rates of 22\%+/- 11\%, and buried recovery rates of 56\%+/- 13.7\% when designing with RosettaDesign \citep{Schneider:2009ig}.
-These values are similar to those seen in Tables 1 and 2.
+These values are similar to those seen in Tables \ref{table:burial_100} and \ref{table:burial_42}.
 Additionally, Sharabi et al. reported overall sequence recovery values of between 40\% and 70\% depending on the weights of the scoring function used during their design \citep{Sharabi:2011ev}.
 These numbers are within the range of the sequence recovery values obtained during the experiments described in this manuscript.
 
