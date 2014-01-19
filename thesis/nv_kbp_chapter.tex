@@ -199,7 +199,7 @@ The NV environment KBP energy function showed a 1.6\% improvement in percent seq
 \renewcommand{\tabcolsep}{0.09cm}
 \centering
 \input{tables/nv_kbp/percent_pssm_by_burial_100.tex}
-\caption{Percent PSSM recovery and percent sequence recovery by degree of burial for 100 proteins used in optimization. "Standard" refers to the standard energy function, "Reference" refers to the modified standard energy function in which the reference energies were reoptimized, and ?NV environment KBP? refers to the optimized energy function incorporating the NV environment energy term.}
+\caption{Percent PSSM recovery and percent sequence recovery by degree of burial for 100 proteins used in optimization. "Standard" refers to the standard energy function, "Reference" refers to the modified standard energy function in which the reference energies were re-optimized, and "NV environment KBP" refers to the optimized energy function incorporating the NV environment energy term.}
 \label{table:burial_100}
 \end{table}
 
@@ -285,12 +285,21 @@ The percent sequence recovery improved by 2.0\% in the buried region, 3.2\% in t
  Not all groups show improvement, and this is expected, as the scoring function was not directly optimized for percent sequence recovery.
  
 While the overall percent changes are relatively small, these changes are both statistically and scientifically significant.
-To assess the statistical significance of the data, standard deviations were calculated in supplementary tables 3 and 4.
+To assess the statistical significance of the data, standard deviations were calculated in tables \ref{table:100_protein_stdev} and 4.
 The standard deviations were calculated for both percent PSSM recovery and percent sequence recovery.
 Each of the five scoring functions generated during the five-way cross validation weight optimization using 100 proteins was used to design the independent set of 42 proteins.
-The standard deviations of PSSM and sequence recovery are listed in supplementary tables 3 and 4.
+The standard deviations of PSSM and sequence recovery are listed in supplementary tables \ref{table:100_protein_stdev} and 4.
 The standard deviations calculated in supplementary tables 3 and 4 range from 0.1-1.2\%. 
 The average error is 0.4\% and therefore smaller that the improvements in recovery rates observed. 
+
+\begin{table}
+\scriptsize
+\renewcommand{\tabcolsep}{0.09cm}
+\centering
+\input{tables/nv_kbp/100_protein_stdev.tex}
+\caption{Standard deviations for 100 protein benchmark set data. shown in table \ref{table:burial_100}}
+\label{table:100_protein_stdev}
+\end{table}
 
 It is important to consider not only the absolute change in percent recovery, but also the change relative to the maximum possible recovery value.
 In the case of sequence recovery, the maximum possible sequence recovery can be estimated by analyzing the amino acids tolerated in each position in BLAST derived PSSMs.
