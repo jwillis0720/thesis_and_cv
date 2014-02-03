@@ -95,7 +95,7 @@ Additionally, the scoring manager is responsible for handling the weighting of t
 For this study, the tensor has dimensions of 15 \AA$^{3}$ width, and a 0.25 \AA\ spacing between grid points. 
 
 \subsection{Sampling architecture}\subsubsection{Description of grid MCM}An MCM algorithm is used to compute the initial binding pose for the ligand.
-Figure 1 shows a flow chart of the overall steps in the sampling process.
+Figure \ref{fig:docking_flowchart} shows a flow chart of the overall steps in the sampling process.
 At each step in the sampling process the ligand is either randomly perturbed in the binding site, or the conformation of the ligand is changed.
 Ligand perturbation is performed as a combination of a random translation and rotation, and the conformation of the ligand is perturbed by selecting a random conformation from a library of pre-computed conformers.
 After the perturbation, the ligand is scored using the scoring grids described above, and, the Metropolis criterion is applied to either accept or reject the new pose.
@@ -104,8 +104,9 @@ During sampling, only the scoring grids are used to provide scoring information,
 By only using scoring grid information, it is possible to perform 500 cycles of sampling in roughly 1-3 seconds.
 
 \begin{figure}
+%figure 1 in orginal paper
 \centering
-\includegraphics[width=4in]{figures/nv_kbp/nv_ncr_comparison}
+\includegraphics[width=4in]{figures/lowres/protocol_flowchart.pdf}
 \caption{
 A general schematic of the docking protocols described in this paper.
 Because the initial placement and refinement steps are independent, the two initial placement algorithms can be combined to produce a total of four ligand docking algorithms.  
@@ -114,7 +115,7 @@ Because the initial placement and refinement steps are independent, the two init
 \end{figure}
 
 \subsection{Docking Protocol}\subsubsection{Introduction to the docking process}
-The overall docking protocol is illustrated in the schematic flowchart in Figure 1.
+The overall docking protocol is illustrated in the schematic flowchart in Figure \ref{fig:docking_flowchart}.
 The study compares different configurations of both the initial placement step and the refinement step, described below.
 Complete RosettaScripts XML files for each experiment can be found in the supplementary information.
 As a baseline we use the \textsc{TransRot} initial placement algorithm, where translation and rotation moves are performed separately using the binary scoring grids described by Davis et al.\citep{Davis:2009bf} and summarized in the introduction.
@@ -158,30 +159,68 @@ In the case of the crystal and repacked structures, only a single protein struct
 Each experiment is a combination of one set of input protein structures above (crystal, repacked, or relaxed) and one docking protocol.
 Four docking protocols were selected to investigate the behaviors of each component of the docking algorithms.
 A docking protocol consists of an initial placement algorithm (\textsc{TransRot} or \textsc{Transform}), and a refinement algorithm (MCM or MIN).
-Figure 1 is a schematic describing the overall docking process. 
+Figure \ref{fig:docking_flowchart} is a schematic describing the overall docking process. 
 
 \subsection{Summary of results}\subsubsection{New method decreases amount of time to make one model}
-Figure 2 shows the change in the average time necessary to generate a single model with each of the four tested algorithms.
+Figure \ref{fig:time_per_model} shows the change in the average time necessary to generate a single model with each of the four tested algorithms.
 The average time needed to generate a model using the previously published \textsc{TransRot}/MCM protocol is 49.4 seconds per model.
 Changing the Refinement protocol from MCM to MIN reduces the time per model to 33.3 seconds, and changing both the refinement protocol to MIN and the initial placement model from \textsc{TransRot} to \textsc{Transform} further reduces the time per model to 9.3 seconds.
 From this timing data we can conclude that that the majority of computational time spent by the previously published \textsc{TransRot}/MCM algorithm is split roughly evenly between the initial placement stage and the refinement stage.
 A combination of the new \textsc{Transform} initial placement algorithm and MIN refinement is capable of consistently generating models approximately 5-10 times faster than the previously published docking algorithm.
+
+\begin{figure}
+%figure 2 in orginal paper
+\centering
+\includegraphics[width=4in]{figures/lowres/time_per_model.pdf}
+\caption{
+The average time and standard deviation to produce a single model for each docking algorithm and type of input pose.
+\textsc{TransRot}/MCM is the algorithm previously published by Davis et al\citep{Davis:2009bf}. 
+}
+\label{fig:time_per_model}
+\end{figure}
+
 \subsubsection{Use of the MIN refinement algorithm improves consistency in run time compared to MCM refinement.} 
 Further timing consistency is seen when the MIN refinement stage is used in place of MCM refinement.
 Each round of repacking in MCM refinement requires that the interactions between atoms in the binding site be recomputed.
 As the computational complexity of this operation increases with the square of the number of atoms in the protein-ligand interface, the docking of ligands into larger binding pockets takes substantially larger when using MCM refinement compared to the docking of ligands into smaller binding pockets, which contributes in the observed changes in timing consistency.
 
 \subsubsection{The \textsc{Transform} algorithm improves docking success rate}
-Figure 4 and Figure 5 plot the fraction of protein-ligand systems for which the lowest scoring pose is < 2.0 \AA\ RMSD as a function of CPU time and number of models generated, respectively.
+Figure \ref{fig:fraction_successful_time} and Figure \ref{fig:fraction_successful_time} plot the fraction of protein-ligand systems for which the lowest scoring pose is < 2.0 \AA\ RMSD as a function of CPU time and number of models generated, respectively.
 These figures indicate that the choice of initial placement algorithm is far more important than choice of low resolution scoring method or refinement method.
 Docking protocols which make use of the \textsc{Transform} initial placement algorithm can reliably dock an additional 10-15\% of models within roughly 15 minutes of CPU time, or 150 models, compared to protocols which use the previously published \textsc{TransRot} initial placement algorithm.
-The choice of refinement algorithm appears to play little role in the overall performance of the docking protocol, except in the case of the previously published algorithm (\textsc{TransRot}/MCM), in which case docking performance begins to approach the \textsc{Transform} based protocols after roughly 800-1000 models have been generated (Figure 5).
+The choice of refinement algorithm appears to play little role in the overall performance of the docking protocol, except in the case of the previously published algorithm (\textsc{TransRot}/MCM), in which case docking performance begins to approach the \textsc{Transform} based protocols after roughly 800-1000 models have been generated (Figure \ref{fig:fraction_successful_time}).
 This observed behavior is consistent with previously published studies of RosettaLigand performance using this protocol\citep{Davis:2009fx,Combs:2013bl,Lemmon:2012ku}. 
 
+\begin{figure}
+%figure 4 in orginal paper
+\centering
+\includegraphics[width=4in]{figures/lowres/fraction_successful_time.pdf}
+\caption{
+The fraction of protein systems in which the lowest scoring model has an RMSD < 2.0 \AA\ to the native structure as a function of CPU time using the 3 evaluated RosettaLigand docking algorithms when docked into A) Crystal structures, B) Repacked crystal structures, and C) Relaxed crystal structures.
+A large pool of models were generated, and random subsamples were taken corresponding to time points at 5 minute intervals.
+The number of structures included in each time point was based on the average time to generate a model for each algorithm.
+20 random samples were taken for each time point, and the means are plotted, with the error bars representing the standard deviation.
+Docking protocols which make use of the \textsc{Transform}  algorithm are reliably converged after approximately 15 minutes (dotted line).
+}
+\label{fig:fraction_successful_time}
+\end{figure}
+
+\begin{figure}
+%figure 5 in orginal paper
+\centering
+\includegraphics[width=4in]{figures/lowres/fraction_successful_count.pdf}
+\caption{
+The fraction of protein systems in which the lowest scoring model has an RMSD < 2.0 \AA\ to the native structure as function of the total number of structures generated using the 3 evaluated RosettaLigand docking algorithms when docked into A) Crystal structures, B) Repacked crystal structures, and C) Relaxed crystal structures.
+A large pool of models were generated, and random subsamples were taken.  20 random samples were taken for each point, and the means are plotted, with the error bars representing the standard deviation.
+Docking protocols which make use of the \textsc{Transform} algorithm are reliably converged after approximately 150 models (dotted line).
+}
+\label{fig:fraction_successful_time}
+\end{figure}
+
 \subsubsection{The new algorithm is still tolerant of backbone and side-chain perturbations}
-It is clear from Figure 4 and Figure 5 that despite using a pre-computed scoring grid during initial placement, RosettaLigand with the new initial placement algorithm is still tolerant of changes to the side-chain and backbone conformations of the protein binding site. In all tested protocols, the success rate of RosettaLigand decreases as the uncertainty associated with the protein side-chain and backbone atoms increases.
-In other words, after 1000 models have been generated docking ligands into crystal structures (Figure 5A), The \textsc{TransRot}/MCM protocol has successfully docked 76\% of models, while the \textsc{Transform}/MCM protocol has successfully docked 94\%.
-When ligands are docked into relaxed models in which both backbone and side-chain atoms are perturbed (Figure 5C), The \textsc{TransRot}/MCM protocol has successfully docked 58\% of models, while the \textsc{Transform}/MCM protocol has successfully docked 84\%.
+It is clear from Figure \ref{fig:fraction_successful_time} and Figure \ref{fig:fraction_successful_time} that despite using a pre-computed scoring grid during initial placement, RosettaLigand with the new initial placement algorithm is still tolerant of changes to the side-chain and backbone conformations of the protein binding site. In all tested protocols, the success rate of RosettaLigand decreases as the uncertainty associated with the protein side-chain and backbone atoms increases.
+In other words, after 1000 models have been generated docking ligands into crystal structures (Figure \ref{fig:fraction_successful_time}A), The \textsc{TransRot}/MCM protocol has successfully docked 76\% of models, while the \textsc{Transform}/MCM protocol has successfully docked 94\%.
+When ligands are docked into relaxed models in which both backbone and side-chain atoms are perturbed (Figure \ref{fig:fraction_successful_time}C), The \textsc{TransRot}/MCM protocol has successfully docked 58\% of models, while the \textsc{Transform}/MCM protocol has successfully docked 84\%.
 The reduction in success rate is expected because the addition of side-chain and backbone perturbation effectively adds noise to the protein structure.
 However, we see that the \textsc{Transform}/MCM protocol results in a 10\% decrease in success rate between relaxed and crystal structures, rather than 18\% for the \textsc{TransRot}/MCM protocol, so the new \textsc{Transform} protocol is more tolerant of inaccurate protein structures than the original protocol.
 Because the new initial placement algorithm is more likely to place the ligand in a high quality binding pose, a greater percentage of total docking time is spent in proximity or the correct binding site and pose.
@@ -208,7 +247,7 @@ The improvement of the poses generated by the initial placement stage results in
 The improved sampling efficiency afforded by the new initial placement algorithm both reduces the time that must be spent in high resolution docking, and reduces the total number of models which must be created to reliably produce a correct predicted binding pose.
 
 \subsection{The majority of performance improvement is driven by the improvements to the initial placement sampling algorithm}
-Figure 3 compares the performance of several of the tested RosettaLigand protocols, and provides further insight into the impact of the various components of the protocol on overall performance.
+Figure \ref{fig:rmsd_vs_rmsd} compares the performance of several of the tested RosettaLigand protocols, and provides further insight into the impact of the various components of the protocol on overall performance.
 The RMSD vs RMSD plots illustrate specific performance differences comparison between pairs of Rosetta protocols.
 When the original \textsc{TransRot} initial placement algorithm is used, minimal improvement is observed when the MIN refinement algorithm is used as compared to MCM initial placement (Left).
 While 17 of the 43 proteins show improvement in RMSD, only 1 exhibits sufficient improvement to cross the 2.0 \AA\ cutoff.
@@ -216,21 +255,47 @@ Comparison of the \textsc{TransRot} and \textsc{Transform} initial placement (Ce
 Comparison of the MCM and MIN refinement algorithms when the \textsc{Transform} initial placement algorithm is used shows that in this context the two refinement algorithms have nearly identical performance (Right).
 From this data we can conclude that the improvements seen are driven primarily by the new initial placement algorithm. 
 
+\begin{figure}
+%figure 3 in orginal paper
+\centering
+\includegraphics[width=4in]{figures/lowres/rmsd_vs_rmsd_relax.pdf}
+\caption{
+RMSD vs RMSD plots comparing the performance of various docking protocols when docking ligands into relaxed structures.
+20 samples of 150 models were collected, and the average of the RMSD of the lowest scoring model is plotted for each protein-ligand system.
+The standard deviation of these 20 samples is shown with error bars. Dotted lines indicate the 2.0 \AA\ RMSD cutoff used to classify correct vs incorrect poses. 
+}
+\label{fig:rmsd_vs_rmsd}
+\end{figure}
+
 \subsection{Examination of the successes and failures of RosettaLigand illustrates the impact of the \textsc{Transform} algorithm}
-Figure 6 illustrates several examples of the successes and failures of RosettaLigand.
-Figure 6A is an example of a case in which both the \textsc{Transform} and \textsc{TransRot} based algorithms are capable of successfully docking the ligand.
+Figure \ref{fig:specific_comparison} illustrates several examples of the successes and failures of RosettaLigand.
+Figure \ref{fig:specific_comparison}A is an example of a case in which both the \textsc{Transform} and \textsc{TransRot} based algorithms are capable of successfully docking the ligand.
 In both cases, the RMSD between the native ligand position and the predicted ligand position is less than 0.5 \AA.  This example represents a ?best case scenario? for RosettaLigand.
 The ligand is relatively small, and is deeply buried in the protein, making close contacts with protein-side-chains on almost all sides.
 This drastically reduces the possible sampling space available during both initial placement and minimization.
-Figure 6B is an example which demonstrates a failure of the \textsc{TransRot} algorithm which is corrected by the \textsc{Transform} algorithm.
+Figure \ref{fig:specific_comparison}B is an example which demonstrates a failure of the \textsc{TransRot} algorithm which is corrected by the \textsc{Transform} algorithm.
 The lowest scoring model generated by the \textsc{TransRot} based protocol is flipped 180\textdegree\ about the long axis and less tightly packed in the binding site compared to the lowest scoring model generated by the \textsc{Transform} protocol.
 Notably, the final score of the \textsc{TransRot} generated model is significantly higher than the score of the \textsc{Transform} generated model (-7.71 REU vs -14.57 REU). 
 This suggests that the failure of the \textsc{TransRot} based protocol is a result of a failure to sample the correct conformation.
 Because the \textsc{Transform} mover is able to sample translation and rotation simultaneously, more time will be spent sampling reasonable docking positions of long and narrow ligands like the one in this case, which increases the probability of the initial placement algorithm identifying a near-correct binding position for the refinement algorithm to refine and score.
 There are some cases in which neither protocol is able to predict the binding pose.
-Figure 6C is one such example.  In this case, the problem is most likely a failure of the Rosetta scoring function used in the Refinement stage.
+Figure \ref{fig:specific_comparison}C is one such example.  In this case, the problem is most likely a failure of the Rosetta scoring function used in the Refinement stage.
 In the native crystal structure, the ligand is involved in pi-stacking interactions with two phenylalanine residues in the protein.
 The Rosetta energy function is currently unable to directly model pi-stacking interactions, and thus will not properly score a native-like conformation. 
+
+\begin{figure}
+%figure 6 in orginal paper
+\centering
+\includegraphics[width=4in]{figures/lowres/specific_comparison.pdf}
+\caption{
+Comparison of specific successes and failures between the RosettaLigand protocols.
+Native structures are in grey, lowest scoring models generated by the \textsc{Transform}/MIN protocol in blue, and lowest scoring models generated by \textsc{TransRot}/MIN in pink.
+A) A case in which both tested protocols successfully recovers the native binding position.
+B) A case in which \textsc{Transform}/MIN successfully recovers the native binding position, while \textsc{TransRot}/MIN fails.
+C) A case in which both protocols fail to recover the native binding position. 
+}
+\label{fig:specific_comparison}
+\end{figure}
 
 \subsection{The \textsc{Transform} algorithm improves performance by improving sampling}
 The improvements yielded by the introduction of the \textsc{Transform} algorithm are likely a result of the types of moves performed during sampling.
@@ -238,7 +303,7 @@ Because the original \textsc{TransRot} algorithm performs translation and rotati
 By simultaneously transforming the ligand in all dimensions, the space of the binding site can be more effectively sampled. 
 
 \subsection{The benefit of the MIN refinement is primarily logistical, but important for vHTS studies}
-While Figure 4 and Figure 5 indicate that both the MIN and MCM refinement algorithms have a similar impact on sampling performance and average run time, the substantially reduced variability in run time of the MIN refinement algorithm illustrated in Figure 2 provides a major practical advantage to using MIN rather than MCM for refinement.
+While Figure \ref{fig:fraction_successful_time} and Figure \ref{fig:fraction_successful_time} indicate that both the MIN and MCM refinement algorithms have a similar impact on sampling performance and average run time, the substantially reduced variability in run time of the MIN refinement algorithm illustrated in Figure \ref{fig:time_per_model} provides a major practical advantage to using MIN rather than MCM for refinement.
 When docking a large number of ligands on a computing cluster, a protocol with a predictable run time is highly advantageous as it allows for more efficient utilization of the available resources of the cluster. 
 For this reason, while the two refinement methods have similar scientific performance, we recommend using MIN refinement, rather than MCM refinement. 
 
