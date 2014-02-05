@@ -5,23 +5,71 @@
 \chapter{Introduction}
 
 % history and state of the ligand docking field
+\section{The history of ligand docking}
+Attempts to model and predict protein-drug interactions date began shortly after the publication of the x-ray structure of hemoglobin, with Beddell et. al. Publishing a proof of concept method for structure based drug discovery in 1976\citep{BEDDELL:1976go}.
+The method developed by Beddell relied on the manual placement of physical molecular models into a scale model of the hemoglobin electron density, which allowed the authors to identify novel compounds with millimolar activity. 
+While the identified compounds were relatively poor by modern standards, and the method of manual placement into physical models did not provide a means of postulating mechanism of action, the authors recognized the value of the new technique, saying:
+\begin{quote}
+It has been common practice to design new drugs by modifying the chemical structure of a known substance which has the desired biological properties, and this procedure has imposed severe restraints on the choice.
+However, it is not necessary for the novel compounds to be related to the original substance when the structure of the receptor site is already known. 
+\end{quote}
+It is remarkable that this observation on the state of rational drug discovery continues to be relevant, nearly 40 years after it was originally made. 
 
+Over the intervening decades, rational structure based drug discovery has remained a tremendously challenging problem, though great progress has been made.
+The advent of relatively inexpensive general purpose computers in the early 1980s made computational molecular modeling possible, with PJ Goodford pioneering the development of early methods for computational protein-ligand docking.
+In 1984, Goodford et al published GRID, a computational method for predicting energetically favorable protein-ligand binding conformations\citep{Goodford:1985bf}.
+GRID differed from previous attempts structure based drug discovery in that it used chemical information rather than relying entirely on receptor fit. 
+Specifically, it assessed the protein-ligand interaction using an empirical energy function consisting of a Lennard-Jones term, electrostatic term, and hydrogen bonding term.
+This energy function was precomputed as a 3 dimensional grid overlaid on the ligand binding site.
+Thus, the total score of the ligand could be rapidly assessed as the sum of the grid squares the atoms are located in.
+Pre-computation of the scoring grid enabled many ligand conformations and compositions to be rapidly assessed, and the addition of chemical information in addition to shape proved valuable. 
 
+The promise of accurate and rapid computational design of novel small molecules has driven a wide array of research into improved methods for predicting protein-ligand interfaces. 
+In the time following 
+%TODO: continue with brief review of modern major methods, as well as results
+
+In 2006, a diverse set of 81 protein targets, each with a diverse set of known active and predicted inactive ligands was assembled as the DEKOIS 2.0 dataset\citep{Bauer:2013de}.
+Glide, GOLD and Autodock Vina were used to screen this dataset, and the pROC AUC enrichment for each target and each screening method was computed.
+The results of this benchmark showed a wide range in the predictive ability of the three screening methods.  
+The diversity of the benchmarking results provide a few useful insights about the current state of computational ligand docking. 
+%TODO: continues this, what is going on here
 
 % history of RosettaLigand
+\section{The history of RosettaLigand}
+RosettaLigand was originally published in 2006\citep{Meiler:2006vj} as a protein-ligand docking tool based off of the previously published RosettaDock\citep{Gray:2003uk} protein-protein docking tool.
+The original RosettaLigand docking algorithm took advantage of the knowledge based energy function used by RosettaDock.
+The use of a knowledge based potential rather than a physics based potential is advantageous as knowledge based potentials are capable of indirectly modeling effects that are difficult to model directly. %TODO:cite this
+Additionally, RosettaLigands ability to rapidly optimize protein side-chain geometry\citep{Barth:2007cw} made it possible to model protein-ligand interactions with full atomic detail.
+While RosettaLigand was frequently able to accurately predict the binding orientation ligands\citep{Meiler:2006vj}, it was unable to model backbone or ligand flexibility, which have long been suspected to be critical for protein-ligand binding\citep{Yang:2014dm,KOSHLAND:1958wa}.
+To rectify this situation, further extensions were made to RosettaLigand by Davis et al\citep{Davis:2009bf} which allowed RosettaLigand to fully consider the flexibility of all parts of both the protein and the ligand.
+A blind benchmarking study comparing the pose recovery performance of the 2009 version of RosettaLigand suggested that overall it performed similarly to other major ligand docking tools\citep{Davis:2009fx}.
+A notable conclusion of this study is that while most of the tools studied have a similar performance overall, the performance in predicting docking pose for individual protein targets varies wildly.
+This inconstant performance between protein targets and protein docking tools is seem in other studies as well. 
 
-% the value of structure based vHTS
+One of the hypothetical advantages of a knowledge based energy function is the ability to accurately model complex physical effects without a direct physical model.
+In principle, this, combined with the ability to model both backbone and sidechain flexibility would make RosettaLigand well suited to the docking of ligands into comparative models or other low resolution protein structures. 
+To assess this, a benchmarking study was performed in which small molecules with known binding positions were docked into homology models generated in the CASP experiment\citep{Kaufmann:2012ck}.
+The results of this benchmark demonstrated that in most of the tested cases, Rosetta was able to generate low energy binding positions within 2.0\AA\ of the crystallographic binding site.
 
-% existing structure based techniques are 
+In addition to benchmarking studies, Rosetta has been used to develop models of ligand binding in GPCRs.
+A comparative model of hSERT was created based on the dSERT crystal structure. 
+S- and R-citalopram were docked into this comparative model using RosettaLigand, and the resulting predicted binding poses were used to design mutational studies to identify residues critical for S-citalopram binding.
+Rosetta was able to correctly predict that Y95 and E444 formed protein-ligand interactions critical to binding\citep{Combs:2011db}.  
+Similarly, RosettaLigand was used to model the binding of Positive Allosteric Modulators in a comparative model of mGlu$_{5}$\citep{Turlington:2013et}.
+In this case, the predictions made by Rosetta were used to guide mutation and radioligand binding studies, the results of which were used to further refine models.
+These models made it possible to map out critical interactions between Positive Allosteric Modulators and the mGlu$_{5}$ binding site even in the absence of crystal structure information.
+
+\section{}
+
+\section{The history of structure based virtual High Throughput Screening (vHTS)} 
+
+The development of inexpensive high performance computing has made the screening of large compound libraries with protein-ligand docking tools possible in recent years.
+Structure based vHTS promises to enable researchers to identify novel inhibitors f
 
 % existing ligand based techniques are limited in scope
 
 % ligand based techniques are hard to use if you have a novel target
 
-% Improvements of RosettaHTS over RosettaLigand
-
-% Advantages of RosettaHTS over other methods
-
 % Integration of ligand and structure based methods
 
-% Review of use of Neural networks for vHTS
+% Review of use of Neural networks for vHTSm
