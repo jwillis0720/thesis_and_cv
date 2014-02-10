@@ -1,5 +1,5 @@
 \chapter{Improving RosettaLigand Speed and Sampling Efficiency through the Development of a Novel Sampling Algorithm}
-
+\label{chap:lowres_paper}
 \section{Abstract}
 
 RosettaLigand has been successfully used to predict protein-ligand binding poses in a number of cases\citep{Turlington:2013et,Davis:2009fx,Combs:2013bl}.
@@ -39,11 +39,15 @@ Finally, Monte Carlo Minimization (MCM) of the binding pose using the grid based
 The scoring girds themselves are generated using a scoring function derived from ChemScore\citep{Friesner:2004hm}.
 
 \subsection{Performance comparison}
-\subsubsection{Performance of ligand docking tools is inconsistent} Despite the large differences between scoring and sampling algorithm implementations across the different ligand docking tools, a blind study of ligand docking performance conducted by Davis et al.\citep{Davis:2009fx} suggested that while certain methods of docking perform better than others for a given protein target, in the aggregate, the commonly used systems have a similar range of performance.
+
+\subsubsection{Performance of ligand docking tools is inconsistent} 
+Despite the large differences between scoring and sampling algorithm implementations across the different ligand docking tools, a blind study of ligand docking performance conducted by Davis et al.\citep{Davis:2009fx} suggested that while certain methods of docking perform better than others for a given protein target, in the aggregate, the commonly used systems have a similar range of performance.
 Interestingly, while some protein systems appear to be relatively easy (Chk1 kinase) or difficult (Hepatitis C RNA Polymerase) for most ligand docking tools, the results for most systems vary depending on the ligand docking tool.
 
 \subsection{Limitations of the RosettaLigand low resolution docking step}
-\subsubsection{Introduction to the RosettaLigand docking process}As currently implemented, RosettaLigand consists of a two stage docking process consisting of an initial placement stage followed by a refinement stage.
+
+\subsubsection{Introduction to the RosettaLigand docking process}
+As currently implemented, RosettaLigand consists of a two stage docking process consisting of an initial placement stage followed by a refinement stage.
 The overall effect of the initial placement algorithm is to place the ligand in a non-clashing position at random.
 To accomplish this, the initial placement algorithm consists of three steps, which were initially described in Davis et al.\citep{Davis:2009bf}
 The algorithm uses a binary scoring grid to identify non-clashing regions of the protein.
@@ -66,7 +70,8 @@ The third and final step in the initial placement algorithm is the Slide Togethe
 Due to the relatively small amount of information provided by the binary scoring grid, it is possible for the ligand to be placed in a region where it does not contact any protein atoms at the end of the translate and rotate steps.
 In this case the apparent interaction energy at the beginning of the refinement stage would be 0, reducing the efficiency and sometimes causing failure in the following Monte Carlo refinement stage.
 To avoid this situation, the ligand must be brought in contact with the protein.
-The Slide Together step moves the ligand towards the center of mass of the protein until the full atom repulsive score increases. Following this initial placement, a refinement stage is carried out in which small perturbations of the ligand and repacking of the protein side-chains are performed using MCM.
+The Slide Together step moves the ligand towards the center of mass of the protein until the full atom repulsive score increases. 
+Following this initial placement, a refinement stage is carried out in which small perturbations of the ligand and repacking of the protein side-chains are performed using MCM.
 Finally, all atoms in the binding site are minimized using gradient minimization, and the final structure is scored.
 
 \subsubsection{Possible limitations of the low resolution placement in RosettaLigand}
@@ -84,7 +89,8 @@ The improved initial placement algorithm has two components: A modular grid base
 Both components are fully independent.
 The implementation described here allows for the rapid implementation of new score terms and sampling methodologies, and the easy integration of these methods into the existing RosettaLigand pipeline.
 
-\subsection{Score function development}\subsubsection{Description of scoring grids and manager}
+\subsection{Score function development}
+\subsubsection{Description of scoring grids and manager}
 
 The new score function consists of a set of scoring grids which are controlled by a scoring manager.
 Each scoring grid is responsible for computing a single term in the energy function.
@@ -94,7 +100,9 @@ The scoring manager is responsible for keeping every scoring grid up to date wit
 Additionally, the scoring manager is responsible for handling the weighting of the individual scoring terms to compute the total score.
 For this study, the tensor has dimensions of 15 \AA$^{3}$ width, and a 0.25 \AA\ spacing between grid points. 
 
-\subsection{Sampling architecture}\subsubsection{Description of grid MCM}An MCM algorithm is used to compute the initial binding pose for the ligand.
+\subsection{Sampling architecture}
+\subsubsection{Description of grid MCM}
+An MCM algorithm is used to compute the initial binding pose for the ligand.
 Figure \ref{fig:docking_flowchart} shows a flow chart of the overall steps in the sampling process.
 At each step in the sampling process the ligand is either randomly perturbed in the binding site, or the conformation of the ligand is changed.
 Ligand perturbation is performed as a combination of a random translation and rotation, and the conformation of the ligand is perturbed by selecting a random conformation from a library of pre-computed conformers.
@@ -114,7 +122,8 @@ Because the initial placement and refinement steps are independent, the two init
 \label{fig:docking_flowchart}
 \end{figure}
 
-\subsection{Docking Protocol}\subsubsection{Introduction to the docking process}
+\subsection{Docking Protocol}
+\subsubsection{Introduction to the docking process}
 The overall docking protocol is illustrated in the schematic flowchart in Figure \ref{fig:docking_flowchart}.
 The study compares different configurations of both the initial placement step and the refinement step, described below.
 Complete RosettaScripts XML files for each experiment can be found in the supplementary information.
@@ -122,7 +131,8 @@ As a baseline we use the \textsc{TransRot} initial placement algorithm, where tr
 The specific TransRot protocol used here is originally described in Fleishman et al.\citep{Fleishman:2011ji}, and is conceptually identical to the process described in the Davis paper, though the user interface is different. 
 
 \subsubsection{Description of the \textsc{Transform} based initial placement algorithm}
-In the new \textsc{Transform} based initial placement algorithm, translation and rotation are performed simultaneously.
+
+In the new \textsc{Transform} based initial placement algorithm, translation and rotation are performed simultaneously.
 500 steps of MCM are carried out.
 At each step, the ligand position is either transformed, or the ligand conformation is changed using the ligand conformers described above.
 When a transformation move is selected, the ligand is randomly translated within 0.1 \AA\ of its current position, and rotated within 5\textdegree.
@@ -144,7 +154,8 @@ After the high resolution docking step, a final minimization is carried out in w
 MIN refinement is carried out similarly to MCM refinement, except in the case of MIN refinement, only a single round of repacking is performed prior to the final minimization.
 Because no ligand perturbation is performed during MIN refinement, the ligand pose generated during in the initial placement stage becomes critical.
 
-\subsection{Benchmarking setup}\subsubsection{Introduction to benchmarking scheme}
+\subsection{Benchmarking setup}
+\subsubsection{Introduction to benchmarking scheme}
 To benchmark the performance of the new initial placement algorithm, a docking benchmark derived from the CSAR\citep{DunbarJr:2011kq} dataset was used.
 A subset of 43 proteins from the CSAR data set was used (Supplemental table). % TODO: add supplement
 This subset omits protein/ligand complexes with co-factors, metal ions, or water molecules that bridge ligand and protein.
@@ -161,7 +172,8 @@ Four docking protocols were selected to investigate the behaviors of each compon
 A docking protocol consists of an initial placement algorithm (\textsc{TransRot} or \textsc{Transform}), and a refinement algorithm (MCM or MIN).
 Figure \ref{fig:docking_flowchart} is a schematic describing the overall docking process. 
 
-\subsection{Summary of results}\subsubsection{New method decreases amount of time to make one model}
+\subsection{Summary of results}
+\subsubsection{New method decreases amount of time to make one model}
 Figure \ref{fig:time_per_model} shows the change in the average time necessary to generate a single model with each of the four tested algorithms.
 The average time needed to generate a model using the previously published \textsc{TransRot}/MCM protocol is 49.4 seconds per model.
 Changing the Refinement protocol from MCM to MIN reduces the time per model to 33.3 seconds, and changing both the refinement protocol to MIN and the initial placement model from \textsc{TransRot} to \textsc{Transform} further reduces the time per model to 9.3 seconds.
@@ -179,7 +191,8 @@ The average time and standard deviation to produce a single model for each docki
 \label{fig:time_per_model}
 \end{figure}
 
-\subsubsection{Use of the MIN refinement algorithm improves consistency in run time compared to MCM refinement.} 
+
+\subsubsection{Use of the MIN refinement algorithm improves consistency in run time compared to MCM refinement.} 
 Further timing consistency is seen when the MIN refinement stage is used in place of MCM refinement.
 Each round of repacking in MCM refinement requires that the interactions between atoms in the binding site be recomputed.
 As the computational complexity of this operation increases with the square of the number of atoms in the protein-ligand interface, the docking of ligands into larger binding pockets takes substantially larger when using MCM refinement compared to the docking of ligands into smaller binding pockets, which contributes in the observed changes in timing consistency.
@@ -327,19 +340,23 @@ The results described here demonstrate that even in very complex optimization pr
 \subsubsection{Introduction to protein preparation}
 Complete command lines and instructions for the protein preparation are included in the supplemental protocol capture document.
 
-\subsubsection{Description of crystal structure preparation}The original crystal structures from the CSAR dataset were processed to remove existing water molecules, and hydrogens were added using Rosetta.
+\subsubsection{Description of crystal structure preparation}
+The original crystal structures from the CSAR dataset were processed to remove existing water molecules, and hydrogens were added using Rosetta.
 The side-chains and protein backbone were left at the crystallographic positions.
 
-\subsubsection{Description of repacked structure preparation}The crystal structures prepared above were repacked in the absence of the ligand using the Rosetta fixbb application.
+\subsubsection{Description of repacked structure preparation}
+The crystal structures prepared above were repacked in the absence of the ligand using the Rosetta fixbb application.
 The backbone was kept fixed, and all side-chain positions were allowed to repack\citep{Kortemme:2004ia}.
 
-\subsubsection{Description of relaxed structure preparation}For each of the crystal structures prepared above, 10 relaxed models were produced using the Rosetta relax application.
+\subsubsection{Description of relaxed structure preparation}
+For each of the crystal structures prepared above, 10 relaxed models were produced using the Rosetta relax application.
 During the Rosetta relax protocol, cyclic repacking of the side-chains and gradient based minimization of the backbone are used to perform MCM of the entire protein structure.
 In this case, all CA atoms were restrained to within 0.3\AA\ of the crystallographic coordinates, to prevent major conformational shifts.
 Relaxation was performed in the absence of the ligand.
 
 \subsection{Ligand Conformer preparation}
 \subsubsection{Description of ligand conformer generation}
-Conformers were generated for each ligand using the BCL::ConformerGeneration application(unpublished).
+
+Conformers were generated for each ligand using the BCL::ConformerGeneration application(unpublished).
 BCL::ConformerGeneration uses a stochastic fragment assembly approach to conformer generation, utilizing a database of fragment conformations derived from the Cambridge Structural Database. 
-A maximum of 100 conformers were generated per ligand, though the actual number of generated conformers varies based on the structure of the ligand and the number of rotatable bonds. The generated conformers were used to produce params files and ligand rotamer libraries using the protocol detailed in the supplementary protocol capture.
+A maximum of 100 conformers were generated per ligand, though the actual number of generated conformers varies based on the structure of the ligand and the number of rotatable bonds. The generated conformers were used to produce params files and ligand rotamer libraries using the protocol detailed in the supplementary protocol capture.
