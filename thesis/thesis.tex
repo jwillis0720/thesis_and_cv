@@ -37,7 +37,8 @@ Figure\hfill Page\endgraf} \addtocontents{lot}{\vspace{0.2in}
 \usepackage[subfigure, titles]{tocloft}
 \usepackage{acronym}
 \usepackage{datetime}
-
+\usepackage{fancyvrb}
+\usepackage{color}
 
 %%another algorithm package
 \usepackage{algorithm}
@@ -105,6 +106,11 @@ Figure\hfill Page\endgraf} \addtocontents{lot}{\vspace{0.2in}
     
     
 \interfootnotelinepenalty=10000 %prevents the splitting of long footnotes across multiple pages. Use with caution. 
+
+%%Put useful shortcuts here:
+
+\newcommand{\ki}{K$_{i}$}
+\newcommand{\ic}{IC$_{50}$}
 
 \begin{document}
 
@@ -186,9 +192,12 @@ Thanks to everyone and the cat.
 \setcounter{page}{1}
 
 \include{introduction}
-%\include{nv_kbp_chapter}
-%\include{lowres_paper}
-%\include{hts_preprocessing}
+\include{nv_kbp_chapter}
+\include{lowres_paper}
+%\include{RosettaHTS}
+\include{hts_preprocessing}
+\include{mysql_appendix}
+\include{lowres_appendix}
 
 \singlespacing
 \bibliographystyle{apalike}

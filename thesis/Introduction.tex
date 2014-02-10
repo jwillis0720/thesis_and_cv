@@ -15,24 +15,55 @@ However, it is not necessary for the novel compounds to be related to the origin
 \end{quote}
 It is remarkable that this observation on the state of rational drug discovery continues to be relevant, nearly 40 years after it was originally made. 
 
-Over the intervening decades, rational structure based drug discovery has remained a tremendously challenging problem, though great progress has been made.
-The advent of relatively inexpensive general purpose computers in the early 1980s made computational molecular modeling possible, with PJ Goodford pioneering the development of early methods for computational protein-ligand docking.
+After the advent of relatively inexpensive general purpose computers in the early 1980s, the promise of accurate and rapid computational design of novel small molecules has driven a wide array of research into improved methods for predicting protein-ligand interfaces.
+A successful protein-ligand docking tool must solve two basic problems: sampling and scoring.
+To effectively solve the sampling problem, the software must be able to efficiently explore both the rigid space of the protein binding site, as well as the conformational space of both 	the protein and the ligand.
+To effectively solve the scoring problem, a score function must be developed which can rapidly distinguish between energy favorable and unfavorable conformations.
+Solving both of these problems has proven highly challenging, although great progress has been made. 
+
+In 1982, Kuntz et al. published DOCK, one of the earliest computational tools for modeling protein-ligand interactions\citep{Kuntz:1982wx}.  Dock used a relatively simple energy function which modeled repulsive forces as hard spheres, and a rough approximation of hydrogen bonding which favored binding positions in which hydrogen bond donor groups on the ligand were within 3-5\AA\ of acceptor nitrogens and oxygens on the protein backbone.
+In concept, the DOCK algorithm is similar to the manual placement method described by by Beddell et al above. 
+The program uses the van der waals radii of the protein and ligand atoms to create "space filled" representations of both the receptor pocket and the ligand.
+Pairs of protein and ligand spheres are then considered systematically, and the set of pairings which minimizes sphere overlap is selected.
+This algorithm is driven almost entirely by shape complementarity, and effectively models the "lock and key" hypothesis of protein-ligand binding, in which a rigid protein is matched with a rigid ligand.
+
 In 1984, Goodford et al published GRID, a computational method for predicting energetically favorable protein-ligand binding conformations\citep{Goodford:1985bf}.
 GRID differed from previous attempts structure based drug discovery in that it used chemical information rather than relying entirely on receptor fit. 
 Specifically, it assessed the protein-ligand interaction using an empirical energy function consisting of a Lennard-Jones term, electrostatic term, and hydrogen bonding term.
 This energy function was precomputed as a 3 dimensional grid overlaid on the ligand binding site.
 Thus, the total score of the ligand could be rapidly assessed as the sum of the grid squares the atoms are located in.
-Pre-computation of the scoring grid enabled many ligand conformations and compositions to be rapidly assessed, and the addition of chemical information in addition to shape proved valuable. 
+Pre-computation of the scoring grid enabled many ligand conformations and compositions to be rapidly assessed, and the addition of chemical information in addition to shape proved more effective than simply evaluating shape complementarity.
 
-The promise of accurate and rapid computational design of novel small molecules has driven a wide array of research into improved methods for predicting protein-ligand interfaces. 
-In the time following 
-%TODO: continue with brief review of modern major methods, as well as results
+While the GRID method proved reasonably effective, it had a number of shortcomings which limited it's effectiveness.
+The physics based force field used was relatively rudimentary, and the limited set of chemical probes used to create the grid.
+Additionally, accurate docking into a full-atom grid based model requires a high degree of precision in the position of the protein atoms, which limits the effectiveness of such a model in cases where the accuracy of the protein structure is lower.
 
-In 2006, a diverse set of 81 protein targets, each with a diverse set of known active and predicted inactive ligands was assembled as the DEKOIS 2.0 dataset\citep{Bauer:2013de}.
-Glide, GOLD and Autodock Vina were used to screen this dataset, and the pROC AUC enrichment for each target and each screening method was computed.
-The results of this benchmark showed a wide range in the predictive ability of the three screening methods.  
-The diversity of the benchmarking results provide a few useful insights about the current state of computational ligand docking. 
-%TODO: continues this, what is going on here
+In the years following the publication of DOCK and GRID, additional experimental study of protein structure began to suggest that the rigid body lock and key model was not adequate for the modeling of protein-ligand interactions.
+It had long been suspected\citep{KOSHLAND:1958wa} that enzymes and receptors may be flexible to accommodate the fit of small molecules (the so called "induced fit" hypothesis), however in 1995, Nicklaus et al.\citep{Nicklaus:1995tu} published work suggesting that small molecules also undergo substantial conformational shift on binding.
+This conclusion was arrived at by comparing the geometry of flexible small molecules observed bound to proteins with the geometry of the same small molecules when crystallized in the absence of a protein, or when computationally minimized using molecular mechanics.
+The results of this study indicated that while the conformations of rigid structures typically differed by < 0.1 \AA\ RMSD between the bound an unbound context, flexible ligands typically differed significantly, frequently by several angstroms.
+Furthermore, the difference in RMSD between bound and unbound ligands was strongly correlated with the number of rotatable bonds in the ligand, with an R$^{2}$ correlation of 0.82.
+In response to this research, the development of newer protein-ligand docking methods began to focus on the flexibility of the system.
+While flexibility had previously been avoided due to the inherent increase in complexity associated with modeling it, it became apparent that it was a critical component of protein-ligand interaction.
+
+FlexX\citep{Rarey:1996hf} and Genetic Optimization of Ligand Docking (GOLD)\citep{Jones:1997bl}, are two of the early methods which attempted to model ligand flexibility.
+FlexX represents the ligand binding site using a set of interaction sites, which are defined as surfaces surrounding hydrogen bond donors and acceptors, metals and metal acceptors, aromatic rings, methyls and amides.
+An empirical scoring function is used to score ligand conformations based on the distance and angle between defined protein and ligand interaction sites.
+FlexX uses an incremental construction algorithm to model ligand flexibility.
+An initial core fragment of the ligand is placed in the binding site using an incremental construction algorithm, and the additional fragments necessary to complete the ligand are then placed such that they can connect to the initial fragment and minimize the energy function score. 
+GOLD, on the other hand, relies on the user providing a reasonable initial position for the ligand inside the protein binding site.
+From that initial position, a genetic algorithm\citep{Jones:1995vw} was used to optimize the rotation angles of both the ligand and the interacting protein side-chains. 
+The genetic algorithm makes it possible to rapidly find a high quality local minimum without the exhaustive sampling of bond angles that had made the problem previously intractable.
+As a result of this new sampling technique, GOLD was able to successfully recover the correct binding conformation in 71 out of 100 X-Ray crystal structures in a benchmarking study. 
+
+In 2004, Glide\citep{Friesner:2004hm} was published as a novel method for protein-ligand docking aimed at the screening of large libraries of small molecules.
+To improve the speed of the algorithm, Glide models the receptor site using a set of cartesian scoring grids, and keeps the receptor atoms fixed.
+This allows the ligand to be rapidly scored, making it possible for a large number of ligand positions to be evaluated.
+Glide performs a set of exhaustive searches along at cartesian grid overlaid on the receptor binding site.
+To reduce the amount of sampling required, the step size of the grid is reduced over the course of the search process, beginning with a 2.0 \AA\ pitch grid.
+Additionally, a set of filters based on the ChemScore\citep{Eldridge:1997tm} energy function are used to progressively filter the set of allowable binding orientations by increasingly detailed metrics.
+After an initial starting position is accepted, The conformational space of the ligand is exhaustively searched, and the final pose is energy minimized.
+The use of a grid representation for the energy function makes it possible to to screen large numbers of compounds very rapidly, making Glide a popular choice for virtual screening studies\citep{Yilmaz:2013dj,Bauer:2013de}.
 
 % history of RosettaLigand
 \section{The history of RosettaLigand}
@@ -59,14 +90,29 @@ Similarly, RosettaLigand was used to model the binding of Positive Allosteric Mo
 In this case, the predictions made by Rosetta were used to guide mutation and radioligand binding studies, the results of which were used to further refine models.
 These models made it possible to map out critical interactions between Positive Allosteric Modulators and the mGlu$_{5}$ binding site even in the absence of crystal structure information.
 
-\section{}
 
-\section{The history of structure based virtual High Throughput Screening (vHTS)} 
+\section{Computational Ligand Docking has inconsistent predictive power} 
 
-The development of inexpensive high performance computing has made the screening of large compound libraries with protein-ligand docking tools possible in recent years.
-Structure based vHTS promises to enable researchers to identify novel inhibitors f
+A common thread running through the research described above is the difficulty of docking ligands into some proteins.
+For every protein-ligand method developed, some percentage of protein-ligand interfaces cannot be effectively predicted.
+While the predictions generated by protein-ligand docking has made some major scientific contributions to drug discovery and molecular modeling, the unreliability of the method has historically constrained its usefulness.
+
+In 2006, a diverse set of 81 protein targets, each with a diverse set of known active and predicted inactive ligands was assembled as the DEKOIS 2.0 dataset\citep{Bauer:2013de}.
+Glide, GOLD and Autodock Vina were used to screen this dataset, and the pROC AUC enrichment for each target and each screening method was computed.
+The results of this benchmark showed a wide range in the predictive ability of the three screening methods.  
+While all 3 docking methods had strong predictive power against some protein targets (COX2, KIF11), there were several cases in which no method had predictive power (HSP90, QPCT), and more cases in which some methods were able to make accurate predictions while others were not (COX1, ROCK-1).
+Furthermore, it was not possible for the authors to identify straightforward patterns to predict which protein targets could be successfully screened against and which could not. 
+The phenomenon of structure based vHTS methods having inconsistent performance depending on the protein target has been replicated in other studies.
+For example, the Directory of Useful Decoys, Enhanced (DUD-E) benchmark set was screened using DOCK, and the resulting predictions exhibited similar inconsistencies to those seen in the DEKOIS 2.0 study\citep{Mysinger:2012hu}.
+
+\section{The causes of ligand docking inconsistencies are unclear}
 
 % existing ligand based techniques are limited in scope
+\section{The use of machine learning methods has been valuable for ligand based vHTS}
+
+As a result of the inconsistent and unpredictable performance of structure based vHTS methods described in the previous section, ligand based vHTS is generally more common.
+A wide range of methods exist for generating QSAR models based on a set of known active and inactive compounds.
+
 
 % ligand based techniques are hard to use if you have a novel target
 
