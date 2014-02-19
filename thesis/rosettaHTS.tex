@@ -238,7 +238,8 @@ as shown in the figure, we see that this is the case.  The 3 networks trained us
 As expected, the BCL scalar descriptor has no classification ability.
 Table \ref{table:ann_performance} lists the ROC-AUC and average enrichment of each of the plotted classifiers.
 We see that the 3 networks trained with RosettaLigand interface score information have similar performance in terms of average enrichment and AUC, and that this performance is increased substantially over using only RosettaLigand scoring information for classification.
-Specifically, 
+Specifically, the ROC-AUC of the ANN classifiers is increased by 0.026-0.036 over the RosettaLigand interface classifier, and the Average Enrichment is increased by 35.93-38.42.
+Based on the metrics of ROC-AUC and Average enrichment, the 3 ANN models appear to have nearly identical performance.
 \begin{figure}
 \centering
 \includegraphics[width=4in]{figures/hts/tpr_plot.pdf}
@@ -250,7 +251,6 @@ To accentuate the differences in early classification, the X axis is plotted on 
 }
 \label{fig:roc_plot}
 \end{figure}
-
 \begin{table}
 \scriptsize
 \renewcommand{\tabcolsep}{0.09cm}
@@ -265,6 +265,8 @@ Average enrichment is the average enrichment within the first 1\% of the each da
 }
 \label{table:ann_performance}
 \end{table}
+
+Inspection of the accuracy of the models, however, yields a more complex story. 
 
 \begin{figure}
 \centering
