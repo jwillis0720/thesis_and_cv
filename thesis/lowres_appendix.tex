@@ -1,9 +1,5 @@
 \chapter{Appendix: development and testing of knowledge based scoring functions for RosettaLigand initial placement}
-
-\section{Introduction}
-
-
-
+\label{chap:lowres_appendix}
 \section{Methods}
 
 \subsection{Shape complementarity scoring grid}
@@ -49,7 +45,8 @@ As the goal of the initial placement algorithm is to provide a rapid first appro
 A knowledge based potential was created based on the $?log?(propensity)$ of a hydrogen bond donor atom being within some distance of a hydrogen bond acceptor atom, using the same Top8000 set of proteins described above (Figure \ref{fig:hbond_schematic}A).
 Separate scoring grids are computed for hydrogen bond donors and acceptors. To compute the hydrogen bond donor scoring grid, the distance from each grid square to the nearest hydrogen bond donor is computed, and the score from the knowledge based potential is stored in the grid square (Figure \ref{fig:hbond_schematic}B).
 The same process is followed to compute the hydrogen bond acceptor scoring grid.
-Hydrogen bond donor atoms are scored based on the value of the nearest grid square in the appropriate scoring grid.  The combination of the shape complementarity and hydrogen bonding scoring grids are referred to here as the ?KBP? scoring function. 
+Hydrogen bond donor atoms are scored based on the value of the nearest grid square in the appropriate scoring grid.  
+The combination of the shape complementarity and hydrogen bonding scoring grids are referred to here as the ?KBP? scoring function. 
 \begin{figure}
 %figure 2 in original paper
 \centering
@@ -69,10 +66,12 @@ In black is the region directly computed based on the knowledge based potential.
 
 Figure \ref{fig:frac_time} and Figure \ref{fig:frac_count} compare the effect of the knowledge based potential on docking performance and efficiency.
 Figure \ref{fig:frac_time}A and Figure \ref{fig:frac_count}A demonstrate that the new knowledge based potential no significant impact on ligand docking when docking into relaxed models.
-Furthermore, when ligands are docked into repacked and relaxed models, the new Knowledge Based Potential demonstrates decreased performance compared to the binary scoring function. There are two factors which likely play a role in this decreased performance.
+Furthermore, when ligands are docked into repacked and relaxed models, the new Knowledge Based Potential demonstrates decreased performance compared to the binary scoring function. 
+There are two factors which likely play a role in this decreased performance.
 It is notable that as the degree of noise introduced into the protein structure increases, the performance of the KBP based scoring grid relative to the Binary scoring grid decreases.
 This is effect is most likely caused by the presence of side chain information in the KBP based scoring grids.
-Because side chain atoms are included, an input model with incorrect side-chains will result in an incorrectly placed energy minimum, and lower quality binding poses. The second likely factor is suggested by the shapes of the curves in Figure \ref{fig:frac_count}.
+Because side chain atoms are included, an input model with incorrect side-chains will result in an incorrectly placed energy minimum, and lower quality binding poses. 
+The second likely factor is suggested by the shapes of the curves in Figure \ref{fig:frac_count}.
 While most ligands are successfully docked within 150 poses, some ligands are exceptionally difficult to dock, and require additional sampling, for this reason, the Transform/Binary/Repack protocol shows a slight increase in success rate after approximately 800 models have been generated.
 In contrast, the Transform/KBP/Repack protocol does not exhibit the same increase.
 This is likely a result of the comparative shapes of the two energy functions.

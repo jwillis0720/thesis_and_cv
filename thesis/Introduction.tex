@@ -3,7 +3,7 @@
 %  Innovation (Why was the research done novel? How does it relate to competing methods?) of the body of work in your thesis.
 %This chapter could ideally come form a review article you have written.
 \chapter{Introduction}
-\section{The sampling and scoring methods used by the Rosetta software suite}
+\section{The Sampling and Scoring Methods Used By the Rosetta Software Suite}
 Rosetta is a unified software package for protein structure prediction and functional design.
 It has been applied to predict protein structures with and without the aid of sparse experimental data, perform protein-protein and protein-small molecule docking, design novel proteins, and redesign existing proteins for altered function.
 Rosetta allows for rapid tests of hypotheses in biomedical research which would be impossible or exorbitantly expensive to perform via traditional experimental methods.
@@ -24,7 +24,7 @@ Rohl\citep{Rohl:2004dh} provides a review of the fragment selection and backbone
 \subsection{Sampling Strategies for side-chain Degrees of Freedom}
 Systematic sampling of side-chain degrees of freedom of even short peptides quickly becomes intractable\citep{Levinthal:1968vd}.
 Rosetta drastically reduces the number of conformations sampled by usage of discrete conformations of side-chains observed in the PDB\citep{Kuhlman:2000tc,Dunbrack:1993jt}.
-These ?rotamers? capture allowed combinations between side-chain torsion angles as well as the backbone phi, psi angles and thereby reduce the conformational space\citep{Dunbrack:1993jt}.
+These "rotamers" capture allowed combinations between side-chain torsion angles as well as the backbone phi, psi angles and thereby reduce the conformational space\citep{Dunbrack:1993jt}.
 A Metropolis Monte Carlo simulated annealing run is used to search for the combination of rotamers occupying the global minimum in the energy function\citep{Kuhlman:2000tc,LeaverFay:2005vc}.
 This general approach is extended to protein design by replacing a rotamer of amino acid A with a rotamer of amino acid B in the Monte Carlo step.
 
@@ -54,7 +54,7 @@ This limitation allows pre-computation and storage of many of these energy contr
 \section{Protein Design Using Rosetta}
 All protocols discussed up to this point relate to protein structure prediction and seek to determine the position of amino acid atoms in space.
 Protein design on the other hand seeks to determine an amino acid sequence that folds into a given protein structure or performs a given function.
-In this context the protein design problem of finding a sequence that folds into a given tertiary structure is also known as the ?inverse protein folding problem?.
+In this context the protein design problem of finding a sequence that folds into a given tertiary structure is also known as the "inverse protein folding problem".
 The RosettaDesign\citep{Kuhlman:2003kp} algorithm is an iterative process that energetically optimizes both the structure and sequence of a protein.
 RosettaDesign alternates between rounds of fixed backbone sequence optimization and flexible backbone energy minimization\citep{Kuhlman:2003kp}.
 During the sequence optimization step, a Monte Carlo simulated annealing search is used to sample the sequence space.
@@ -87,16 +87,16 @@ The backbone structure of half the barrel was duplicated, and Rosetta was used t
 The new protein, named FLR, was expressed and crystallized.
 The two resulting crystal structures had RMSDs of 0.49 \AA\ and 0.87 \AA, demonstrating the ability of RosettaDesign to make accurate predictions of side-chain conformation and energies\citep{Fortenberry:2011hw}.
 
-\section{Existing challenges with protein surface design}
+\section{Existing Challenges With Protein Surface Design}
 
-\subsection{Electrostatic energy is insufficient to predict the impact of protein surface mutations}
+\subsection{Electrostatic Energy is Insufficient to Predict the Impact of Protein Surface Mutations}
 While protein design has had frequent successes, there are outstanding challenges, particularly with respect to the design of the surfaces of soluble proteins.
 Solvent interactions are critical accurately measuring the electrostatics and stability of protein surfaces\citep{Park:2004kn}.
 However, due to the computational complexity associated with explicit solvent modeling, implicit models are frequently used, and may not be sufficiently detailed to make accurate energetic predictions.
 Furthermore, The network of interactions between protein surface residues and the overall stability of the proteins are highly complex. 
 Xiao\citep{Xiao:2013dq} demonstrated that while electrostatic surface interactions are important for stability, the impact of a single mutation on experimentally determined stability frequently cannot be explained by the impact on computed electrostatic energy.
 
-\subsection{Computationally designed proteins frequently aggregate unless "supercharged"}
+\subsection{Computationally Designed Proteins Frequently Aggregate Unless "Supercharged"}
 In addition to issues with stability, computationally designed proteins frequently have issues with aggregation.
 A study was performed in which RosettaDesign was used to fully redesign 10 proteins\citep{Dantas:2003vt}.
 They found that 4 of the 10 designed proteins formed insoluble aggregates at 1mM concentration.
@@ -105,9 +105,9 @@ However, "supercharged" proteins are infrequently seen in nature, suggesting tha
 Observation of the folding properties of supercharged proteins suggest that excessive charging can inhibit folding\citep{MichaelSLawrence:2007cv}, which may have acted as an evolutionary  barrier to natural supercharging.
 
 % history and state of the ligand docking field
-\section{The history of ligand docking}
+\section{The History of Ligand Docking}
 
-\subsection{Early attempts at hand-docking ligands using physical models}
+\subsection{Early Attempts at Hand-Docking Ligands Using Physical Models}
 Attempts to model and predict protein-drug interactions date began shortly after the publication of the x-ray structure of hemoglobin, with Beddell et. al. Publishing a proof of concept method for structure based drug discovery in 1976\citep{BEDDELL:1976go}.
 The method developed by Beddell relied on the manual placement of physical molecular models into a scale model of the hemoglobin electron density, which allowed the authors to identify novel compounds with millimolar activity. 
 While the identified compounds were relatively poor by modern standards, and the method of manual placement into physical models did not provide a means of postulating mechanism of action, the authors recognized the value of the new technique, saying:
@@ -214,10 +214,6 @@ Furthermore, it was not possible for the authors to identify straightforward pat
 The phenomenon of structure based vHTS methods having inconsistent performance depending on the protein target has been replicated in other studies.
 For example, the Directory of Useful Decoys, Enhanced (DUD-E) benchmark set was screened using DOCK, and the resulting predictions exhibited similar inconsistencies to those seen in the DEKOIS 2.0 study\citep{Mysinger:2012hu}.
 
-\section{The causes of ligand docking failures are complex}
-
-There is likely no single root cause for the phenomenon described above.
-
 \section{Artificial Neural Networks (ANNs) have proven valuable for extracting complex signals}
 
 Since the publication of the Perceptron as a means of machine learning\citep{Rosenblatt:1958jc}, ANNs have been an area of great interest to the machine learning community.
@@ -226,9 +222,8 @@ In more recent years, the availability of large clusters of low cost computer ha
 ANNs have been used for tasks such as face recognition\citep{Zhao:2003bf}, cancer cell identification\citep{Zhou:2002ew}, and drug activity classification\citep{Gohlke:2002in}.
 Neural networks are popular choices for these tasks due to their ability to extract the signal from complex patterns.
 
-%TODO: description of simple feed-forward back prop network with diagram
-
 \section{Overtraining and overfitting are common pitfalls in the use of ANNs for pattern recognition}
+\label{sec:intro_overtraining}
 While ANN based approaches have been valuable to many fields, they are often difficult to use in practice.
 Due to the very large number of free parameters in a neural network, they are very prone to over-fitting.
 In over-fitting, the neural network effectively "memorizes" the dataset, and becomes a model that exactly implements the set of data used for training\citep{Tetko:1995cm}.
