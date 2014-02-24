@@ -232,10 +232,10 @@ Docking protocols which make use of the \textsc{Transform} algorithm are reliabl
 
 \subsubsection{The new algorithm is still tolerant of backbone and side-chain perturbations}
 It is clear from Figure \ref{fig:fraction_successful_time} and Figure \ref{fig:fraction_successful_time} that despite using a pre-computed scoring grid during initial placement, RosettaLigand with the new initial placement algorithm is still tolerant of changes to the side-chain and backbone conformations of the protein binding site. In all tested protocols, the success rate of RosettaLigand decreases as the uncertainty associated with the protein side-chain and backbone atoms increases.
-In other words, after 1000 models have been generated docking ligands into crystal structures (Figure \ref{fig:fraction_successful_time}A), The \textsc{TransRot}/MCM protocol has successfully docked 76\% of models, while the \textsc{Transform}/MCM protocol has successfully docked 94\%.
-When ligands are docked into relaxed models in which both backbone and side-chain atoms are perturbed (Figure \ref{fig:fraction_successful_time}C), The \textsc{TransRot}/MCM protocol has successfully docked 58\% of models, while the \textsc{Transform}/MCM protocol has successfully docked 84\%.
+In other words, after 1000 models have been generated docking ligands into crystal structures (Figure \ref{fig:fraction_successful_time}A), The \textsc{TransRot}/MCM protocol has successfully docked 81\% of models, while the \textsc{Transform}/MCM protocol has successfully docked 87\%.
+When ligands are docked into relaxed models in which both backbone and side-chain atoms are perturbed (Figure \ref{fig:fraction_successful_time}C), The \textsc{TransRot}/MCM protocol has successfully docked 60\% of models, while the \textsc{Transform}/MCM protocol has successfully docked 75\%.
 The reduction in success rate is expected because the addition of side-chain and backbone perturbation effectively adds noise to the protein structure.
-However, we see that the \textsc{Transform}/MCM protocol results in a 10\% decrease in success rate between relaxed and crystal structures, rather than 18\% for the \textsc{TransRot}/MCM protocol, so the new \textsc{Transform} protocol is more tolerant of inaccurate protein structures than the original protocol.
+However, we see that the \textsc{Transform}/MCM protocol results in a 12\% decrease in success rate between relaxed and crystal structures, rather than 21\% for the \textsc{TransRot}/MCM protocol, so the new \textsc{Transform} protocol is more tolerant of inaccurate protein structures than the original protocol.
 Because the new initial placement algorithm is more likely to place the ligand in a high quality binding pose, a greater percentage of total docking time is spent in proximity or the correct binding site and pose.
 As a result, the sampling density increases and thereby the overall success rate of Rosetta ligand increases relative to the \textsc{TransRot}/MCM algorithm.
 
@@ -263,8 +263,8 @@ The improved sampling efficiency afforded by the new initial placement algorithm
 Figure \ref{fig:rmsd_vs_rmsd} compares the performance of several of the tested RosettaLigand protocols, and provides further insight into the impact of the various components of the protocol on overall performance.
 The RMSD vs RMSD plots illustrate specific performance differences comparison between pairs of Rosetta protocols.
 When the original \textsc{TransRot} initial placement algorithm is used, minimal improvement is observed when the MIN refinement algorithm is used as compared to MCM initial placement (Left).
-While 17 of the 43 proteins show improvement in RMSD, only 1 exhibits sufficient improvement to cross the 2.0 \AA\ cutoff.
-Comparison of the \textsc{TransRot} and \textsc{Transform} initial placement (Center) shows substantial improvement when the \textsc{Transform} initial placement algorithm is used, with 41/43 proteins having improved RMSDs, and 18/43 having enough improvement to cross the 2.0 \AA\ threshold.
+While 14 of the 43 proteins show improvement in RMSD, only 3 exhibit sufficient improvement to cross the 2.0 \AA\ cutoff.
+Comparison of the \textsc{TransRot} and \textsc{Transform} initial placement (Center) shows substantial improvement when the \textsc{Transform} initial placement algorithm is used, with 32/43 proteins having improved RMSDs, and 13/43 having enough improvement to cross the 2.0 \AA\ threshold.
 Comparison of the MCM and MIN refinement algorithms when the \textsc{Transform} initial placement algorithm is used shows that in this context the two refinement algorithms have nearly identical performance (Right).
 From this data we can conclude that the improvements seen are driven primarily by the new initial placement algorithm. 
 
@@ -283,7 +283,8 @@ The standard deviation of these 20 samples is shown with error bars. Dotted line
 \subsection{Examination of the successes and failures of RosettaLigand illustrates the impact of the \textsc{Transform} algorithm}
 Figure \ref{fig:specific_comparison} illustrates several examples of the successes and failures of RosettaLigand.
 Figure \ref{fig:specific_comparison}A is an example of a case in which both the \textsc{Transform} and \textsc{TransRot} based algorithms are capable of successfully docking the ligand.
-In both cases, the RMSD between the native ligand position and the predicted ligand position is less than 0.5 \AA.  This example represents a ?best case scenario? for RosettaLigand.
+In both cases, the RMSD between the native ligand position and the predicted ligand position is less than 0.5 \AA.  This example represents a 
+"best case scenario" for RosettaLigand.
 The ligand is relatively small, and is deeply buried in the protein, making close contacts with protein-side-chains on almost all sides.
 This drastically reduces the possible sampling space available during both initial placement and minimization.
 Figure \ref{fig:specific_comparison}B is an example which demonstrates a failure of the \textsc{TransRot} algorithm which is corrected by the \textsc{Transform} algorithm.
