@@ -36,7 +36,10 @@ The methods developed in chapter \ref{chap:lowres_paper} lead naturally to chapt
 To training the ANN model, a training data set was constructed using cross-docking so as to be highly diverse in chemical and protein space, as well as balanced in chemical space between active and inactive compounds.
 In addition to previously developed Rosetta energy terms, interface quality metrics, and ligand descriptor information, a new set of protein-ligand interface descriptors were developed based on Radial Distribution Functions.
 Several networks were trained using various combinations of these descriptor sets.
-The performance indicated %TODO finish this after done with HTS paper
+Analysis of the cross-validation performance of the trained networks indicated that the majority of the useful information to the networks was provided by the Rosetta energy term and interface quality metric data.
+The cross-validation performance also demonstrated that the networks were well-trained and capable of making more accurate ligand activity classifications than the RosettaLigand interface scores alone. 
+Despite the encouraging cross-validation performance of the ANN models, screening of the DEKOIS 2.0 benchmark showed that the models were unable to consistently classify active ligands, although significantly fewer protein systems had worse than random performance relative to using the RosettaLigand interface score alone for classification.
+Further work is underway to address this issue, and is detailed in section \ref{subsec:hts_further_development}
 
 
 \section{Future Directions}
@@ -77,8 +80,18 @@ To accomplish this, the homology modeling benchmark used by Kaufmann et al.\cite
 Preparation of this benchmarking set for use with the modern RosettaLigand protocol is currently underway.
 
 \subsection{RosettaHTS method development}
-
+\label{subsec:hts_further_development}
 \subsubsection{Further development of protein-ligand interface descriptors}
+The RDF descriptors described in chapter \ref{chap:rosetta_hts} appeared to provide no meaningful information to the ANN models.
+Despite this, it is likely that it is possible to develop meaningful fingerprint descriptors for use in these neural networks.
+The RDF fingerprint implementation has several parameters which can be potentially optimized to improve performance.
+Specifically, the magnitude of the smoothing factor, number of bins in the fingerprint, and maximum fingerprint range are being optimized.
+In addition to optimizing the parameters of the RDF fingerprints, several other methods for producing fingerprints can be explored.
+The FEATURE framework\citep{Halperin:2008ce} is a method producing fixed length protein environment fingerprints.
+This method has been successfully used to identify protein-ligand binding pockets and classify protein binding interactions. 
+The FEATURE framework describes the chemical environment surrounding points in space, as a result it can be adapted for use as a ligand interaction descriptor.
+Similarly, a 3D autocorrelation function, similar to that implemented in ADRIANA\citep{Code:2011uf} could be valuable as a 
+
+%TODO 3DA
 
 \subsubsection{Improving neural network generality}
-While we demonstrated in chapter \ref{chap:rosetta_hts} that the RosettaHTS neural network improves classification perfomance compared to , it's ability to 

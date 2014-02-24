@@ -168,11 +168,10 @@ Approved: \hskip 2.5in Date:\\[1.2em]
 %:
 %:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter*{ACKNOWLEDGMENTS}
-\addcontentsline{toc}{chapter}{ACKNOWLEDGMENTS}
-\vspace{7mm}
 
-Thanks to everyone and the cat. 
+\include{acknowledgements}
+\include{summary}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \singlespacing
@@ -195,16 +194,16 @@ Thanks to everyone and the cat.
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
-%\include{introduction}
-%\include{nv_kbp_chapter}
-%\include{lowres_paper}
-  d\include{RosettaHTS}
-%\include{conclusion}
-%\include{hts_preprocessing}
-%\include{mysql_appendix}
-%\include{lowres_appendix}
-%\include{nv_capture}
-%\include {lowres_capture}
+\include{introduction}
+\include{nv_kbp_chapter}
+\include{lowres_paper}
+\include{RosettaHTS}
+\include{conclusion}
+\include{hts_preprocessing}
+\include{mysql_appendix}
+\include{lowres_appendix}
+\include{nv_capture}
+\include {lowres_capture}
 \singlespacing
 \bibliographystyle{apalike}
 \bibliography{full_library}
