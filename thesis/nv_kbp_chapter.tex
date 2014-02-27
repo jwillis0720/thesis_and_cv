@@ -1,20 +1,22 @@
 \chapter{Design of Native-Like Proteins through an Exposure-Dependent Environment Potential}
 \label{chap:nv_kbp}
 \section{Introduction}
-Computational design of proteins is an active area of research.
+\subsection{Computational design of proteins is an active area of research}
 The design of protein surfaces with proper amino acid composition is critical to preventing aggregation and allowing for correct protein folding \citep{Chandler:2005ds}.
 Thermostabilization of enzymes and design of proteins with novel folds are two possible applications of the present research. 
 
+\subsection{The current Rosetta solvation model does penalize the burial of apolar atoms}
 As there are relatively few explicit interactions of amino acids on the protein surface, the total energy of a residue is dominated by Rosetta's implicit solvation model.
 The solvation model currently used by Rosetta is a function developed by Lazaridis and Karplus\citep{Lazaridis:1999wi}.
 This potential estimates the solvation free energy of an atom from a reference free energy, where the atom is essentially fully solvent-exposed.
-For every proximal atom, a cost of ?desolvation? is added in a pairwise decomposable and distance-dependent manner.
+For every proximal atom, a cost of "desolvation" is added in a pairwise decomposable and distance-dependent manner.
 This procedure aligns with the protein folding process, where amino acids move from a completely exposed location (reference state) into varying degrees of burial.
 While the model is parameterized for all amino acid atom types, it is driven by high desolvation penalties of polar atoms.
 It is quite insensitive to the burial of apolar atoms because desolvation energies are small. 
 
+\subsection{}
 This paradigm of desolvation is useful for determining energy changes in the folding of a monomeric protein.
-However, hydrophobic patches on the surface of a {\em de novo} designed protein are hardly penalized, as the environment of these amino acids did not change in the folding process.
+However, hydrophobic patches on the surface of a \textit{de novo} designed protein are hardly penalized, as the environment of these amino acids did not change in the folding process.
 At present, RosettaDesign excels in the design of tightly packed protein cores, while the protein surface is often poorly composed and requires manual adjustment\citep{Dantas:2003vt}.
 We hypothesize that native proteins have evolved to minimize unspecific aggregation, a fact that is ignored by the desolvation potential.
 Evolutionary pressures exerted on protein sequence composition by the requirement of protein solubility are difficult to model with a typical physics-based model, but can be modeled effectively with a knowledge-based energy potential. 
