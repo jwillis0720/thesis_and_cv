@@ -83,7 +83,7 @@ The adjusted correlation factor $R^{2}$ value for HSE to rSASA was 0.68, while t
 This suggests that while HSE is conceptually simpler, it does not perform as accurately as NV for proteins in our benchmark set.
 
 A linear regression modeling the correlation between rSASA values (in the range of 0 to 1 calculated using NACCESS) and NV score (range 0 to 1) was generated based on all proteins in the 42 protein benchmark set.
-The resulting linear regression model was rSASA = 1.29*(NV)-0.11 and had an $R^{2}$ of 0.86.
+The equation for the resulting linear regression model was $rSASA = 1.29*(NV)-0.11$ and had an $R^{2}$ of 0.86.
 Based on this model, residues with NV scores between 0.00 to 0.24 will have an approximate rSASA value of 0 to 0.19, residues with NV scores from 0.25 to 0.39 will have an approximate rSASA value of 0.21 to 0.39, and residues with NV scores between 0.40 to 1.00 will have an approximate rSASA value of 0.40 to 1.10.
 
 Terms in the RosettaDesign energy function can take the form of either single-body or two-body terms.

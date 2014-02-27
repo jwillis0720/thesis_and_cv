@@ -1,4 +1,4 @@
-\chapter{Appendix for chapter \ref{chap:lowres_paper}}
+\chapter{Appendix: protocol capture for chapter \ref{chap:lowres_paper}}
 
 \section{Introduction}
 
@@ -12,7 +12,7 @@ The files referenced in this chapter can be found in the DVD attached to the the
 Conformers can be generated with a number of tools, including MOE and OMEGA.
 In this case, the Conformer Generation tool included as part of the BioChemical Library (BCL) suite was used.
 The following command was used to generate conformers:
-
+\singlespace
 \begin{verbatim}
 bcl.exe molecule:ConformerGeneration -conformers \
 pdb_refinedsupplemented_lib.sdf.bz2 -ensemble \
@@ -21,7 +21,7 @@ DihedralBins -temperature 1.0 -max_iterations 1000 \
 -top_models 100 -bin_size 30.0 -scheduler PThread 8 \
 -add_h -conformers_single_file conformers
 \end{verbatim}
-
+\doublespace
 You can use any conformer generation tool you have available to you for this step.
 Your generated conformers should be output to a single SDF file.
 Every conformer must have 3D coordinates and hydrogens added.

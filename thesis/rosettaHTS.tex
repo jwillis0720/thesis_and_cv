@@ -7,8 +7,8 @@
 While protein-ligand docking tools are frequently capable of correctly predicting poses\citep{Trott:2010km,Friesner:2004hm,Ewing:2001wu}, these methods have proven limited in their ability to distinguish between active and inactive compounds\citep{Bauer:2013de,Huang:2006gi,Davis:2009fx}.
 The DEKOIS 2.0 benchmark published in 2013 \citep{Bauer:2013de} and a blind study of protein-ligand docking tools conducted in 2009\citep{Davis:2009fx} demonstrated that the majority of protein-targets can successfully be studied with protein-ligand docking tools, although the tool with the best performance varies based on the target.
 This suggests that protein-ligand docking as a broad class of technique generally has the ability to be successful. 
-However, the overall variance in ligand docking performance suggests 
-%TODO finish this
+However, the overall variance in ligand docking performance suggests that while active and inactive ligands can be classified for most protein systems by at least one available tool, no tool is universally reliable.
+Furthermore, it has not been possible to easily predict which protein systems can be successfully targeted by which by which ligand docking tools. 
 
 \subsection{Neural Network based methods can be used to re-score protein-ligand binding prediction}
 
@@ -299,8 +299,7 @@ Closely inspecting this plot, we can see that the primary effect of the Rosetta 
 
 \begin{figure}
 \centering
-%TODO: fix figure legend, add panel B
-\includegraphics[width=4in]{figures/hts/dekois_screen_all.pdf}
+\includegraphics[width=4in]{figures/hts/auc_distributions.pdf}
 \caption{
 A) A plot of the distribution of ROC-AUC values for each of the 74 protein targets in the DEKOIS 2.0 benchmarking set when models were rescored with each of the classifiers being evaluated.
 B) A plot of the distributions for 3 of the evaluated models.
@@ -339,4 +338,5 @@ One possible cause of the reduced performance is the lack of chemical space cove
 The cross-validation performance of the ANN based classifiers indicates that the descriptor data used provides sufficient information to improve upon the Rosetta interface score.
 However, the 507 ligand set used for this training does not cover the same range of chemical space as the DEKOIS 2.0 benchmark set, and as a result it is likely that in many cases the network is attempting to make predictions far outside of the range of descriptor space that it understands.
 While the ANN models clearly have classification ability over a large range of the DEKOIS 2.0 dataset, this classification ability is more limited than would be desirable.
-The ANN models described here demonstrate the possible efficacy of a machine learning approach to structure based virtual screening, however more experimental data is likely required to achieve the goal of a truly general model. 
+The ANN models described here demonstrate the possible efficacy of a machine learning approach to structure based virtual screening, however more experimental data is likely required to achieve the goal of a truly general model.
+The future directions of this research are outlined in chapter \ref{chap:conclusion}.
