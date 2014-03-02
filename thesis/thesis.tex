@@ -36,7 +36,7 @@ Figure\hfill Page\endgraf} \addtocontents{lot}{\vspace{0.2in}
 \usepackage{multirow}
 \usepackage{booktabs}
 \usepackage[subfigure, titles]{tocloft}
-\usepackage{acronym}
+\usepackage[printonlyused,withpage]{acronym}
 \usepackage{datetime}
 \usepackage{fancyvrb}
 \usepackage{color}
@@ -46,8 +46,8 @@ Figure\hfill Page\endgraf} \addtocontents{lot}{\vspace{0.2in}
 \usepackage{algorithm}
 \usepackage{algorithmic}
 
-\renewcommand{\nomname}{LIST OF ABBREVIATIONS}
-\makenomenclature
+%\renewcommand{\nomname}{LIST OF ABBREVIATIONS}
+%\makenomenclature
 
 \graphicspath{{images/}}
 \DeclareGraphicsExtensions{.pdf,.jpeg,.png,.PNG, .eps, .tiff}
@@ -185,7 +185,8 @@ Approved: \hskip 2.5in Date:\\[1.2em]
 \newpage
 \listoffigures
 \newpage
-\printnomenclature
+\include{acronyms}
+%\printnomenclature
 \newpage
 \endgroup
 
@@ -195,7 +196,6 @@ Approved: \hskip 2.5in Date:\\[1.2em]
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
-\include{acronyms}
 
 \include{introduction}
 \include{nv_kbp_chapter}
