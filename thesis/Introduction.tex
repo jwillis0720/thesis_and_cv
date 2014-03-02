@@ -3,7 +3,7 @@
 %  Innovation (Why was the research done novel? How does it relate to competing methods?) of the body of work in your thesis.
 %This chapter could ideally come form a review article you have written.
 \chapter{Introduction}
-\section{The Sampling and Scoring Methods Used By the Rosetta Software Suite}
+\section{The Sampling and scoring methods used by the Rosetta software suite}
 Rosetta is a unified software package for protein structure prediction and functional design.
 It has been applied to predict protein structures with and without the aid of sparse experimental data, perform protein-protein and protein-small molecule docking, design novel proteins, and redesign existing proteins for altered function.
 Rosetta allows for rapid tests of hypotheses in biomedical research which would be impossible or exorbitantly expensive to perform via traditional experimental methods.
@@ -14,25 +14,25 @@ The majority of conformational sampling protocols in Rosetta use the Metropolis 
 Gradient based minimization is often employed for last step refinement of initial models.
 Since each Rosetta protocol allows degrees of freedom specific for the task, Rosetta can perform a diverse set of protein modeling tasks\citep{Wang:2007du}.
 
-\subsection{Sampling Strategies for Backbone Degrees of Freedom}
+\subsection{Sampling strategies for backbone degrees of freedom}
 Rosetta separates large backbone conformational sampling from local backbone refinement.
 Large backbone conformational changes are modeled by exchanging the backbone conformations of 9 or 3 amino acid peptide fragments.
 Peptide conformations are collected from the PDB for homologous stretches of sequence\citep{Simons:1997do} which captures the structural bias for the local sequence\citep{Bystroff:1996vl}.
 For local refinement of protein models Rosetta utilizes Metropolis Monte Carlo sampling of phi, psi angles calculated not to disturb the global fold of the protein.
 Rohl\citep{Rohl:2004dh} provides a review of the fragment selection and backbone refinement algorithms in Rosetta. 
 
-\subsection{Sampling Strategies for side-chain Degrees of Freedom}
+\subsection{Sampling strategies for side-chain degrees of freedom}
 Systematic sampling of side-chain degrees of freedom of even short peptides quickly becomes intractable\citep{Levinthal:1968vd}.
 Rosetta drastically reduces the number of conformations sampled by usage of discrete conformations of side-chains observed in the PDB\citep{Kuhlman:2000tc,Dunbrack:1993jt}.
 These "rotamers" capture allowed combinations between side-chain torsion angles as well as the backbone phi, psi angles and thereby reduce the conformational space\citep{Dunbrack:1993jt}.
 A Metropolis Monte Carlo simulated annealing run is used to search for the combination of rotamers occupying the global minimum in the energy function\citep{Kuhlman:2000tc,LeaverFay:2005vc}.
 This general approach is extended to protein design by replacing a rotamer of amino acid A with a rotamer of amino acid B in the Monte Carlo step.
 
-\subsection{Rosetta Energy Function}
+\subsection{Rosetta energy function}
 Simulations with Rosetta can be classified based on whether amino acid side-chains are represented by super atoms or centroids in the low-resolution mode or at atomic detail in the high-resolution mode.
 Both modes have optimized energy functions that have been reviewed previously by Rohl\citep{Rohl:2004dh}.
 
-\subsubsection{Knowledge Based Centroid Energy Function}
+\subsubsection{Knowledge based centroid energy function}
 The low-resolution energy function treats the side-chains as centroids\citep{Simons:1997do,Simons:1999wp}.
 The energy function models solvation, electrostatics, hydrogen bonding between beta strands, and steric clashes.
 Solvation effects are modeled as the probability of seeing a particular amino acid residue with a given number of alpha carbons within an amino acid dependent cutoff distance.
@@ -44,14 +44,14 @@ All probability profiles have been derived using Bayesian statistics on crystal 
 The lower resolution of this centroid-based energy function smoothes the energy landscape at the expense of its accuracy.
 The smoother energy landscape allows structures which are close to the true global minima to maintain a low energy even with structural defects that a full atom energy function would penalize stiffly.
 
-\subsubsection{Knowledge Based All Atom Energy Function}
+\subsubsection{Knowledge based all atom energy function}
 The all-atom high-resolution energy function used by Rosetta was originally developed for protein design\citep{Kuhlman:2000tc,Kuhlman:2003kp}.
 It combines the 6-12 Lennard Jones potential for van der Waals forces, a solvation approximation\citep{Lazaridis:1999wi}, an orientation dependent hydrogen bonding potential\citep{Kortemme:2003td}, a knowledge based electrostatics term, and a knowledge based conformation dependent amino acid internal free energy term\citep{Dunbrack:1993jt}.
 An important consideration when constructing this potential was that all energy terms are pairwise decomposable.
 The pairwise decomposition of each of the terms limits the total number of energy contributions to $\frac{1}{2}*N(N-1)$ where $N$ is the number of atoms within the system.
 This limitation allows pre-computation and storage of many of these energy contributions in the computer memory which is necessary for rapid execution of the Metropolis Monte Carlo sampling strategies employed by Rosetta during protein design and atomic-detail protein structure prediction.
 
-\section{Protein Design Using Rosetta}
+\section{Protein design using Rosetta}
 All protocols discussed up to this point relate to protein structure prediction and seek to determine the position of amino acid atoms in space.
 Protein design on the other hand seeks to determine an amino acid sequence that folds into a given protein structure or performs a given function.
 In this context the protein design problem of finding a sequence that folds into a given tertiary structure is also known as the "inverse protein folding problem".
@@ -62,9 +62,9 @@ Every amino acid is considered at each position in the sequence, and rotamers ar
 After each round of Monte Carlo sequence optimization, the backbone is relaxed to accommodate the designed amino acids\citep{Kuhlman:2003kp}.
 The practical uses of ROSETTADesign can be divided into five basic categories: Design of novel folds\citep{Kuhlman:2003kp}, redesign of existing proteins\citep{Korkegian:2005it}, protein interface design, enzyme design\citep{Jiang:2008jk}, and prediction of fibril forming regions in proteins\citep{Thompson:2006cj}.
 
-\subsection{De Novo Protein Design}
+\subsection{De novo protein design}
 
-The RosettaDesign method has been used for the de novo design of a fold that was not (yet) represented in the PDB.
+The RosettaDesign method has been used for the \textit{de novo} design of a fold that was not (yet) represented in the PDB.
 A starting backbone model consisting of a five stranded beta-sheet and two packed alpha-helices was constructed with the Rosetta de novo protocol using distance constraints derived from a two-dimensional sketch\citep{Rohl:2004dh}.
 The sequence was iteratively designed with five simulation trials of 15 cycles each.
 The final sequence was expressed and the structure was determined using X-ray crystallography.
@@ -74,7 +74,7 @@ Similarly, a molecular switch which folded into a trimeric coiled coil in the ab
 The sequence of an existing zinc finger domain was aligned with a coiled-coil hemaglutinin domain.
 During the design protocol the sequence was optimized to fold into both tertiary structures\citep{Ambroggio:2006he}.
 
-\subsection{Redesign of Existing Proteins}
+\subsection{Redesign of existing proteins}
 When nine globular proteins were stripped of all side chains and then redesigned using RosettaDesign the average sequence recovery was 35\% for all residues\citep{Kuhlman:2003kp}.
 In four out of nine cases the stability of the proteins improved as measured by chemical denaturation.
 The structure of a redesigned human procarboxypeptidase (PDB 1AYE)\citep{GarciaSaez:1997cn} was determined experimentally.
@@ -87,16 +87,16 @@ The backbone structure of half the barrel was duplicated, and Rosetta was used t
 The new protein, named FLR, was expressed and crystallized.
 The two resulting crystal structures had RMSDs of 0.49 \AA\ and 0.87 \AA, demonstrating the ability of RosettaDesign to make accurate predictions of side-chain conformation and energies\citep{Fortenberry:2011hw}.
 
-\section{Existing Challenges With Protein Surface Design}
+\section{Existing challenges with protein surface design}
 
-\subsection{Electrostatic Energy is Insufficient to Predict the Impact of Protein Surface Mutations}
+\subsection{Electrostatic energy is insufficient to predict the impact of protein surface mutations}
 While protein design has had frequent successes, there are outstanding challenges, particularly with respect to the design of the surfaces of soluble proteins.
 Solvent interactions are critical accurately measuring the electrostatics and stability of protein surfaces\citep{Park:2004kn}.
 However, due to the computational complexity associated with explicit solvent modeling, implicit models are frequently used, and may not be sufficiently detailed to make accurate energetic predictions.
 Furthermore, The network of interactions between protein surface residues and the overall stability of the proteins are highly complex. 
 Xiao\citep{Xiao:2013dq} demonstrated that while electrostatic surface interactions are important for stability, the impact of a single mutation on experimentally determined stability frequently cannot be explained by the impact on computed electrostatic energy.
 
-\subsection{Computationally Designed Proteins Frequently Aggregate Unless "Supercharged"}
+\subsection{Computationally designed proteins frequently aggregate unless "supercharged"}
 In addition to issues with stability, computationally designed proteins frequently have issues with aggregation.
 A study was performed in which RosettaDesign was used to fully redesign 10 proteins\citep{Dantas:2003vt}.
 They found that 4 of the 10 designed proteins formed insoluble aggregates at 1mM concentration.
@@ -104,10 +104,9 @@ Aggregation appears to be a general phenomenon affecting protein design, and it 
 However, "supercharged" proteins are infrequently seen in nature, suggesting that evolved mechanisms for retaining solubility and avoiding aggregation are more complex.
 Observation of the folding properties of supercharged proteins suggest that excessive charging can inhibit folding\citep{MichaelSLawrence:2007cv}, which may have acted as an evolutionary  barrier to natural supercharging.
 
-% history and state of the ligand docking field
-\section{The History of Ligand Docking}
+\section{The history of ligand docking}
 
-\subsection{Early Attempts at Hand-Docking Ligands Using Physical Models}
+\subsection{Early attempts at hand-docking ligands using physical models}
 Attempts to model and predict protein-drug interactions date began shortly after the publication of the x-ray structure of hemoglobin, with Beddell et. al. Publishing a proof of concept method for structure based drug discovery in 1976\citep{BEDDELL:1976go}.
 The method developed by Beddell relied on the manual placement of physical molecular models into a scale model of the hemoglobin electron density, which allowed the authors to identify novel compounds with millimolar activity. 
 While the identified compounds were relatively poor by modern standards, and the method of manual placement into physical models did not provide a means of postulating mechanism of action, the authors recognized the value of the new technique, saying:
@@ -200,7 +199,7 @@ Similarly, RosettaLigand was used to model the binding of Positive Allosteric Mo
 In this case, the predictions made by Rosetta were used to guide mutation and radioligand binding studies, the results of which were used to further refine models.
 These models made it possible to map out critical interactions between Positive Allosteric Modulators and the mGlu$_{5}$ binding site even in the absence of crystal structure information.
 
-\section{Computational Ligand Docking has inconsistent predictive power} 
+\section{Computational ligand docking has inconsistent predictive power} 
 
 A common thread running through the research described above is the difficulty of docking ligands into some proteins.
 For every protein-ligand method developed, some percentage of protein-ligand interfaces cannot be effectively predicted.
