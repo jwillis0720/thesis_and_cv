@@ -46,7 +46,7 @@ A knowledge based potential was created based on the $?log?(propensity)$ of a hy
 Separate scoring grids are computed for hydrogen bond donors and acceptors. To compute the hydrogen bond donor scoring grid, the distance from each grid square to the nearest hydrogen bond donor is computed, and the score from the knowledge based potential is stored in the grid square (Figure \ref{fig:hbond_schematic}B).
 The same process is followed to compute the hydrogen bond acceptor scoring grid.
 Hydrogen bond donor atoms are scored based on the value of the nearest grid square in the appropriate scoring grid.  
-The combination of the shape complementarity and hydrogen bonding scoring grids are referred to here as the ?KBP? scoring function. 
+The combination of the shape complementarity and hydrogen bonding scoring grids are referred to here as the "\ac{KBP}" scoring function. 
 \begin{figure}
 %figure 2 in original paper
 \centering
@@ -68,12 +68,12 @@ Figure \ref{fig:frac_time} and Figure \ref{fig:frac_count} compare the effect of
 Figure \ref{fig:frac_time}A and Figure \ref{fig:frac_count}A demonstrate that the new knowledge based potential no significant impact on ligand docking when docking into relaxed models.
 Furthermore, when ligands are docked into repacked and relaxed models, the new Knowledge Based Potential demonstrates decreased performance compared to the binary scoring function. 
 There are two factors which likely play a role in this decreased performance.
-It is notable that as the degree of noise introduced into the protein structure increases, the performance of the KBP based scoring grid relative to the Binary scoring grid decreases.
-This is effect is most likely caused by the presence of side chain information in the KBP based scoring grids.
+It is notable that as the degree of noise introduced into the protein structure increases, the performance of the \ac{KBP} based scoring grid relative to the Binary scoring grid decreases.
+This is effect is most likely caused by the presence of side chain information in the \ac{KBP} based scoring grids.
 Because side chain atoms are included, an input model with incorrect side-chains will result in an incorrectly placed energy minimum, and lower quality binding poses. 
 The second likely factor is suggested by the shapes of the curves in Figure \ref{fig:frac_count}.
 While most ligands are successfully docked within 150 poses, some ligands are exceptionally difficult to dock, and require additional sampling, for this reason, the Transform/Binary/Repack protocol shows a slight increase in success rate after approximately 800 models have been generated.
-In contrast, the Transform/KBP/Repack protocol does not exhibit the same increase.
+In contrast, the Transform/\ac{KBP}/Repack protocol does not exhibit the same increase.
 This is likely a result of the comparative shapes of the two energy functions.
 The Binary energy function is extremely flat, and results in a relatively wide area of space with identical scores.
 As a result, a range of ligand poses will be produced during the initial placement stage, as there is not one single energy minimum.
@@ -85,7 +85,7 @@ If these minima are incorrectly placed as a result of backbone inaccuracies, the
 \centering
 \includegraphics[width=4in]{figures/lowres_appendix/fraction_successful_time_supplement.pdf}
 \caption{
-The fraction of protein systems in which the lowest scoring model has an RMSD < 2.0 \AA\ to the native structure as a function of CPU time using the Binary scoring function (Transform/Binary/Repack) and Knowledge based scoring function (Transform/KBP/Repack) RosettaLigand docking protocols when docked into A) Crystal structures, B) Repacked crystal structures and C) Relaxed crystal structures. 
+The fraction of protein systems in which the lowest scoring model has an \acs{RMSD} < 2.0 \AA\ to the native structure as a function of \acs{CPU} time using the Binary scoring function (Transform/Binary/Repack) and Knowledge based scoring function (Transform/\acs{KBP}/Repack) RosettaLigand docking protocols when docked into A) Crystal structures, B) Repacked crystal structures and C) Relaxed crystal structures. 
 A large pool of models were generated, and random subsamples were taken corresponding to time points at 5 minute intervals.
 The number of structures included in each time point was based on the average time to generate a model for each algorithm.
 20 random samples were taken for each time point, and the means are plotted, with the error bars representing the standard deviation. Docking protocols which make use of the Transform algorithm are reliably converged after approximately 15 minutes (dotted line).  
@@ -98,7 +98,7 @@ The number of structures included in each time point was based on the average ti
 \centering
 \includegraphics[width=4in]{figures/lowres_appendix/fraction_successful_count_supplement.pdf}
 \caption{
-The fraction of protein systems in which the lowest scoring model has an RMSD < 2.0 \AA\ to the native structure as function of the total number of structures using the Binary scoring function (Transform/Binary/Repack) and Knowledge based scoring function (Transform/KBP/Repack) RosettaLigand docking protocols when docked into A) Crystal structures, B) Repacked crystal structures and C) Relaxed crystal structures.
+The fraction of protein systems in which the lowest scoring model has an \acs{RMSD} < 2.0 \AA\ to the native structure as function of the total number of structures using the Binary scoring function (Transform/Binary/Repack) and Knowledge based scoring function (Transform/\acs{KBP}/Repack) RosettaLigand docking protocols when docked into A) Crystal structures, B) Repacked crystal structures and C) Relaxed crystal structures.
 A large pool of models were generated, and random subsamples were taken.
 20 random samples were taken for each point, and the means are plotted, with the error bars representing the standard deviation.
 Docking protocols which make use of the Transform algorithm are reliably converged after approximately 150 models (dotted line).
