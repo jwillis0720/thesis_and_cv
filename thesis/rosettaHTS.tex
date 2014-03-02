@@ -23,10 +23,10 @@ As the goal of RosettaHTS was to train a model capable of distinguishing between
 There are several factors which complicate the selection of a training set for a general classifier.
 First, compounds with known binding affinity must be located across a wide range of protein targets.
 Because the goal is to compare ligands independent of protein target, \ki\ must be used rather than \ic.
-This substantially reduces the availability of data from public databased such as CHEMBL or PubChem. 
+This substantially reduces the availability of data from public databased such as ChEMBL or PubChem. 
 Furthermore, the active compounds selected must bind to a wide and evenly distributed range of targets, and have a wide and evenly distributed range of known activities.
 Due to the realities of the drug discovery process, neither publicly nor privately available compound databases meet these requirements.
-For example, while CHEMBL contains 481050 \ki\ value measurements across 164 distinct targets with known \ki values, 90\% of these targets have fewer than 891 measurements each.
+For example, while ChEMBL contains 481050 \ki\ value measurements across 164 distinct targets with known \ki values, 90\% of these targets have fewer than 891 measurements each.
 In other words, nearly all of the available \ki\ values are confined to a small handful of protein targets.
 
 \subsubsection{The limitations of existing sources of inactive ligands}
@@ -59,7 +59,7 @@ For the purposes of this training set, all active ligands must have the followin
 The set of proteins must be diverse, every protein in the set should come from a different family to avoid biasing training.
 While RosettaLigand is capable of docking ligands into proteins into ligands of any side, extremely large proteins require the allocation of large amounts of memory, which makes screening more time consuming.
 As a result, all proteins in the training set should have <1000 total residues across all chains.
-RosettaLigand must be capable of predicting the pose of each complex such that the lowest Rosetta score has an RMSD of < 2.0 \AA\ to the crystal structure.
+RosettaLigand must be capable of predicting the pose of each complex such that the lowest Rosetta score has an \ac{RMSD} of < 2.0 \AA\ to the crystal structure.
 the 2959 complexes in the PDBBind refined set were filtered based on the first two criteria, and then docked using the RosettaLigand protocol described in chapter \ref{chap:lowres_paper}, resulting in a set of 507 unique protein-ligand complexes (Table \ref{table:training_pdbs}. 
 This set of compounds is very diverse in chemical space, ranging from small fragments to small peptides, with the bulk of the distribution consisting of small drug-like molecules.
 Specifically, the number of atoms ranges from 6 to 171, with a median of 44, the number of rings ranges from 0 to 8 with a median of 2. The number of rotatable bonds ranges from 0 to 49 with a median of 6, and the weight ranges from 87.06 to 1107.58 with a median of 107.
@@ -79,12 +79,12 @@ The basic property distribution of ligands in the training data set.  Histograms
 \renewcommand{\tabcolsep}{0.09cm}
 \centering
 \input{tables/hts/training_pdbs.tex}
-\caption{The PDB IDs of the protein-ligand complexes selected for use in the training data set.}
+\caption{The \acs{PDB} IDs of the protein-ligand complexes selected for use in the training data set.}
 \label{table:training_pdbs}
 \end{table}
 
 \subsubsection{Crossdocking active compounds produces presumed inactive binding data}
-The best scoring, lowest RMSD binding poses selected in section \ref{subsubsec:active_poses} will comprise the active component of the training set.
+The best scoring, lowest \ac{RMSD} binding poses selected in section \ref{subsubsec:active_poses} will comprise the active component of the training set.
 The inactive component of the training set was generated through cross-docking.
 Each ligand in the 507 compound set was docked into each of the proteins in the set except the one with measured activity data.
 Due to the size of chemical space\citep{Reymond:2012un} and the diversity of the protein-ligand complexes in the dataset, it can be reasonably assumed that every cross-docked complex has no binding affinity.
@@ -95,13 +95,13 @@ The lowest scoring Rosetta model for each cross-docked complex was selected, and
 \subsubsection{Sources of descriptor data} 
 
 The proper selection of descriptors is critical for the training of an effective model.
-It is frequently difficult to determine \textit{a priori} which descriptors will be the most useful, so three classes of descriptor information were evaluated.  Specifically: scalar scores and statistics describing the protein-ligand interface,  Radial Distribution Function(RDF) descriptors describing the arrangement of atoms in the protein-ligand interface, and scalar metrics describing the ligand chemistry.
+It is frequently difficult to determine \textit{a priori} which descriptors will be the most useful, so three classes of descriptor information were evaluated.  Specifically: scalar scores and statistics describing the protein-ligand interface,  \ac{RDF} descriptors describing the arrangement of atoms in the protein-ligand interface, and scalar metrics describing the ligand chemistry.
 
 \subsubsection{Scalar protein-ligand interface descriptors}
 \label{subsubsec:scalar_rosetta}
 The RosettaLigand energy function directly provides a number of metrics that can be used as scalar descriptors of the chemistry of the protein-ligand interface.
 In addition to these scores, Rosetta implements an "Interface Analyzer" which generates additional descriptors of the protein-ligand interface.
-Between these two descriptor sources, a set of 20 descriptors can be computed, describing the van der waals, hydrogen bonding, desolvation and electrostatic energy of the protein-ligand interface, as well as the size of the protein binding pocket, the number of unsatisfied hydrogen bonds, and the Solvent Accessible Surface Area(SASA) of the interface.
+Between these two descriptor sources, a set of 20 descriptors can be computed, describing the van der waals, hydrogen bonding, desolvation and electrostatic energy of the protein-ligand interface, as well as the size of the protein binding pocket, the number of unsatisfied hydrogen bonds, and the \ac{SASA} of the interface.
 Table \ref{table:rosetta_scalar} summarizes the specific scalar interface descriptors used.
 \begin{table}
 \scriptsize
@@ -116,7 +116,7 @@ Rosetta energy descriptors were originally described by Rohl\citep{Rohl:2004dh} 
 \subsubsection{Scalar ligand descriptors}
 \label{subsubsec:scalar_bcl}
 The scalar descriptors discussed in section \ref{subsubsec:scalar_rosetta} encode only information related to the protein-ligand interface.
-To provide information about the chemistry of the ligand, an additional set of ligand descriptors are computed using the BioChemical Library (BCL).
+To provide information about the chemistry of the ligand, an additional set of ligand descriptors are computed using the \ac{BCL}.
 These descriptors provide information about the weight of the ligand, the number of hydrogen bond donors and acceptors, predicted LogP, number of rings, number of rotatable bonds and the circumference of the ligand around the widest dimension.
 Table \ref{table:bcl_scalar} summarizes the scalar ligand descriptors.
 \begin{table}
@@ -124,34 +124,34 @@ Table \ref{table:bcl_scalar} summarizes the scalar ligand descriptors.
 \renewcommand{\tabcolsep}{0.09cm}
 \centering
 \input{tables/hts/bcl_scalar.tex}
-\caption{A summary of the names and definitions of the scalar descriptors generated by the BCL. }
+\caption{A summary of the names and definitions of the scalar descriptors generated by the \acs{BCL}. }
 \label{table:bcl_scalar}
 \end{table}
-The number of descriptors used to describe the ligand is relatively small compared to previous machine learning studies performed using the BCL\citep{Mueller:2010dx}.
+The number of descriptors used to describe the ligand is relatively small compared to previous machine learning studies performed using the \ac{BCL}\citep{Mueller:2010dx}.
 The rationale for including a smaller number of descriptors is that a relatively small number of ligands is being used to train the classifier.
 As a result, the descriptions of the ligand chemistry used should be broad enough that the range of the descriptor space is well covered.
 
 \subsubsection{Protein-ligand fingerprint descriptors}
 In addition to the scalar descriptors  discussed in sections \ref{subsubsec:scalar_rosetta} and \ref{subsubsec:scalar_bcl}, a novel set of protein-ligand interface descriptors were added.
-These fingerprint descriptors are implemented as RDFs, which take the following form:
+These fingerprint descriptors are implemented as \ac{RDF}s, which take the following form:
 \begin{equation}
 g(r) = \frac{1}{2}\sum_{\substack{i,j \\ i \neq j}}score_{ij}e^{-B(r-r_{ij})^{2}}
 \end{equation}
 Where $i$ and $j$ are a protein and ligand atom respectively, $score_{ij}$ is a score computed based on those two atoms, $B$ is a smoothing factor, $r$ is the radius of the sphere being currently considered, and $r_{ij}$ is that distance between the two atoms.
-The function $g(r)$ computes the RDF for a single distance.  To compute the complete fingerprint, $g(r)$ is computed for a range of values of of $r$.
+The function $g(r)$ computes the \ac{RDF} for a single distance.  To compute the complete fingerprint, $g(r)$ is computed for a range of values of of $r$.
 The resulting fingerprint represents the probability of two atoms existing within a sphere of radius $r$ with some property. 
 More broadly, these fingers can be interpreted as a 1 dimensional representation of the 3 dimensional distribution of geometric and chemical properties in the protein-ligand interface. 
 A range of fingerprints were computed using this method, with various chemical properties used to compute $score_{ij}$.
 Fingerprints are computed using the attractive, repulsive,electrostatic, solvation and hydrogen bonding scores used by Rosetta.  Additionally, a charge based function is implemented in which $score_{ij}$ is computed as the product of the charges of each atom pair, and a hydrogen bond count function is computed in which $score_{ij}$ is 1.0 if the pair of atoms are a hydrogen bond donor and acceptor, and 0.0 otherwise.
 The fingerprints are computed directly by Rosetta.
-Table \ref{table:rosetta_fingerprint} summarizes the RDF fingerprints computed by Rosetta.
-Based on previous experience with RDF fingerprints in the BCL, all fingerprints are computed using 24 evenly spaced distance steps between 0 and 6.0 \AA.
+Table \ref{table:rosetta_fingerprint} summarizes the \ac{RDF} fingerprints computed by Rosetta.
+Based on previous experience with \ac{RDF} fingerprints in the \ac{BCL}, all fingerprints are computed using 24 evenly spaced distance steps between 0 and 6.0 \AA.
 \begin{table}
 \scriptsize
 \renewcommand{\tabcolsep}{0.09cm}
 \centering
 \input{tables/hts/rosetta_fingerprint.tex}
-\caption{A summary of the names and definitions of the RDF fingerprint descriptors generated by Rosetta. }
+\caption{A summary of the names and definitions of the \acs{RDF} fingerprint descriptors generated by Rosetta. }
 \label{table:rosetta_fingerprint}
 \end{table}
 
@@ -159,13 +159,13 @@ Based on previous experience with RDF fingerprints in the BCL, all fingerprints 
 
 \subsubsection{Cross validation scheme}
 In addition to selecting a set of input descriptors, a reasonable training mechanism and neural network architecture must be selected.
-As described in section \ref{sec:intro_overtraining}, ANNs are prone to overtraining, and the proper design of a training protocol is critical to avoid this problem.
-Based on previous experience using ANNs to predict drug activity\citep{Mueller:2010dx,Mueller:2012gn,Butkiewicz:2013ka}, a 10 fold cross validation was used.
+As described in section \ref{sec:intro_overtraining}, \ac{ANN}s are prone to overtraining, and the proper design of a training protocol is critical to avoid this problem.
+Based on previous experience using \ac{ANN}s to predict drug activity\citep{Mueller:2010dx,Mueller:2012gn,Butkiewicz:2013ka}, a 10 fold cross validation was used.
 In this scheme, the combined set of active and inactive compounds described in section \ref{subsec:dataset_description} was randomized and split into 10 evenly sized blocks.
 In each round of cross validation, 1 block is selected as an "independent" set, 1 block is selected as a "monitoring" set, and the remaining blocks are selected for training.
 Figure \ref{fig:crossval_schematic} provides a schematic illustration of this cross validation scheme.
 Note that the cross validation is set up such that each block in the dataset plays a role as both an independent and a monitoring set.
-During training, the training dataset is used to train the ANN, and after every iteration of training, enrichment is calculated using the monitoring set.
+During training, the training dataset is used to train the \ac{ANN}, and after every iteration of training, enrichment is calculated using the monitoring set.
 At the conclusion of the training process for each round of cross validation, the model with the best enrichment according to the monitoring dataset is output.
 The training scheme results in an ensemble of 90 models.
 When all rounds of cross validation are complete, the final enrichment of the ensemble of models is computed using the independent datasets from each round of cross validation.
@@ -204,51 +204,50 @@ The network is trained for 800 iterations, and the model with the highest averag
 \subsubsection{Summary of networks trained}
 \label{subsubsec:network_training}
 Several networks were trained using a variety of input descriptors.
-The "Rosetta scalar" network was trained using only the Rosetta generated scalar descriptors in table \ref{table:rosetta_scalar}, the "Rosetta+BCL scalar" network was trained using the Rosetta scalar descriptors combined with the BCL descriptors in table \ref{table:bcl_scalar}, and the "Rosetta fingerprint + scalar" network is trained using both the Rosetta scalar, and Rosetta fingerprint descriptors in table\ref{table:rosetta_fingerprint}.
-As a control, the "BCL scalar" network is trained using only the BCL descriptors.
-Because the set of training data is balanced in chemical space, we expect that the BCL scalar network will not achieve any reasonable enrichment, as no signal should be available for classification.
+The "Rosetta scalar" network was trained using only the Rosetta generated scalar descriptors in table \ref{table:rosetta_scalar}, the "Rosetta+BCL scalar" network was trained using the Rosetta scalar descriptors combined with the \ac{BCL} descriptors in table \ref{table:bcl_scalar}, and the "Rosetta fingerprint + scalar" network is trained using both the Rosetta scalar, and Rosetta fingerprint descriptors in table\ref{table:rosetta_fingerprint}.
+As a control, the "\ac{BCL} scalar" network is trained using only the \ac{BCL} descriptors.
+Because the set of training data is balanced in chemical space, we expect that the \ac{BCL} scalar network will not achieve any reasonable enrichment, as no signal should be available for classification.
 
 \subsubsection{Results of network training}
 
 Because the networks described in section \ref{subsubsec:network_training} were trained using a cross-validation scheme, The performance of each of the 90 models generated can be evaluated using the independent dataset for each model.
 These independent evaluations were merged to produced a single set of independent predictions spanning the entire training dataset.
 These prediction sets were then compared to the classification performance obtained by using the RosettaLigand interface score.
-Three prediction performance metrics are presented here: Enrichment (Equation \ref{eq:enrichment}), Positive Predictive Value (PPV) and Receiver Operating Characteristic Area Under Curve (ROC-AUC). 
+Three prediction performance metrics are presented here: Enrichment (Equation \ref{eq:enrichment}), \ac{PPV} and \ac{ROC-AUC}. 
 As described previously, Enrichment provides a metric for the ability of the model to correctly make positive predictions early on.
-ROC are measurements of the overall performance of the classifier which provide a convenient means of visualizing classification performance. 
+\ac{ROC} are measurements of the overall performance of the classifier which provide a convenient means of visualizing classification performance. 
 
-\subsubsection{Description of the ROC-AUC metric}
-To compute an ROC curve, the True Positive Rate (TPR) is computed as $TPR=TP/P$ where TP is the number of true positive predictions, and P is the number of total positive values in the given dataset, and the False Positive Rate (FPR) is computed as $FPR=FP/N$ where FP is the number of false positive predictions, and N is the total number of negative values in the dataset.
-The predictions made by each model are sorted by predicted score, with the best scores first, and the TPR and FPR values are computed for each cumulative fraction of the sorted dataset.
+\subsubsection{Description of the \acs{ROC-AUC} metric}
+To compute an \ac{ROC} curve, the \ac{TPR} is computed as $TPR=TP/P$ where $TP$ is the number of true positive predictions, and $P$ is the number of total positive values in the given dataset, and the \ac{FPR} is computed as $FPR=FP/N$ where $FP$ is the number of false positive predictions, and $N$ is the total number of negative values in the dataset.
+The predictions made by each model are sorted by predicted score, with the best scores first, and the \ac{TPR} and \ac{FPR} values are computed for each cumulative fraction of the sorted dataset.
 The resulting curve provides a metric of the overall classification performance.
 The area under the curve can be computed by integration, resulting in a value between 0.0 and 1.0.
-A ROC-AUC value of 1.0 indicates a perfect classifier, a value of 0.5 indicates a classifier with a performance equivalent to a coin-toss, and a value of 0.0 indicates a classifier which is always incorrect.
+A \ac{ROC-AUC} value of 1.0 indicates a perfect classifier, a value of 0.5 indicates a classifier with a performance equivalent to a coin-toss, and a value of 0.0 indicates a classifier which is always incorrect.
 
-\subsubsection{Description of the PPV metric}
-PPV is a measure of the accuracy of a classifier.  
-PPV is computed as $PPV=TP/TP+FP$, and can be interpreted as the fraction of positive predictions that are actually positive.
-Thus, higher PPV indicates a more accurate classifier.
-%talk about PPV integration
+\subsubsection{Description of the \acs{PPV} metric}
+\ac{PPV} is a measure of the accuracy of a classifier.  
+\ac{PPV} is computed as $PPV=TP/TP+FP$, and can be interpreted as the fraction of positive predictions that are actually positive.
+Thus, higher \ac{PPV} indicates a more accurate classifier.
 
 \subsubsection{Summary of classifier performance}
 \label{subsubsec:classifier_performance}
-The ROC and PPV metrics can be used to produce a concise visual comparison of the performance of the various networks which were evaluated.
-Figure \ref{fig:roc_plot} plots ROC curves formed using the networks trained in \ref{subsubsec:network_training}, as well as a classifier which consists entirely of the RosettaLigand interface scores. 
-In this experiment, the RosettaLigand interface score based classifier and the "BCL Scalar descriptor" network act as controls.
-We expect a successful ANN to have significant improvement compared to the RosettaLigand interface score classifier, and further that the BCL scalar descriptor network have performance roughly equal to a random coin toss.
-as shown in the figure, we see that this is the case.  The 3 networks trained using Rosetta interface information all exhibit similar ROC curve parameters, all of which are significantly improved over the RosettaLigandRosettaLigand interface score classifier.
-As expected, the BCL scalar descriptor has no classification ability.
-Table \ref{table:ann_performance} lists the ROC-AUC and average enrichment of each of the plotted classifiers.
-We see that the 3 networks trained with RosettaLigand interface score information have similar performance in terms of average enrichment and AUC, and that this performance is increased substantially over using only RosettaLigand scoring information for classification.
-Specifically, the ROC-AUC of the ANN classifiers is increased by 0.026-0.036 over the RosettaLigand interface classifier, and the Average Enrichment is increased by 35.93-38.42.
-Based on the metrics of ROC-AUC and Average enrichment, the 3 ANN models appear to have nearly identical performance.dd0-7
+The \ac{ROC} and \ac{PPV} metrics can be used to produce a concise visual comparison of the performance of the various networks which were evaluated.
+Figure \ref{fig:roc_plot} plots \ac{ROC} curves formed using the networks trained in \ref{subsubsec:network_training}, as well as a classifier which consists entirely of the RosettaLigand interface scores. 
+In this experiment, the RosettaLigand interface score based classifier and the "\ac{BCL} Scalar descriptor" network act as controls.
+We expect a successful \ac{ANN} to have significant improvement compared to the RosettaLigand interface score classifier, and further that the \ac{BCL} scalar descriptor network have performance roughly equal to a random coin toss.
+as shown in the figure, we see that this is the case.  The 3 networks trained using Rosetta interface information all exhibit similar \ac{ROC} curve parameters, all of which are significantly improved over the RosettaLigand interface score classifier.
+As expected, the \ac{BCL} scalar descriptor has no classification ability.
+Table \ref{table:ann_performance} lists the \ac{ROC-AUC} and average enrichment of each of the plotted classifiers.
+We see that the 3 networks trained with RosettaLigand interface score information have similar performance in terms of average enrichment and \ac{AUC}, and that this performance is increased substantially over using only RosettaLigand scoring information for classification.
+Specifically, the \ac{ROC-AUC} of the \ac{ANN} classifiers is increased by 0.026-0.036 over the RosettaLigand interface classifier, and the Average Enrichment is increased by 35.93-38.42.
+Based on the metrics of \ac{ROC-AUC} and Average enrichment, the three \ac{ANN} models appear to have nearly identical performance.
 \begin{figure}
 \centering
 \includegraphics[width=4in]{figures/hts/tpr_plot.pdf}
 \caption{
-ROC curves showing the performance of the various networks trained using the 507 protein training set.
+\acs{ROC} curves showing the performance of the various networks trained using the 507 protein training set.
 Performance is plotted using the independent dataset from each of the 90 neural networks used.
-The ROC curve is plotted as the ratio of True Positive Rate (TPR) to False Positive Rate (FPR).
+The \acs{ROC} curve is plotted as the ratio of \acs{TPR} to \acs{FPR}.
 To accentuate the differences in early classification, the X axis is plotted on a log scale.
 }
 \label{fig:roc_plot}
@@ -259,52 +258,52 @@ To accentuate the differences in early classification, the X axis is plotted on 
 \centering
 \input{tables/hts/ann_performance_metrics.tex}
 \caption{
-ROC-AUC and average enrichment for the classification models being evaluated.
+\acs{ROC-AUC} and average enrichment for the classification models being evaluated.
 The Rosetta Interface Scores classifier uses only the sorted RosettaLigand interface scores for classification.
-all "ANN" classifiers are constructed as neural nets using the specified descriptors.
-ROC-AUC is the area under the ROC curve generated from each descriptor (Figure \ref{fig:roc_plot})
+all "\acs{ANN}" classifiers are constructed as neural nets using the specified descriptors.
+\acs{ROC-AUC} is the area under the \acs{ROC} curve generated from each descriptor (Figure \ref{fig:roc_plot})
 Average enrichment is the average enrichment within the first 1\% of the each dataset.
 }
 \label{table:ann_performance}
 \end{table}
 
-Inspection of the PPV of the models, however demonstrates significant performance differences.
-Figure \ref{fig:ppv_plot} plots the PPV of each model as a function of the FPR.
+Inspection of the \ac{PPV} of the models, however demonstrates significant performance differences.
+Figure \ref{fig:ppv_plot} plots the \ac{PPV} of each model as a function of the \ac{FPR}.
 These plots provide a visual depiction of the accuracy of each classifier.
-We can see from these models that the models using Rosetta scalar descriptors, or a combination of Rosetta and BCL scalar descriptors have siginificantly improved performance relative to the model using Rosetta scalar and fingerprint information.
+We can see from these models that the models using Rosetta scalar descriptors, or a combination of Rosetta and \ac{BCL} scalar descriptors have siginificantly improved performance relative to the model using Rosetta scalar and fingerprint information.
 This suggests that the introduction of fingerprint data results in a loss of model accuracy early in screening.
 
 \begin{figure}
 \centering
 \includegraphics[width=4in]{figures/hts/ppv_plot.pdf}
 \caption{
-Plots showing the Positive Predictive Value (PPV) as a function of False Positive Rate(FPR) for the various networks trained using the 507 protein training set.
+Plots showing the \acs{PPV} as a function of \ac{FPR} for the various networks trained using the 507 protein training set.
 Performance is plotted using the independent dataset from each of the 90 neural networks used.
-The PPV vs FPR curve of an ideal classifier is also plotted, for reference.
+The \acs{PPV} vs \acs{FPR} curve of an ideal classifier is also plotted, for reference.
 To accentuate the differences in early classification, the X axis is plotted on a log scale.
 }
 \label{fig:ppv_plot}
 \end{figure}
 
 \subsubsection{Benchmarking of trained networks using DEKOIS 2.0}
-While the performance metrics described in section \ref{subsubsec:classifier_performance} clearly indicate that the ANN based classifiers have some value at classifying ligand activity beyond the RosettaLigand interface score and have not been over-trained.
+While the performance metrics described in section \ref{subsubsec:classifier_performance} clearly indicate that the \ac{ANN} based classifiers have some value at classifying ligand activity beyond the RosettaLigand interface score and have not been over-trained.
 However, the ability of the networks to generalize beyond the training dataset needs to be assessed.
-In order to answer the question of whether the ANN models demonstrated here are capable of making general predictions, the DEKOIS 2.0 \ref{Bauer:2013de} dataset was used for benchmarking. 
+In order to answer the question of whether the \ac{ANN} models demonstrated here are capable of making general predictions, the DEKOIS 2.0 \ref{Bauer:2013de} dataset was used for benchmarking. 
 All proteins and ligands were prepared in the same manner as the training data set, and the best scoring model for each protein-ligand complex was selected.
-The classifiers previously described were used to rescore the selected protein-ligand complexes, and the ROC-AUC for each complex was computed. 
-The distribution of ROC-AUC across each of the 74 protein-ligand systems is plotted in figure \ref{fig:dekois_roc_all}A.
-As expected, the model created using only BCL ligand descriptors has no predictive power, and the 3 ANN based classifiers have similar, but positive predictive power.
-Figure \ref{fig:dekois_roc_all}B shows the Rosetta Fingerprint and scalar model, the RosettaLigand interface score model, and the BCL only descriptors.
-Closely inspecting this plot, we can see that the primary effect of the Rosetta fingerprint and scalar model (and the other ANN classifiers) is to reduce the width of the distribution of ROC-AUC scores.  Some highly performing protein targets perform less well, but other targets which are classified worse than random perform better. 
+The classifiers previously described were used to re-score the selected protein-ligand complexes, and the \ac{ROC-AUC} for each complex was computed. 
+The distribution of \ac{ROC-AUC} across each of the 74 protein-ligand systems is plotted in figure \ref{fig:dekois_roc_all}A.
+As expected, the model created using only \ac{BCL} ligand descriptors has no predictive power, and the 3 \ac{ANN} based classifiers have similar, but positive predictive power.
+Figure \ref{fig:dekois_roc_all}B shows the Rosetta Fingerprint and scalar model, the RosettaLigand interface score model, and the \ac{BCL} only descriptors.
+Closely inspecting this plot, we can see that the primary effect of the Rosetta fingerprint and scalar model (and the other \ac{ANN} classifiers) is to reduce the width of the distribution of \ac{ROC-AUC} scores.  Some highly performing protein targets perform less well, but other targets which are classified worse than random perform better. 
 
 \begin{figure}
 \centering
 \includegraphics[width=4in]{figures/hts/auc_distributions.pdf}
 \caption{
-A) A plot of the distribution of ROC-AUC values for each of the 74 protein targets in the DEKOIS 2.0 benchmarking set when models were rescored with each of the classifiers being evaluated.
+A) A plot of the distribution of \acs{ROC-AUC} values for each of the 74 protein targets in the DEKOIS 2.0 benchmarking set when models were re-scored with each of the classifiers being evaluated.
 B) A plot of the distributions for 3 of the evaluated models.
-The dotted vertical line indicates the ROC-AUC associated with a random model.
-ROC-AUC values less than 0.5 are worse than random. 
+The dotted vertical line indicates the \acs{ROC-AUC} associated with a random model.
+\acs{ROC-AUC} values less than 0.5 are worse than random. 
 }
 \label{fig:dekois_roc_all}
 \end{figure}
@@ -313,30 +312,30 @@ ROC-AUC values less than 0.5 are worse than random.
 
 \subsection{Neural network models can be constructed which improve activity classification over a range of protein and ligand chemical space}
 
-The chemically balanced training data set was successfully used to train ANNs to classify ligands based on their binding affinity.
-These classifiers were created using a variety of sources of descriptor information, however, based on the cross-validation performance of the ANNs trained, it appears that the scalar descriptors generated by RosettaLigand provide the majority of information to the models.
-Models trained with a combination of RosettaLigand and BCL scalar descriptor information have similar performance to the models trained with RosettaLigand information alone, while models trained with RosettaLigand and Rosetta fingerprint descriptor information seem to be slightly less accurate during early classification.
+The chemically balanced training data set was successfully used to train \ac{ANN}s to classify ligands based on their binding affinity.
+These classifiers were created using a variety of sources of descriptor information, however, based on the cross-validation performance of the \ac{ANN}s trained, it appears that the scalar descriptors generated by RosettaLigand provide the majority of information to the models.
+Models trained with a combination of RosettaLigand and \ac{BCL} scalar descriptor information have similar performance to the models trained with RosettaLigand information alone, while models trained with RosettaLigand and Rosetta fingerprint descriptor information seem to be slightly less accurate during early classification.
 The former behavior is easily explainable.
 It is possible that under certain circumstances, ligand descriptor information may be beneficial to this type of classification model, and that some emergent property might exist between (for example) the flexibility of the ligand and the behavior of that ligand in the RosettaLigand docking simulation.
 However, at least in the training dataset used here, there is no evidence for the existence of such an emergent property, and indeed if one does exist it would almost certainly require a dataset comprising a very large range of ligand chemical space to become apparent. 
 The loss of accuracy seen upon the addition of the Rosetta fingerprint descriptors suggests that rather than conveying meaningful information about the protein-ligand interface, these descriptors are, instead, introducing noise into the system.
-While there is ample historical precedent\citep{Mueller:2010dx,Butkiewicz:2013ka,Hristozov:2007bz} for the value of RDF based fingerprint descriptors as ANN input, it appears that in this case, the descriptors as implemented are not providing meaningful information.
+While there is ample historical precedent\citep{Mueller:2010dx,Butkiewicz:2013ka,Hristozov:2007bz} for the value of \ac{RDF} based fingerprint descriptors as \ac{ANN} input, it appears that in this case, the descriptors as implemented are not providing meaningful information.
 Regardless, the RosettaLigand based scalar descriptors do provide sufficient information to create a well trained model the performance of which exceeds the performance obtained simply by using the RosettaLigand energy function. 
 
 \subsection{Development of a truly global classifier of protein-ligand binding affinity remains challenging}
 
 Using these models to re-score protein-ligand binding poses indicates that while the models are well trained, they still lack the ability to act generally. Figure \ref{fig:dekois_roc_all} provides some insight into the limits of these models.
-When comparing the ROC-AUC performance of the neural network models, we see that the width of the distribution of per-system performance narrows.
-That is to say, the ANN based classifiers tend to perform neither as well nor as poorly as the Rosetta based classifier.
-The reduction in the number of systems with ROC-AUC significantly worse than random is a highly desirable behavior.
+When comparing the \ac{ROC-AUC} performance of the neural network models, we see that the width of the distribution of per-system performance narrows.
+That is to say, the \ac{ANN} based classifiers tend to perform neither as well nor as poorly as the Rosetta based classifier.
+The reduction in the number of systems with \ac{ROC-AUC} significantly worse than random is a highly desirable behavior.
 Even a random classifier will return a few true positive results by chance, while a worse than random classifier will be intentionally selecting false positives.
-All 3 of the ANN based classifiers shown in Figure \ref{fig:dekois_roc_all}A show a decrease in the number of systems with ROC-AUC less than 0.4, compared to the Rosetta interface score classifier.
-The Rosetta interface score classifier results in 9/72 protein systems with ROC-AUC of less than 0.4, while the 3 ANN models have only 4/72 protein systems.
+All 3 of the \ac{ANN} based classifiers shown in Figure \ref{fig:dekois_roc_all}A show a decrease in the number of systems with \ac{ROC-AUC} less than 0.4, compared to the Rosetta interface score classifier.
+The Rosetta interface score classifier results in 9/72 protein systems with \ac{ROC-AUC} of less than 0.4, while the 3 \ac{ANN} models have only 4/72 protein systems.
 Unfortunately, the same effect is observed at the other end of the spectrum.
-The Rosetta interface score classifier results in a ROC-AUC of 0.75 or higher in 19/72 protein systems, while with the 3 ANN models, 7-11 out of 72 protein systems have ROC-AUC higher than 0.75. 
+The Rosetta interface score classifier results in a \ac{ROC-AUC} of 0.75 or higher in 19/72 protein systems, while with the 3 \ac{ANN} models, 7-11 out of 72 protein systems have \ac{ROC-AUC} higher than 0.75. 
 One possible cause of the reduced performance is the lack of chemical space covered by the benchmarking set.
-The cross-validation performance of the ANN based classifiers indicates that the descriptor data used provides sufficient information to improve upon the Rosetta interface score.
+The cross-validation performance of the \ac{ANN} based classifiers indicates that the descriptor data used provides sufficient information to improve upon the Rosetta interface score.
 However, the 507 ligand set used for this training does not cover the same range of chemical space as the DEKOIS 2.0 benchmark set, and as a result it is likely that in many cases the network is attempting to make predictions far outside of the range of descriptor space that it understands.
-While the ANN models clearly have classification ability over a large range of the DEKOIS 2.0 dataset, this classification ability is more limited than would be desirable.
-The ANN models described here demonstrate the possible efficacy of a machine learning approach to structure based virtual screening, however more experimental data is likely required to achieve the goal of a truly general model.
+While the \ac{ANN} models clearly have classification ability over a large range of the DEKOIS 2.0 dataset, this classification ability is more limited than would be desirable.
+The \ac{ANN} models described here demonstrate the possible efficacy of a machine learning approach to structure based virtual screening, however more experimental data is likely required to achieve the goal of a truly general model.
 The future directions of this research are outlined in chapter \ref{chap:conclusion}.
