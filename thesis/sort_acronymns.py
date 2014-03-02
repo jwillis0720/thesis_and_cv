@@ -19,7 +19,11 @@ with open(ac_file) as infile:
         if not line.startswith("\\acro"):
             continue
         ac_pattern = re.search("\{(.*)\}\{(.*)\}",line)
-        abbreviation = ac_pattern.group(1)
+        try:
+            abbreviation = ac_pattern.group(1)
+        except AttributeError:
+            print line
+            sys.exit("error")
         line_map[abbreviation.lower()] = line
 
 with open(ac_file,'w') as outfile:
