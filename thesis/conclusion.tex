@@ -11,14 +11,14 @@ In the service of this goal, chapter \ref{chap:nv_kbp} describes a novel method 
 
 The new energy function implements a knowledge based potential previously developed by Durham et al.\citep{Durham:2009kt} which was computed based on the propensity of amino acids existing at various degrees of burial in X-ray crystal structures of soluble proteins.
 This energy function is effectively an environment potential, which provides an energy bonus to amino acids which are frequently in nature at a given degree of burial within the protein.
-In addition to the implementation of this knowledge based potential, the weights of the RosettaDesign energy function were re-optimized to maximize the Position Specific Scoring Matrix (PSSM) score of the protein, based on a PSSM generated using BLAST.
+In addition to the implementation of this knowledge based potential, the weights of the RosettaDesign energy function were re-optimized to maximize the \ac{PSSM} score of the protein, based on a \ac{PSSM} generated using \ac{BLAST}.
 To assess the quality of the proteins designed with the new energy function, two metrics were used.
 The first metric was sequence recovery\citep{Kuhlman:2000tc}, the percentage of amino acids which were designed to be identical to the native amino acid.
-The second metric, PSSM recovery, was originally presented in chapter \ref{chap:nv_kbp}.
-PSSM recovery is the percentage of amino acids with a favorable PSSM score according to a PSSM created using BLAST.
-PSSM recovery is advantageous over sequence recovery as a metric of protein design because it measures evolutionarily favorable mutations, rather than simply counting exact amino acid recovery.
+The second metric, \ac{PSSM} recovery, was originally presented in chapter \ref{chap:nv_kbp}.
+\ac{PSSM} recovery is the percentage of amino acids with a favorable \ac{PSSM} score according to a \ac{PSSM} created using \ac{BLAST}.
+\ac{PSSM} recovery is advantageous over sequence recovery as a metric of protein design because it measures evolutionarily favorable mutations, rather than simply counting exact amino acid recovery.
 Through the combination of this optimization function and the environment based knowledge based potential resulted in protein designs which were more native-like relative to the previously published Rosetta design function.
-Specifically, PSSM recovery improved from 72\% with the standard energy function to 77.2\% with the optimized energy function.
+Specifically, \ac{PSSM} recovery improved from 72\% with the standard energy function to 77.2\% with the optimized energy function.
 
 \subsection{Improvement of the speed and sampling efficiency of RosettaLigand}
 While RosettaLigand has been previously successful at ligand docking\citep{Lemmon:2012ku,Combs:2011db,Allison:2013ir}, it is too slow for use in high throughput ligand docking applications.
@@ -31,13 +31,13 @@ These results highlight the importance of a high quality and efficient sampling 
 The results presented in chapter \ref{chap:lowres_paper} make it possible for the first time to efficiently use Rosetta ligand for the structure based virtual screening of large compound libraries on a small academic computing cluster.
 
 \subsection{Development of RosettaHTS: A structure based virtual screening protocol}
-The methods developed in chapter \ref{chap:lowres_paper} lead naturally to chapter \ref{chap:rosetta_hts}, which describes the development of a protocol for docking large numbers of small molecules using RosettaLigand and a novel ANN based classification model for predicting the activity of these compounds.
-To training the ANN model, a training data set was constructed using cross-docking so as to be highly diverse in chemical and protein space, as well as balanced in chemical space between active and inactive compounds.
+The methods developed in chapter \ref{chap:lowres_paper} lead naturally to chapter \ref{chap:rosetta_hts}, which describes the development of a protocol for docking large numbers of small molecules using RosettaLigand and a novel \ac{ANN} based classification model for predicting the activity of these compounds.
+To training the \ac{ANN} model, a training data set was constructed using cross-docking so as to be highly diverse in chemical and protein space, as well as balanced in chemical space between active and inactive compounds.
 In addition to previously developed Rosetta energy terms, interface quality metrics, and ligand descriptor information, a new set of protein-ligand interface descriptors were developed based on Radial Distribution Functions.
 Several networks were trained using various combinations of these descriptor sets.
 Analysis of the cross-validation performance of the trained networks indicated that the majority of the useful information to the networks was provided by the Rosetta energy term and interface quality metric data.
 The cross-validation performance also demonstrated that the networks were well-trained and capable of making more accurate ligand activity classifications than the RosettaLigand interface scores alone. 
-Despite the encouraging cross-validation performance of the ANN models, screening of the DEKOIS 2.0 benchmark showed that the models were unable to consistently classify active ligands, although significantly fewer protein systems had worse than random performance relative to using the RosettaLigand interface score alone for classification.
+Despite the encouraging cross-validation performance of the \ac{ANN} models, screening of the DEKOIS 2.0 benchmark showed that the models were unable to consistently classify active ligands, although significantly fewer protein systems had worse than random performance relative to using the RosettaLigand interface score alone for classification.
 Further work is underway to address this issue, and is detailed in section \ref{subsec:hts_further_development}
 
 \section{Future Directions}
@@ -89,28 +89,28 @@ The FEATURE framework\citep{Halperin:2008ce} is a method producing fixed length 
 This method has been successfully used to identify protein-ligand binding pockets and classify protein binding interactions. 
 The FEATURE framework describes the chemical environment surrounding points in space, as a result it can be adapted for use as a ligand interaction descriptor.
 Similarly, a 3D autocorrelation function, similar to that implemented in ADRIANA\citep{Code:2011uf} could be valuable as a fingerprinting method.
-The FEATURE framework and 3D Autocorrelation methods are less detailed than the RDF fingerprints and may result in less noisy and therefore more effective descriptions of the protein-ligand interface.
+The FEATURE framework and 3D Autocorrelation methods are less detailed than the \ac{RDF} fingerprints and may result in less noisy and therefore more effective descriptions of the protein-ligand interface.
 
 \subsubsection{Improving neural network generality}
 The ANN models trained in chapter \ref{chap:rosetta_hts} improved classification performance beyond the use of the RosettaLigand interface score alone within the scope of protein and ligand chemical space seen in the cross-validation data set.
-However, application of these models to a benchmark with chemical space that significantly diverged from the training set resulted in degraded performance, suggesting that the ANN models are still limited in their ability to make general predictions.
+However, application of these models to a benchmark with chemical space that significantly diverged from the training set resulted in degraded performance, suggesting that the \ac{ANN} models are still limited in their ability to make general predictions.
 While the most computationally straightforward means of improving the ability of the network to make general predictions would be to improve the size and scope of the training data set, the lack of available binding affinity and structural data makes this approach infeasible. 
-Luckily, several recent innovations in machine learning techniques may provide a method for improving the ability of ANNs to make general predictions without massively increasing the size of the training dataset.
-Deep Belief Networks (DBNs)\citep{Hinton:2006dy} have recently been shown useful in the training of networks capable of making general predictions in the fields of image recognition\citep{Le:2013kz,Bengio:2009kb} and speech recognition\citep{Heigold:2013us}.
-These DBNs consist of many layers of hidden neurons, with each layer consisting of hundreds or thousands of neurons.
-The large number of hidden neurons makes these networks capable of modeling more complex, indirect relationships than traditional ANNs are capable of.
+Luckily, several recent innovations in machine learning techniques may provide a method for improving the ability of \ac{ANN}s to make general predictions without massively increasing the size of the training dataset.
+\ac{DBN} methods \citep{Hinton:2006dy} have recently been shown useful in the training of networks capable of making general predictions in the fields of image recognition\citep{Le:2013kz,Bengio:2009kb} and speech recognition\citep{Heigold:2013us}.
+These \ac{DBN}s consist of many layers of hidden neurons, with each layer consisting of hundreds or thousands of neurons.
+The large number of hidden neurons makes these networks capable of modeling more complex, indirect relationships than traditional \ac{ANN}s are capable of.
 Furthermore, these networks can be "pre-trained" using unlabeled data, and can identify features in the descriptor space in an unsupervised fashion, then fine-tuned using a smaller subset of data with known outputs.
 In principle, this approach could be used to produce a more general model of ligand binding without obtaining more labelled experimental data.
-In a DBN based protocol, the network would be pre-trained using the combined set of known training and unknown screening data without any labels attached.
+In a \ac{DBN} based protocol, the network would be pre-trained using the combined set of known training and unknown screening data without any labels attached.
 This would result in a pre-trained network with "knowledge" of the full chemical space to which the network will be applied.
 This network will then be fine-tuned using the known training data, and then applied to predict the activity of the unknown screening data.
 
 There are several potential pitfalls and complications regarding this approach.
-First, the BCL machine learning tools do not currently implement a DBN in a means that would be amenable to this training method.
+First, the \ac{BCL} machine learning tools do not currently implement a \ac{DBN} in a means that would be amenable to this training method.
 Theano\citep{Bergstra:2010tc} is a Python library designed to facilitate the implementation of complex machine learning systems.
-Theano will be used to rapidly prototype a DBN capable of using the previously implemented RosettaLigand descriptors.
+Theano will be used to rapidly prototype a \ac{DBN} capable of using the previously implemented RosettaLigand descriptors.
 The second complication relates to the nature of the descriptors available for protein-ligand binding activity prediction.
-The majority of research in DBN pattern recognition has focused on machine vision and audio recognition problems.
+The majority of research in \ac{DBN} pattern recognition has focused on machine vision and audio recognition problems.
 For this class of problems, each descriptor encodes information of the same kind.
 For example, in the case of an image recognition problem, each descriptor represents the intensity of a pixel at a given point in space.
 Different descriptors refer to different regions of space, but each descriptor is otherwise encoding the same information.
@@ -118,6 +118,6 @@ Furthermore, nearby descriptors encode similar, or in some cases, effectively id
 An image of a cat, for example, with two adjacent pixels swapped, is still an image of a cat.
 The descriptor information provided as a result of ligand docking simulations is very different in that adjacent scalar descriptors can represent radically different types of information.
 Additionally, the set of descriptors currently used by RosettaHTS is significantly smaller than that used with traditional machine vision and audio recognition problems.
-From the existing literature in the field, it is not clear whether the presence of a large number of descriptors encoding homologous types of information is critical to obtain the classification performance exhibited by DBNs in other fields.
-As a result, while DBNs show promise in other fields, it is difficult to predict whether this type of network will be as applicable to the problem posed by RosettaHTS.
+From the existing literature in the field, it is not clear whether the presence of a large number of descriptors encoding homologous types of information is critical to obtain the classification performance exhibited by \ac{DBN}s in other fields.
+As a result, while \ac{DBN}s show promise in other fields, it is difficult to predict whether this type of network will be as applicable to the problem posed by RosettaHTS.
 Luckily, it should be possible to determine whether this approach will be valuable relatively quickly.
