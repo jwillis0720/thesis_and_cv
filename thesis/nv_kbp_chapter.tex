@@ -7,7 +7,7 @@ Thermostabilization of enzymes and design of proteins with novel folds are two p
 
 \subsection{The current Rosetta solvation model does not penalize the burial of apolar atoms}
 As there are relatively few explicit interactions of amino acids on the protein surface, the total energy of a residue is dominated by Rosetta's implicit solvation model.
-The solvation model currently used by Rosetta is a function developed by Lazaridis and Karplus\citep{Lazaridis:1999wi}.
+The solvation model currently used by Rosetta is a function developed by Lazaridis and Karplus \citep{Lazaridis:1999wi}.
 This potential estimates the solvation free energy of an atom from a reference free energy, where the atom is essentially fully solvent-exposed.
 For every proximal atom, a cost of "desolvation" is added in a pairwise decomposable and distance-dependent manner.
 This procedure aligns with the protein folding process, where amino acids move from a completely exposed location (reference state) into varying degrees of burial.
@@ -17,12 +17,12 @@ It is quite insensitive to the burial of apolar atoms because desolvation energi
 \subsection{RosettaDesign currently has difficulty designing protein surfaces}
 This paradigm of desolvation is useful for determining energy changes in the folding of a monomeric protein.
 However, hydrophobic patches on the surface of a \textit{de novo} designed protein are hardly penalized, as the environment of these amino acids did not change in the folding process.
-At present, RosettaDesign excels in the design of tightly packed protein cores, while the protein surface is often poorly composed and requires manual adjustment\citep{Dantas:2003vt}.
+At present, RosettaDesign excels in the design of tightly packed protein cores, while the protein surface is often poorly composed and requires manual adjustment \citep{Dantas:2003vt}.
 We hypothesize that native proteins have evolved to minimize unspecific aggregation, a fact that is ignored by the desolvation potential.
 Evolutionary pressures exerted on protein sequence composition by the requirement of protein solubility are difficult to model with a typical physics-based model, but can be modeled effectively with a knowledge-based energy potential. 
 
 \subsection{Description of the RosettaDesign energy function}
-The RosettaDesign energy function is a weighted composite of the Lazaridis-Karplus solvation free energy potential, attractive and repulsive interactions, an action center pairwise potential to approximate electrostatic interactions, an orientation-dependent hydrogen bonding potential\citep{Kortemme:2003td}, and reference energies for amino acid type and conformation\citep{Dantas:2003vt}. 
+The RosettaDesign energy function is a weighted composite of the Lazaridis-Karplus solvation free energy potential, attractive and repulsive interactions, an action center pairwise potential to approximate electrostatic interactions, an orientation-dependent hydrogen bonding potential \citep{Kortemme:2003td}, and reference energies for amino acid type and conformation \citep{Dantas:2003vt}. 
 Amino acid reference energies and scoring function weights are optimized to maximize sequence recovery in a protein design benchmark.
 Reference energies can be viewed as the ground state energy of an amino acid in an essentially fully exposed, unfolded peptide chain.
 Hence, these reference energies can disfavor apolar amino acids on the surface, thereby representing some of the evolutionary pressure to prevent aggregation.
@@ -31,7 +31,7 @@ In addition, the reference energies are fitted to maximize sequence recovery and
 As a result, the reference energies form a container term that combines multiple effects that can be difficult to disentangle, and it provides a corrective power against exposed hydrophobic amino acids on the surface.
 
 \subsection{A knowledge based environment potential was developed to improve the quality of protein surface designs}
-To improve upon the above shortcomings of RosettaDesign, we implemented the \acf{NV}-based \ac{KBP} previously described by Durham et al.\citep{Durham:2009kt}.
+To improve upon the above shortcomings of RosettaDesign, we implemented the \acf{NV}-based \ac{KBP} previously described by Durham et al. \citep{Durham:2009kt}.
 This neighbor vector environment \ac{KBP} converts the likelihood to see an amino acid at a given level of exposure into an environment energy.
 The \ac{NV} environment \ac{KBP} encapsulates both desolvation energy and evolutionary biases against apolar amino acids at the protein surface with amino acid level resolution.
 
@@ -47,7 +47,7 @@ While the \ac{NCR} method correlates with residue burial, high inaccuracies are 
 \caption{
 Comparison of \acs{NV} and \acs{NCR} measures to \acs{rSASA}.
 In both panels, a color map plots the difference between a surface approximation method and the normalized \acs{rSASA} value.
-A residue for which the \acs{SASA} approximation matches \acs{rSASA} exactly would have a score of 0 and be colored white.
+A residue for which the \acs{SASA} approximation matches \acs{rSASA} exactly would have a score of 0.0 and be colored white.
 Regions of the surface in red are categorized as more solvent exposed than by \acs{rSASA}, while regions in blue are categorized as less solvent exposed than by \acs{rSASA}.
 (A) protein 7DFR colored by the \acs{NCR} approximation of surface accessibility as used in Rosetta.
 (B) protein 7DFR colored using the \acs{NV} approximation.
@@ -61,7 +61,7 @@ Panels A and B illustrate the improvement in consistency, as areas of score devi
 \subsubsection{The \acs{NV} \acs{SASA} approximation was previously developed by Durham et al.}
 To overcome the limitations of the \ac{NCR} burial approximation, an \ac{NV} approximation of residue burial was implemented.
 For a schematic representation of the \ac{NV} algorithm, see Figure \ref{fig:nv_schematic}.
-The \ac{NV} algorithm and \ac{KBP} generated and described by Durham et al\citep{Durham:2009kt}.
+The \ac{NV} algorithm and \ac{KBP} generated and described by Durham et al \citep{Durham:2009kt}
 was used in our implementation.
 Proteins selected for deriving the \ac{KBP} were monomeric, globular proteins, which do not engage in obligate, and therefore strong, protein-protein interactions.
 It is expected that some of these proteins will engage in transient interactions with other proteins, however, these interactions will be weaker.
@@ -74,7 +74,7 @@ As a result, the noise added to the \ac{KBP} by these interactions will be of lo
 (A) The left and right panels both have the same Rosetta neighbor count \citep{Dantas:2003vt} but very different degrees of burial.
 The neighbor vector method is able to distinguish between these cases by calculating the vectors between the query residue and its neighbors.
 The length of the vector indicates the degree of burial, with shorter vectors representing more buried residues. 
-(B) The \acs{WNCR} method gives a higher weight to neighbors near the query residue, smoothing the effect of small changes in composition on the measured degree of burial. 
+(B) The \acf{WNCR} method gives a higher weight to neighbors near the query residue, smoothing the effect of small changes in composition on the measured degree of burial. 
 (C) The combination of the \acs{NV} and \acs{WNCR} methods results in a more accurate measure of residue distribution. 
 In all panels, dotted lines represent lower and upper bounds for counts, the X marks the query residue, and circles represent residues surrounding the query residue.
 }
@@ -84,14 +84,14 @@ In all panels, dotted lines represent lower and upper bounds for counts, the X m
 \subsubsection{\acs{NV} is a more accurate approximation of \acs{SASA} than other methods} 
 The half sphere approximation method developed by Hamelryck in 2005 \citep{Hamelryck:2005kt} approximates surface accessibility by counting the number of residues in a half sphere below the side chain of each amino acid.
 The half sphere count is directly related to residue burial.
-\ac{HSE} is implemented in the freely available BioPython library, and this library was used to compare performance of \ac{HSE} and \ac{NV} to relative \ac{SASA} (calculated using NACCESS).
+\ac{HSE} is implemented in the freely available BioPython library, and this library was used to compare performance of \ac{HSE} and \ac{NV} to \ac{rSASA} (calculated using NACCESS).
 The per residue exposure was calculated for each of the proteins in the 42 protein benchmark set, and adjusted $R^{2}$ values were calculated for the correlation of each measure to \ac{rSASA}.
 The adjusted correlation factor $R^{2}$ value for \ac{HSE} to \ac{rSASA} was 0.68, while the adjusted correlation factor $R^{2}$ for the \ac{NV} method was 0.86.
 This suggests that while \ac{HSE} is conceptually simpler, it does not perform as accurately as \ac{NV} for proteins in our benchmark set.
 
 \subsubsection{Mapping \acs{NV} results to \acs{rSASA} results} 
 A linear regression modeling the correlation between \ac{rSASA} values (in the range of 0 to 1 calculated using NACCESS) and \ac{NV} score (range 0 to 1) was generated based on all proteins in the 42 protein benchmark set.
-The equation for the resulting linear regression model was $rSASA = 1.29*(NV)-0.11$ and had an $R^{2}$ of 0.86.
+The equation for the resulting linear regression model was $rSASA = 1.29(NV)-0.11$ and had an $R^{2}$ of 0.86.
 Based on this model, residues with \ac{NV} scores between 0.00 to 0.24 will have an approximate \ac{rSASA} value of 0.0 to 0.19, residues with \ac{NV} scores from 0.25 to 0.39 will have an approximate \ac{rSASA} value of 0.21 to 0.39, and residues with \ac{NV} scores between 0.40 to 1.00 will have an approximate \ac{rSASA} value of 0.40 to 1.10.
 
 \subsection{Overview of RosettaLigand scoring term architecture}
@@ -102,7 +102,7 @@ RosettaDesign revision 39040 was used in all calculations.
 
 \subsection{Sequence recovery is insufficient as a metric for assessing protein design}
 Computationally assessing the performance of a protein design algorithm is inherently challenging.
-Historically, percent sequence recovery has been used as a metric for the quality of a protein design, as it has been observed that protein sequences are frequently close to optimal for a given fold\citep{Kuhlman:2000tc}.
+Historically, percent sequence recovery has been used as a metric for the quality of a protein design, as it has been observed that protein sequences are frequently close to optimal for a given fold \citep{Kuhlman:2000tc}.
 However, many protein folds having large variations in sequence are frequently seen in nature \citep{Chothia:1986tm}.
 Of the 74,608 protein chains present in the \ac{SCOP} database as of 2009, only 1,280 individual folds are observed \citep{Schaeffer:2011fe}.
 In many positions, particularly on the surface of proteins, multiple residues can be tolerated with similar energies.
@@ -154,7 +154,7 @@ In the first experiment, the reference energies, solvation free energy potential
 In the second experiment, the \ac{NV} environment \ac{KBP} was excluded from the energy function, and only the reference energies were optimized.
 This second experiment acts as a control and makes it possible to distinguish between design improvements due to reference energy optimization and design improvements due to the addition of the \ac{NV} environment \ac{KBP} itself.
 While both \ac{NV} environment \ac{KBP} and the solvation free energy potential describe overlapping but different phenomena at different levels of resolution: The \ac{NV} environment \ac{KBP} is an indirect measure of solvation free energy and evolutionary biases against aggregation.
-It is a measure at amino acid resolution and will be independent of side chain conformation.
+This energy term functions at amino acid resolution and will be independent of side chain conformation.
 In contrast, the solvation free energy potential is at atomic resolution incorporating a specific model of solvation.
 While the solvation free energy potential does an inadequate job of accounting for biases against aggregation on the protein surface, it is highly accurate in avoiding burial of polar atoms, and is important to determine side chain conformation.
 
@@ -168,8 +168,8 @@ While the solvation free energy potential does an inadequate job of accounting f
 \end{table}
 
 \subsection{Analysis of the optimization experiments}
-The optimization experiments described above produce 5 individual energy functions, each generated from one section of the five-way cross validation.
-To produce a single optimized scoring function for general use, the weights from the 5 optimized energy functions are averaged together, and the reference energies of the averaged energy function are optimized using the set of 100 proteins used in the initial  cross validation.
+The optimization experiments described above produce five individual energy functions, each generated from one section of the five-way cross validation.
+To produce a single optimized scoring function for general use, the weights from the five optimized energy functions are averaged together, and the reference energies of the averaged energy function are optimized using the set of 100 proteins used in the initial  cross validation.
 The averaged energy function is benchmarked on an independent set of 42 protein crystal structures, in which the proteins have a sequence homology of less than 15\%, a size range of 150-225, and a resolution less than 1.5 \AA.
 Note that these proteins are larger and more complex than the proteins used in the more time-consuming weight optimization procedure.
 As a result, this benchmark poses a formidable challenge for the RosettaDesign fixed backbone design algorithm.
@@ -179,6 +179,7 @@ Percent \ac{PSSM} recovery was calculated as the percentage of residues that wer
 In addition, the percent sequence recovery was measured as the percentage of residues that remained in as the native residue after design. 
 
 \subsubsection{Percent \acs{PSSM} recovery calculation}
+\label{subsubsec:percent_pssm_calc}
 The percent \ac{PSSM} recovery per residue, percent sequence recovery per residue, and the change in overall sequence composition were also calculated for each designed protein.
 Percent \ac{PSSM} recovery per residue is calculated as $\frac{num\ pssm\ recovered}{num\ designed}$ where $num\ pssm\ recovered$ is the number of residues with a given identity which were designed to a residue with a positive \ac{PSSM} score, and $num\ designed$ is the total number of residues designed. 
 Percent sequence recovery per residue was calculated as $\frac{num\ recovered}{num\ designed}$ where $num\ recovered$ is the number of residues with a given identity which were designed to an identical residue.
@@ -189,9 +190,10 @@ A residue was counted as recovered if it was mutated to another residue within t
 \subsubsection{Percent sequence recovery calculation}
 Percent sequence composition change per amino acid type was calculated as $\frac{d-n}{num\ designed}$ where $d$ is the count of designed residues of a given type, and $n$ is the count of native residues.
 To compute the change in overall sequence composition, a \ac{RMS} method was used.
-\ac{RMS} percent sequence composition change was calculated as follows, where $statistical\ metric$ is one of the metrics described above (shown as black bars in figures \ref{fig:overall_crossval_changes} and \ref{fig:overall_independent_changes}):
+\ac{RMS} percent sequence composition change was calculated as shown in equation \ref{eqn:rms}, where $statistical\ metric$ is one of the metrics described in section \ref{subsubsec:percent_pssm_calc} (shown as black bars in figures \ref{fig:overall_crossval_changes} and \ref{fig:overall_independent_changes}).
 
 \begin{equation}
+\label{eqn:rms}
 RMS=\sqrt{\frac{1}{20}\sum^{20}_{i=1..20}(statistical\ metric)^{2}}
 \end{equation}
 
@@ -338,7 +340,7 @@ It is important to consider not only the absolute change in percent recovery, bu
 In the case of sequence recovery, the maximum possible sequence recovery can be estimated by analyzing the amino acids tolerated in each position in \ac{BLAST} derived \ac{PSSM}s.
 In this case, the average percentage of time that the native residue is seen in the \ac{PSSM} is used as an estimate for expected sequence recovery.
 For the 100 protein benchmark set, the average was 34\%, with a standard deviation of 12\%, while in the 42 protein benchmark set, the average was 34\% with a standard deviation of 7\%.
-While the achievable sequence recovery is somewhat higher due to correlation between individual positions, these values suggest that obtaining sequence recovery rates of 40-50\% would approach the maximum.
+While the achievable sequence recovery is somewhat higher due to the correlation between individual positions, these values suggest that obtaining sequence recovery rates of 40-50\% would approach the maximum.
 Tables \ref{table:burial_100} and \ref{table:burial_42} show that for the 100 protein benchmark set, total overall sequence recovery is 45.7\% with the standard energy function and 47.0\% with the \ac{NV} environment \ac{KBP}.
 For the 42 protein benchmark set, total overall sequence recovery is 35.7\% with the standard energy function and 38.9\% with the \ac{NV} environment \ac{KBP}.
 This explains the relatively small increases in sequence recovery, as current recovery values are approaching the practical maximum.
@@ -359,7 +361,7 @@ This substantial difference is likely a result of the different criteria used to
 The proteins in the 42 protein benchmark set are larger than those in the 100 protein set, and will therefore have a larger total surface area and thus be more challenging targets for design.
 
 \subsection{The sequence recovery values observed are realistic, given previous values reported in the literature}
-Despite the difference inherent to different design targets, these values are similar to those obtained in the literature.
+Despite the differences inherent to different design targets, these values are similar to those obtained in the literature.
 Schneider et al. designed a set of proteins of size between 89-223 amino acids based on high resolution crystal structures.
 They observed surface sequence recovery rates of 22\%+/- 11\%, and buried recovery rates of 56\%+/- 13.7\% when designing with RosettaDesign \citep{Schneider:2009ig}.
 These values are similar to those seen in Tables \ref{table:burial_100} and \ref{table:burial_42}.
