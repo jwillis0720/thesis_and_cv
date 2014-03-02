@@ -2,7 +2,7 @@
 \label{chap:hts_preprocess}
 \section{Background}
 
-Virtual High Throughput screening in Rosetta poses a number of unique challenges.
+\ac{vHTS} in Rosetta poses a number of unique challenges.
 Large numbers of ligands must be prepared and managed.
 If multiple protein systems are being screened, the appropriate ligands must be matched with the appropriate proteins. 
 Additionally, because Rosetta currently stores ligand information after it is required, the memory requirements of the protocol increase as more ligands are screened.
@@ -21,7 +21,7 @@ This protocol requires the following:
 \item BioPython
 \item The most recent weekly release of Rosetta.
 \item A directory containing conformations of all the proteins in your screening study.
-\item An SDF file containing all the conformers of all the ligands you want to dock. All conformers of the same ligand must have the same name.
+\item An \ac{SDF} containing all the conformers of all the ligands you want to dock. All conformers of the same ligand must have the same name.
 	\begin{itemize}
 	\item All conformers of all ligands must have 3D coordinates and hydrogens.
 	You will receive no errors or warnings if you provide ligands with 2D coordinates or without hydrogens, but you will get very poor ligand docking results.
@@ -34,8 +34,8 @@ This protocol requires the following:
 
 The first step of the protocol is to split the ligand file.
 \texttt{sdf\_split\_organize.py} will accomplish this task. 
-It takes as input a single sdf file, and will split that file into multiple files, each file containing all the conformers for one ligand.
-Different ligands must have different names in the sdf records, and all conformers for one ligand must have the same name. 
+It takes as input a single \ac{SDF} file, and will split that file into multiple files, each file containing all the conformers for one ligand.
+Different ligands must have different names in the \ac{SDF} records, and all conformers for one ligand must have the same name. 
 Output filenames are based on the sha1 hash of the input filename, and are placed in a directory hashed structure.
 Thus, a ligand with the name ``Written by BCL::WriteToMDL,CHEMBL29197''
 will be placed in the path\\
@@ -90,7 +90,7 @@ The columns are defined as follows:
 \item \textbf{tag} --- The name of the protein the ligand should be docked into. If a ligand should be docked into multiple proteins, it should have multiple entries in the binding data file.
   Note that this protocol makes a distinction between protein name, and file name.
   If you have 4 files: \texttt{foo\_0001.pdb}, \texttt{foo\_0002.pdb}, \texttt{bar\_0001.pdb}, and \texttt{bar\_0002.pdb}, then you have two proteins with the names foo and bar.
-  The scripts expect that the protein PDB files begin with the protein name.
+  The scripts expect that the protein \ac{PDB} files begin with the protein name.
 \item \textbf{value} --- The activity of the ligand. If you are doing a benchmarking study and know the activity of your ligand, you should enter it here.
   If you are not doing a benchmarking study, or if ligand activity is not relevant to your study, value can be set to 1.0 (or anything else). 
   This field is currently only used in a few specific Rosetta protocols that are in the experimental stages, and is typically ignored, so it is safe to set arbitrarily in almost every case.
@@ -120,7 +120,7 @@ make_params.py -j 4 --database path/to/Rosetta/main/database \
 --path_to_params path/to/molfile_to_params.py database.db3 output_dir/
 \end{verbatim}
 
-In the command line above, the -j option indicates the number of CPU cores which should be used when generating params files.
+In the command line above, the -j option indicates the number of \ac{CPU} cores which should be used when generating params files.
 If you are using a multiple core machine, setting -j equal to the number of availible cpu cores.
 
 The script will create a directory params/ containing all params files, pdb files and conformer files.
@@ -131,8 +131,8 @@ Because of the memory usage limitations of Rosetta, it is necessary to split the
 The optimal size of each job will depend on the following factors:
 
 \begin{itemize}
-\item The amount of memory available per CPU
-\item The number of CPUs being used
+\item The amount of memory available per \ac{CPU}
+\item The number of \ac{CPU}s being used
 \item The number of atoms in each ligand
 \item The number of conformers of each ligand
 \item The number of protein residues involved in the binding site.
@@ -159,8 +159,8 @@ If a job file at the beginning of the list is much larger than the others, it is
 
 \subsubsection{Job file specification}
 
-RosettaLigand Job files are JSON files which contain the paths to protein and ligand PDB files, the names of the protein systems,
-and the params files necessary to load the ligand PDB files.
+RosettaLigand Job files are \ac{JSON} files which contain the paths to protein and ligand \ac{PDB} files, the names of the protein systems,
+and the params files necessary to load the ligand \ac{PDB} files.
 An example file is below:
 
 \begin{verbatim}
