@@ -16,8 +16,8 @@ For the purposes of docking in Rosetta, the "protein" files will be used for our
 
 \subsubsection{protein structure preparation}
 
-For the purposes of this protocol, the only protein structure preparation required is the addition of hydrogren atoms, which can be performed using the Rosetta score\_jd2 application.
-A list of the protein structure pdbs is generated with the following command:
+For the purposes of this protocol, the only protein structure preparation required is the addition of hydrogen atoms, which can be performed using the Rosetta score\_jd2 application.
+A list of the protein structure \ac{PDB}s is generated with the following command:
 \singlespace
 \begin{Verbatim}
 ls -1 v2013-refined/*/*protein.pdb > input_files.txt
@@ -32,9 +32,9 @@ score_jd2.default.linuxgccrelease -s input_files.txt -out:pdb
 
 \subsubsection{ligand structure preparation}
 
-PDBBind provides SDF files for each input ligand.
-The provided SDF files are in the crystallographic conformation, and already have 3D coordinates and hydrogens present. 
-Params files are produced by concatenating the SDF files using the command:
+PDBBind provides \ac{SDF} files for each input ligand.
+The provided \ac{SDF} files are in the crystallographic conformation, and already have 3D coordinates and hydrogens present. 
+Params files are produced by concatenating the \ac{SDF} files using the command:
 \singlespace
 \begin{Verbatim}
 cat v2013-refined/*/*ligand.sdf > crystal_ligands.sdf
@@ -61,7 +61,7 @@ To generate files used for cross-docking, the make\_evenly\_grouped\_jobs.py scr
 \subsubsection{Docking script}
 
 The RosettaLigand docking protocol used in this protocol is reported in detail in chapter \ref{chap:lowres_paper}.
-As RosettaLigand is implemented through the RosettaScripts system, the following XML script implements the protocol:
+As RosettaLigand is implemented through the RosettaScripts system, the following \ac{XML} script implements the protocol:
 \singlespace
 \begin{verbatim}
 <ROSETTASCRIPTS>
@@ -160,7 +160,7 @@ As RosettaLigand is implemented through the RosettaScripts system, the following
 </ROSETTASCRIPTS>
 \end{verbatim}
 \doublespace
-The XML script above is used for docking the native ligands into the associated proteins.
+The \ac{XML} script above is used for docking the native ligands into the associated proteins.
 The script for cross-docking is nearly identical, with this mover:
 \singlespace
 \begin{verbatim}
@@ -228,19 +228,19 @@ rosetta_scripts.mpimysql.linuxgccrelease  @flags.txt \
 -in:file:screening_job_file <job_file> -parser:protocol <xml>
 \end{verbatim}
 \doublespace
-Where \texttt{<job\_file>} is the path to a screening job file, and \texttt{<xml>} is the XML script used for docking.
+Where \texttt{<job\_file>} is the path to a screening job file, and \texttt{<xml>} is the \ac{XML} script used for docking.
 
 \subsection{Training data descriptor generation}
 
-Once the ligand docking process is complete, descriptors and SDF files for each of the generated ligand poses need to be produced.
+Once the ligand docking process is complete, descriptors and \ac{SDF} files for each of the generated ligand poses need to be produced.
 
 \subsubsection{Rosetta descriptors}
 
 The Rosetta descriptors are generated using RosettaScripts.
-Specifically, the RDF fingerprint functions are generated using the ComputeLigandRDF mover, the interface score descriptors are generated with the InterfaceScoreCalculator mover, and the interface quality descriptors are generated with the InterfaceAnalyzerMover mover. 
-After the features are computed, they are output along with an SDF file containing the ligand poses using the WriteLigandMolFile mover.
-WriteLigandMolFile will produce once file per CPU core that RosettaScripts is run on.
-The following XML file is used for descriptor computation:
+Specifically, the \ac{RDF} fingerprint functions are generated using the ComputeLigandRDF mover, the interface score descriptors are generated with the InterfaceScoreCalculator mover, and the interface quality descriptors are generated with the InterfaceAnalyzerMover mover. 
+After the features are computed, they are output along with an \ac{SDF} file containing the ligand poses using the WriteLigandMolFile mover.
+WriteLigandMolFile will produce once file per \ac{CPU} core that RosettaScripts is run on.
+The following \ac{XML} file is used for descriptor computation:
 \singlespace
 \begin{verbatim}
 <ROSETTASCRIPTS>
@@ -384,15 +384,15 @@ rosetta_scripts.mpimysql.linuxgccrelease @flags.txt \
 \end{verbatim}
 \doublespace
 Where flags.txt contains the database authentication flags described in section \ref{subsubsec:hts_docking_command}.
-\texttt{<prefix>} should be replaced with the desired prefix for the output SDF files.  
+\texttt{<prefix>} should be replaced with the desired prefix for the output \ac{SDF} files.  
 
-\subsubsection{BCL descriptors}
+\subsubsection{\acs{BCL} descriptors}
 
-Once the descriptors and SDF files have been generated using Rosetta, a BCL binary dataset can be constructed.
+Once the descriptors and \ac{SDF} files have been generated using Rosetta, a \ac{BCL} binary dataset can be constructed.
 This dataset files contain all the descriptor information for each ligand pose used in training.
-Rosetta derived descriptors are read out of the miscellaneous properties of the SDF files output by Rosetta, while the ligand descriptors are produced directly by the BCL.
+Rosetta derived descriptors are read out of the miscellaneous properties of the \ac{SDF} files output by Rosetta, while the ligand descriptors are produced directly by the \ac{BCL}.
 The features which will be used for the input and output of the network are described using object files.
-The output object file is very simple, as it contains only the log(\ki) value stored in the SDF files output by Rosetta:
+The output object file is very simple, as it contains only the log(\ki) value stored in the \ac{SDF} files output by Rosetta:
 \singlespace
 \begin{verbatim}
 Combine(
@@ -475,7 +475,7 @@ Combine(
 \end{verbatim}
 \doublespace
 
-The input and output object files and the SDF files produced by Rosetta are provided to the BCL descriptor::GenerateDataset application, which produces the binary dataset file needed for neural network training:
+The input and output object files and the \ac{SDF} files produced by Rosetta are provided to the \ac{BCL} descriptor::GenerateDataset application, which produces the binary dataset file needed for neural network training:
 \singlespace
 \begin{verbatim}
 bcl.exe descriptor:GenerateDataset -source \
@@ -490,7 +490,7 @@ This command will produce the file dataset.bin containing all necessary descript
 
 \subsection{Neural network training}
 
-The BCL is also used for neural network training.
+The \ac{BCL} is also used for neural network training.
 The DVD attached to the thesis contains the specific configuration file used for training (config.ini).
 The following network and training architecture was used:
 \singlespace
@@ -524,20 +524,21 @@ This script will set up the cross-validation, and dispatch each of the 90 networ
 \subsection{Neural network analysis}
 
 The submit.py script also performs a basic analysis of the trained networks.
-The average enrichment across the entire cross-validation is computed, as are the TPR, FPR and PPV plots which are used to assess the performance of the network.
+The average enrichment across the entire cross-validation is computed, as are the \ac{TPR}, \ac{FPR} and \ac{PPV} plots which are used to assess the performance of the network.
 The results of this analysis are output in the results/ directory produced by the submit.py script.
 
 \subsection{Benchmark data preparation}
 
 The DEKOIS 2.0\citep{Bauer:2013de} dataset was used for benchmarking purposes.
-The ligand SDF files used for the dataset are obtained from http://www.dekois.com/, and the associated protein files were obtained directly from the PDB. 
+The ligand \ac{SDF} files used for the dataset are obtained from http://www.dekois.com/, and the associated protein files were obtained directly from the \ac{PDB}. 
 Cleaned and prepared data are in the attached DVD, and were prepared and docked identically to the process described in section \ref{subsec:training_data_prep}
 
 \subsection{Benchmark data analysis}
 
 \subsubsection{descriptor computaton}
-Rather than using the SDF files of the DEKOIS 2.0 docked ligand poses to train a network, we will score our dataset using an existing network.
-This process is performed using the BCL molecule:Properties command.
+Rather than using the \ac{SDF} files of the DEKOIS 2.0 docked ligand poses to train a network, we will score our dataset using an existing network.
+This process is performed using the 
+\ac{BCL} molecule:Properties command.
 The cross-validation process used for network training produces an ensemble of 90 trained models, so the predicted activity is computed as the average of the output of all 90 models.
 molecule:Properties is run with the following command:
 \singlespace
@@ -557,10 +558,10 @@ bcl.exe molecule:Properties -input_filenames input_ligands.sdf \
 \doublespace
 Where \texttt{<model\_dir>} is the path to a directory oft trained neural network models, and output.csv is the path to an output file.
 
-\subsubsection{ROC curve generation}
-The CSV files produced in the previous step contain all predicted and experimental activities for all ligands in the DEKOIS 2.0 set.
-For the purposes of this study, ROC curves will be created individually for each system. 
-The BCL application model:ComputeStatistics is used to compute ROC plot and ROC-AUC values for a set of network predictions.
+\subsubsection{\ac{ROC} curve generation}
+The \ac{CSV} files produced in the previous step contain all predicted and experimental activities for all ligands in the DEKOIS 2.0 set.
+For the purposes of this study, \ac{ROC} curves will be created individually for each system. 
+The \ac{BCL} application model:ComputeStatistics is used to compute \ac{ROC} plot and \ac{ROC-AUC} values for a set of network predictions.
 This application requires an input file in the following format:
 \singlespace
 \begin{verbatim}
@@ -571,7 +572,7 @@ bcl::linal::Matrix<float>
 ...
 \end{verbatim}
 \doublespace
-The first line is a header indicating that the data is a BCL matrix, the second line indicates that the matrix has 1207 rows and 2 columns, and the remaining rows are the data values.
+The first line is a header indicating that the data is a \ac{BCL} matrix, the second line indicates that the matrix has 1207 rows and 2 columns, and the remaining rows are the data values.
 In this case, the first column should be the experimental values, and the second column should be the predicted values.
 The second column should be sorted such that the best predicted scores are first.
 To accomplish this task, the make\_bcl\_inputs\_for\_plotting.py script is used. 
@@ -582,8 +583,8 @@ make_bcl_inputs_for_plotting.py --exp_label 'Cached(log_ki)' \
 --pred_label 'Cached(predicted_activity)' input_data.csv output_dir/
 \end{verbatim}
 \doublespace
-This script will create BCL matrix files for each protein system found in the dataset and output these files to the specified output\_dir.
-The ROC-AUC values are then computed using these output table files and the script collect\_enrichment.py
+This script will create \ac{BCL} matrix files for each protein system found in the dataset and output these files to the specified output\_dir.
+The \ac{ROC-AUC} values are then computed using these output table files and the script collect\_enrichment.py
 This script is run as:
 \singlespace
 \begin{verbatim}
@@ -591,5 +592,5 @@ collect_enrichment.py output_dir/ tag
 \end{verbatim}
 \doublespace
 Where tag is a user specified tag.
-The script will output the protein system name, ROC-AUC and the tag for each protein system to standard output.
-Additionally, it will produce data files for each protein system in the output\_dir directory, which can be used to graph ROC curves. 
+The script will output the protein system name, \ac{ROC-AUC} and the tag for each protein system to standard output.
+Additionally, it will produce data files for each protein system in the output\_dir directory, which can be used to graph \ac{ROC} curves. 
