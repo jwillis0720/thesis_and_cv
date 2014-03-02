@@ -12,12 +12,12 @@ This framework was developed collaboratively by myself, Matt O'Meara at the Univ
 \section{Features reporter architecture}
 
 The data storage framework used by RosettaHTS is a subset of a statistical analysis framework within Rosetta called the Features Reporter.
-The Features Reporter framework consists of an Object-Relational Mapping (ORM) that allows mySQL schema definitions, queries and insertion statements to be composed in C++, and a reporting system used for computing statistical data and storing it in the database.
-The ORM was developed using CppDB(http://cppcms.com/sql/cppdb/) SQL library, which allows the features reporter to work with SQLite, MySQL and Postgres database backends.
-As all 3 of these back ends have different caveats, behaviors and syntax idioms, the ORM is responsible for constructing the appropriate MySQL command and sending it to the server.
+The Features Reporter framework consists of an \ac{ORM} that allows \ac{SQL} schema definitions, queries and insertion statements to be composed in C++, and a reporting system used for computing statistical data and storing it in the database.
+The \ac{ORM} was developed using CppDB(http://cppcms.com/sql/cppdb/) \ac{SQL} library, which allows the features reporter to work with SQLite, MySQL and Postgres database backends.
+As all 3 of these back ends have different caveats, behaviors and syntax idioms, the \ac{ORM} is responsible for constructing the appropriate MySQL command and sending it to the server.
 
-In addition to allowing for the transparent support of multiple Database Backends, the ORM system makes it possible for a C++ programmer to easily define new SQL objects without being familiar with SQL syntax. 
-For example, the C++ code reproduced below defines an SQL table containing structure ID, residue number, 3 letter residue name, and residue type fields, then generate the appropriate SQL syntax to create this table, and execute the SQL code on the database server.
+In addition to allowing for the transparent support of multiple Database Backends, the \ac{ORM} system makes it possible for a C++ programmer to easily define new \ac{SQL} objects without being familiar with \ac{SQL} syntax. 
+For example, the C++ code reproduced below defines an \ac{SQL} table containing structure ID, residue number, 3 letter residue name, and residue type fields, then generate the appropriate \ac{SQL} syntax to create this table, and execute the \ac{SQL} command on the database server.
 
 \singlespace
 \begin{Verbatim}
@@ -51,14 +51,14 @@ In the sections below we will describe the specific application and usage of thi
 \section{Pose storage schema}
 
 RosettaHTS uses a subset of the Features Reporter system to store and retrieve protein structure information from the database.
-In the most simple case, it would be possible to store only the atom and residue names, chain information, and cartesian coordinates for each atom, and effectively replicate the information present in a PDB file.
-However, storing this limited subset of information requires that Rosetta rebuild the internal data-structures representing the protein structure every time the pose is loaded, as is done when taking input from a PDB file.
+In the most simple case, it would be possible to store only the atom and residue names, chain information, and cartesian coordinates for each atom, and effectively replicate the information present in a \ac{PDB} file.
+However, storing this limited subset of information requires that Rosetta rebuild the internal data-structures representing the protein structure every time the pose is loaded, as is done when taking input from a \ac{PDB} file.
 While this is normally acceptable, in rare cases, there are multiple correct configurations that these data structures can take on, and thus, recomputing them can result in a slightly different input model, and numeric inconsistencies in scoring across multiple loads of the structure.
 While these  numeric inconsistencies do not typically lead to scientific inconsistencies, their presence can complicate data analysis.
 
-In order to rectify this problem, the RosettaHTS pose storage schema stores not only the information reflected in the protein PDB file, but also all of the derived data created by Rosetta.
+In order to rectify this problem, the RosettaHTS pose storage schema stores not only the information reflected in the protein \ac{PDB} file, but also all of the derived data created by Rosetta.
 The storage of this information makes it possible to precisely store and recover the protein structure as it is internally represented by Rosetta.
-The Pose storage schema is illustrated in Figure \ref{fig:pose_schema}.  Each block in the figure represents an SQL table storing a subset of 
+The Pose storage schema is illustrated in Figure \ref{fig:pose_schema}.  Each block in the figure represents an \ac{SQL} table storing a subset of 
 of the information needed to reconstruct the pose.
 Connections between the blocks indicate "Relationships" between the tables.  Connecting the tables with relationships makes it possible to link data elements that related to each other, while simultaneously allowing for Pose data to be queried efficiently.
 
@@ -131,8 +131,8 @@ Given that each compressed model requires approximately 90 kilobytes of storage 
 Thus, a 250,000 compound screen would require about 4.5 terabytes of compressed storage space. 
 The infrastructure required to store and analyze a dataset of this size outstrips the abilities of most research groups, and the storage of the complete dataset is particularly senseless as nearly all of it will be deleted after the initial round of filtering. 
 
-The Database Filter system leverages the properties of the SQL database system to make it possible for the first time to create Rosetta filters which take into account the context of previously generated models.
-SQL is designed to conduct rapid queries of stored data, and as these queries are conducted by the database engine itself, rather than Rosetta, the operation of the filter does not require that state be kept between Rosetta jobs and does not result in additional memory requirements.
+The Database Filter system leverages the properties of the \ac{SQL} database system to make it possible for the first time to create Rosetta filters which take into account the context of previously generated models.
+\ac{SQL} is designed to conduct rapid queries of stored data, and as these queries are conducted by the database engine itself, rather than Rosetta, the operation of the filter does not require that state be kept between Rosetta jobs and does not result in additional memory requirements.
 
 A Rosetta Database Filter can have 3 possible outcomes:  The current model is not output, the current model is output, or the current model replaces an existing model.
 To accomplish this the Database Filter conducts a query of the existing structures in the database  to identify if the current model is suitable to be output, and to identify the model that it will replace if necessary. 
@@ -267,7 +267,7 @@ If the structure IDs of the desired structures are known they can be specified w
 
 Where \texttt{<struct\_id\_list>} is a space separated list of structure IDs.
 
-If the structure IDs are not known, it is possible to select a subset of the database using an SQL select statement:
+If the structure IDs are not known, it is possible to select a subset of the database using an \ac{SQL} select statement:
 
 \singlespace
 \begin{Verbatim}
@@ -286,5 +286,5 @@ SELECT struct_id FROM job_string_real_data
 \doublespace
 
 Would select the structure IDs of the 500 lowest scoring models by total score.
-This command line option is potentially dangerous as minimal syntax validation is performed by Rosetta and the specified statement is executed on the SQL server.
+This command line option is potentially dangerous as minimal syntax validation is performed by Rosetta and the specified statement is executed on the \ac{SQL} server.
 Make sure only to use this command line option with trusted user input, and do not expose any protocol that uses it as a web server.
