@@ -5,7 +5,7 @@
 The design of protein surfaces with proper amino acid composition is critical to preventing aggregation and allowing for correct protein folding \citep{Chandler:2005ds}.
 Thermostabilization of enzymes and design of proteins with novel folds are two possible applications of the present research. 
 
-\subsection{The current Rosetta solvation model does penalize the burial of apolar atoms}
+\subsection{The current Rosetta solvation model does not penalize the burial of apolar atoms}
 As there are relatively few explicit interactions of amino acids on the protein surface, the total energy of a residue is dominated by Rosetta's implicit solvation model.
 The solvation model currently used by Rosetta is a function developed by Lazaridis and Karplus\citep{Lazaridis:1999wi}.
 This potential estimates the solvation free energy of an atom from a reference free energy, where the atom is essentially fully solvent-exposed.
@@ -14,13 +14,14 @@ This procedure aligns with the protein folding process, where amino acids move f
 While the model is parameterized for all amino acid atom types, it is driven by high desolvation penalties of polar atoms.
 It is quite insensitive to the burial of apolar atoms because desolvation energies are small. 
 
-\subsection{}
+\subsection{RosettaDesign currently has difficulty designing protein surfaces}
 This paradigm of desolvation is useful for determining energy changes in the folding of a monomeric protein.
 However, hydrophobic patches on the surface of a \textit{de novo} designed protein are hardly penalized, as the environment of these amino acids did not change in the folding process.
 At present, RosettaDesign excels in the design of tightly packed protein cores, while the protein surface is often poorly composed and requires manual adjustment\citep{Dantas:2003vt}.
 We hypothesize that native proteins have evolved to minimize unspecific aggregation, a fact that is ignored by the desolvation potential.
 Evolutionary pressures exerted on protein sequence composition by the requirement of protein solubility are difficult to model with a typical physics-based model, but can be modeled effectively with a knowledge-based energy potential. 
 
+\subsection{Description of the RosettaDesign energy function}
 The RosettaDesign energy function is a weighted composite of the Lazaridis-Karplus solvation free energy potential, attractive and repulsive interactions, an action center pairwise potential to approximate electrostatic interactions, an orientation-dependent hydrogen bonding potential\citep{Kortemme:2003td}, and reference energies for amino acid type and conformation\citep{Dantas:2003vt}. 
 Amino acid reference energies and scoring function weights are optimized to maximize sequence recovery in a protein design benchmark.
 Reference energies can be viewed as the ground state energy of an amino acid in an essentially fully exposed, unfolded peptide chain.
@@ -29,12 +30,14 @@ However, the same reference energies are also fitted to reflect amino acid prope
 In addition, the reference energies are fitted to maximize sequence recovery and thereby counterweight other inaccuracies in the RosettaDesign energy function.
 As a result, the reference energies form a container term that combines multiple effects that can be difficult to disentangle, and it provides a corrective power against exposed hydrophobic amino acids on the surface.
 
+\subsection{A knowledge based environment potential was developed to improve the quality of protein surface designs}
 To improve upon the above shortcomings of RosettaDesign, we implemented the Neighbor Vector (NV)-based Knowledge-Based Potential (KBP) previously described by Durham et al.\citep{Durham:2009kt}.
 This neighbor vector environment KBP converts the likelihood to see an amino acid at a given level of exposure into an environment energy.
 The NV environment KBP encapsulates both desolvation energy and evolutionary biases against apolar amino acids at the protein surface with amino acid level resolution.
 
+\subsection{The approximation of burial used by Rosetta }
 The usefulness of an environment potential based on burial is contingent on an accurate measure of burial.
-Solvent Accessible Surface Area (SASA) is the most accurate means of calculating amino acid burial but is generally time-consuming to compute, limiting its usefulness in protein design.
+\ac{SASA} is the most accurate means of calculating amino acid burial but is generally time-consuming to compute, limiting its usefulness in protein design.
 RosettaDesign currently uses a Neighbor Count method (NCR) for estimating solvent accessibility in the pair potential.
 While the NCR method correlates with residue burial, high inaccuracies are common in surface and partially exposed positions (Figure \ref{fig:nv_ncr_comparison}). 
 

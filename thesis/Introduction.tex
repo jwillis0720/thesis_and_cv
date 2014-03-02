@@ -17,7 +17,7 @@ Since each Rosetta protocol allows degrees of freedom specific for the task, Ros
 \subsection{Sampling strategies for backbone degrees of freedom}
 Rosetta separates large backbone conformational sampling from local backbone refinement.
 Large backbone conformational changes are modeled by exchanging the backbone conformations of 9 or 3 amino acid peptide fragments.
-Peptide conformations are collected from the PDB for homologous stretches of sequence  \citep{Simons:1997do} which capture the structural bias of the local sequence  \citep{Bystroff:1996vl}.
+Peptide conformations are collected from the \ac{PDB} for homologous stretches of sequence  \citep{Simons:1997do} which capture the structural bias of the local sequence  \citep{Bystroff:1996vl}.
 For local refinement of protein models, Rosetta utilizes Metropolis Monte Carlo sampling of phi and psi angles calculated not to disturb the global fold of the protein.
 Rohl  \citep{Rohl:2004dh} provides a review of the fragment selection and backbone refinement algorithms in Rosetta. 
 
@@ -40,7 +40,7 @@ Electrostatics interactions are modeled as the probability of observing a given 
 Hydrogen bonding between beta strands is evaluated based on the relative geometric arrangement of strand fragments.
 Backbone atom and side-chain centroid overlap is penalized providing the repulsive component to a van der Waals force.
 A radius of gyration term is used to model the effect of van der Waals attraction.
-All probability profiles have been derived using Bayesian statistics on crystal structures from the PDB.
+All probability profiles have been derived using Bayesian statistics on crystal structures from the \ac{PDB}.
 The lower resolution of this centroid-based energy function smoothes the energy landscape at the expense of its accuracy.
 The smoother energy landscape allows structures which are close to the true global minima to maintain a low energy even with structural defects that a full atom energy function would penalize stiffly.
 
@@ -63,11 +63,11 @@ The practical uses of RosettaDesign can be divided into five basic categories: D
 
 \subsection{De novo protein design}
 
-The RosettaDesign method has been used for the \textit{de novo} design of a fold that was not (yet) represented in the PDB.
+The RosettaDesign method has been used for the \textit{de novo} design of a fold that was not (yet) represented in the \ac{PDB}.
 A starting backbone model consisting of a five stranded beta-sheet and two packed alpha-helices was constructed with the Rosetta \textit{de novo} protocol using distance constraints derived from a two-dimensional sketch  \citep{Rohl:2004dh}.
 The sequence was iteratively designed with five simulation trials of 15 cycles each.
 The final sequence was expressed and the structure was determined using X-ray crystallography.
-The experimental structure has an RMSD to the computational design of less than 1.1 \AA\  \citep{Kuhlman:2003kp}. 
+The experimental structure has an \ac{RMSD} to the computational design of less than 1.1 \AA\  \citep{Kuhlman:2003kp}. 
 
 Similarly, a molecular switch which folded into a trimeric coiled coil in the absence of zinc, and a monomeric zinc finger in the presence of zinc was designed by extending RosettaDesign to simultaneously optimize a sequence in two different folds.
 The sequence of an existing zinc finger domain was aligned with a coiled-coil hemaglutinin domain.
@@ -76,7 +76,7 @@ During the design protocol the sequence was optimized to fold into both tertiary
 \subsection{Redesign of existing proteins}
 When nine globular proteins were stripped of all side chains and then redesigned using RosettaDesign the average sequence recovery was 35\% for all residues  \citep{Kuhlman:2003kp}.
 In four out of nine cases the stability of the proteins improved as measured by chemical denaturation.
-The structure of a redesigned human procarboxypeptidase (PDB 1AYE)  \citep{GarciaSaez:1997cn} was determined experimentally.
+The structure of a redesigned human procarboxypeptidase (\ac{PDB} 1AYE)  \citep{GarciaSaez:1997cn} was determined experimentally.
 RosettaDesign was then used to systematically identify mutations of procarboxypeptidase that would improve the stability of the proteins.
 All of the tested mutants were more stable than the wildtype protein with the top scoring mutant having a reduction of free energy of 5.2 kcal/mol  \citep{Dantas:2007iq}.
 
@@ -98,7 +98,7 @@ Xiao  \citep{Xiao:2013dq} demonstrated that while electrostatic surface interact
 \subsection{Computationally designed proteins frequently aggregate unless "supercharged"}
 In addition to issues with stability, computationally designed proteins often have issues with aggregation.
 A study was performed in which RosettaDesign was used to fully redesign 10 proteins \citep{Dantas:2003vt}.
-They found that 4 of the 10 designed proteins formed insoluble aggregates at 1mM concentration.
+They found that 4 of the 10 designed proteins formed insoluble aggregates at 1 mM concentration.
 Aggregation appears to be a general phenomenon affecting protein design, and it has been repeatedly demonstrated that "supercharging" (introducing large numbers of charged surface residues) \citep{Simeonov:2011jf,Kurnik:2012dz,MichaelSLawrence:2007cv} can reduce aggregation in designed proteins.
 However, "supercharged" proteins are infrequently seen in nature, suggesting that evolved mechanisms for retaining solubility and avoiding aggregation are more complex.
 Observation of the folding properties of supercharged proteins suggest that excessive charging can inhibit folding \citep{MichaelSLawrence:2007cv}, which may have acted as an evolutionary  barrier to natural supercharging.
@@ -145,21 +145,21 @@ Additionally, accurate docking into a full-atom grid based model requires a high
 In the years following the publication of DOCK and GRID, additional experimental study of protein structure began to indicate that the rigid body lock and key model was not adequate for the modeling of protein-ligand interactions.
 It had long been suspected \citep{KOSHLAND:1958wa} that enzymes and receptors may be flexible to accommodate the fit of small molecules (the so called "induced fit" hypothesis), however in 1995, Nicklaus et al. \citep{Nicklaus:1995tu} published work suggesting that small molecules also undergo substantial conformational shift on binding.
 This conclusion was arrived at by comparing the geometry of flexible small molecules observed bound to proteins with the geometry of the same small molecules when crystallized in the absence of a protein, or when computationally minimized using molecular mechanics.
-The results of this study indicated that while the conformations of rigid structures typically differed by < 0.1 \AA\ RMSD between the bound and unbound context, flexible ligands typically differed significantly, frequently by several angstroms.
-Furthermore, the difference in RMSD between bound and unbound ligands was strongly correlated with the number of rotatable bonds in the ligand, with an R$^{2}$ correlation of 0.82.
+The results of this study indicated that while the conformations of rigid structures typically differed by < 0.1 \AA\ \ac{RMSD} between the bound and unbound context, flexible ligands typically differed significantly, frequently by several angstroms.
+Furthermore, the difference in \ac{RMSD} between bound and unbound ligands was strongly correlated with the number of rotatable bonds in the ligand, with an R$^{2}$ correlation of 0.82.
 In response to this research, the development of newer protein-ligand docking methods began to focus on the flexibility of the system.
 While flexibility had previously been avoided due to the inherent increase in complexity associated with modeling it, it became apparent that it was a critical component of protein-ligand interaction.
 
 \subsubsection{FlexX and GOLD}
-FlexX \citep{Rarey:1996hf} and Genetic Optimization of Ligand Docking (GOLD) \citep{Jones:1997bl}, are two of the early methods which attempted to model ligand flexibility.
+FlexX \citep{Rarey:1996hf} and \ac{GOLD} \citep{Jones:1997bl}, are two of the early methods which attempted to model ligand flexibility.
 FlexX represents the ligand binding site using a set of interaction sites, which are defined as surfaces surrounding hydrogen bond donors and acceptors, metals and metal acceptors, aromatic rings, methyls and amides.
 An empirical scoring function is used to score ligand conformations based on the distance and angle between defined protein and ligand interaction sites.
 FlexX uses an incremental construction algorithm to model ligand flexibility.
 An initial central fragment of the ligand is placed in the binding site using an incremental construction algorithm, and the additional fragments necessary to build the entire ligand are then placed such that they can connect to the initial fragment and minimize the energy function score. 
-GOLD, on the other hand, relies on the user providing a reasonable initial position for the ligand inside the protein binding site.
+\ac{GOLD}, on the other hand, relies on the user providing a reasonable initial position for the ligand inside the protein binding site.
 From that initial position, a genetic algorithm \citep{Jones:1995vw} was used to optimize the rotation angles of both the ligand and the interacting protein side-chains. 
 The genetic algorithm makes it possible to rapidly find a high quality local minimum without the exhaustive sampling of bond angles that had made the problem previously intractable.
-As a result of this new sampling technique, GOLD was able to successfully recover the correct binding conformation in 71 out of 100 X-Ray crystal structures in a benchmarking study. 
+As a result of this new sampling technique, \ac{GOLD} was able to successfully recover the correct binding conformation in 71 out of 100 X-Ray crystal structures in a benchmarking study. 
 
 \subsubsection{Glide}
 In 2004, Glide \citep{Friesner:2004hm} was published as a novel method for protein-ligand docking aimed at the screening of large libraries of small molecules.
@@ -186,11 +186,11 @@ This inconstant performance between protein targets and protein docking tools is
 \subsection{RosettaLigand is capable of successfully predicting binding based on comparative models}
 One of the advantages of a knowledge based energy function is the ability to accurately model complex physical effects without a direct physical model.
 In principle, this, combined with the ability to model both backbone and side-chain flexibility would make RosettaLigand well suited to the docking of ligands into comparative models or other low resolution protein structures. 
-To assess this, a benchmarking study was performed in which small molecules with known binding positions were docked into homology models generated in the CASP experiment \citep{Kaufmann:2012ck}.
+To assess this, a benchmarking study was performed in which small molecules with known binding positions were docked into homology models generated in the \ac{CASP} experiment \citep{Kaufmann:2012ck}.
 The results of this benchmark demonstrated that in most of the tested cases, Rosetta was able to generate low energy binding positions within 2.0\AA\ of the crystallographic binding site.
 
 \subsection{Applications of RosettaLigand to drug discovery}
-In addition to benchmarking studies, Rosetta has been used to develop models of ligand binding in GPCRs.
+In addition to benchmarking studies, Rosetta has been used to develop models of ligand binding in \ac{GPCR}s.
 A comparative model of hSERT was created based on the dSERT crystal structure. 
 S- and R-citalopram were docked into this comparative model using RosettaLigand, and the resulting predicted binding poses were used to design mutational studies to identify residues critical for S-citalopram binding.
 Rosetta was able to correctly predict that Y95 and E444 formed protein-ligand interactions critical to binding \citep{Combs:2011db}.  
@@ -205,24 +205,24 @@ For every protein-ligand method developed, some percentage of protein-ligand int
 While the predictions generated by protein-ligand docking has made some major scientific contributions to drug discovery and molecular modeling, the unreliability of the method has historically constrained its usefulness.
 
 In 2006, a diverse set of 81 protein targets, each with a diverse set of known active and predicted inactive ligands was assembled as the DEKOIS 2.0 dataset \citep{Bauer:2013de}.
-Glide, GOLD and Autodock Vina were used to screen this dataset, and the pROC AUC enrichment for each target and each screening method was computed.
+Glide, \ac{GOLD} and Autodock Vina were used to screen this dataset, and the pROC AUC enrichment for each target and each screening method was computed.
 The results of this benchmark showed a wide range in the predictive ability of the three screening methods.  
 While all 3 docking methods had strong predictive power against some protein targets (COX2, KIF11), there were several cases in which no method had predictive power (HSP90, QPCT), and more cases in which some methods were able to make accurate predictions while others were not (COX1, ROCK-1).
 Furthermore, it was not possible for the authors to identify straightforward patterns to predict which protein targets could be successfully screened against and which could not. 
-The phenomenon of structure based vHTS methods having inconsistent performance depending on the protein target has been replicated in other studies.
+The phenomenon of structure based \ac{vHTS} methods having inconsistent performance depending on the protein target has been replicated in other studies.
 For example, the Directory of Useful Decoys: Enhanced (DUD-E) benchmark set was screened using DOCK, and the resulting predictions exhibited similar inconsistencies to those seen in the DEKOIS 2.0 study \citep{Mysinger:2012hu}.
 
-\section{Artificial Neural Networks (ANNs) have proven valuable for extracting complex signals}
+\section{Artificial Neural Network techniques have proven valuable for extracting complex signals}
 
-Since the publication of the perceptron as a method of machine learning \citep{Rosenblatt:1958jc}, ANNs have become an area of great interest to the machine learning community.
-While there was much initial optimism regarding the use of ANNs to learn complex tasks, early perceptron based models proved limited in their abilities \citep{Gallant:1990hk}, and the state of computational hardware at the time prevented ANN based techniques from living up to the early optimism.
-In more recent years, the availability of large clusters of low cost computer hardware as lead to a renaissance in both the development and application of ANN based machine learning techniques.
-ANNs have been used for tasks such as face recognition \citep{Zhao:2003bf}, cancer cell identification \citep{Zhou:2002ew}, and drug activity classification \citep{Gohlke:2002in}.
+Since the publication of the perceptron as a method of machine learning \citep{Rosenblatt:1958jc}, \ac{ANN} techniques have become an area of great interest to the machine learning community.
+While there was much initial optimism regarding the use of \ac{ANN}s to learn complex tasks, early perceptron based models proved limited in their abilities \citep{Gallant:1990hk}, and the state of computational hardware at the time prevented \ac{ANN} based techniques from living up to the early optimism.
+In more recent years, the availability of large clusters of low cost computer hardware as lead to a renaissance in both the development and application of \ac{ANN} based machine learning techniques.
+\ac{ANN}s have been used for tasks such as face recognition \citep{Zhao:2003bf}, cancer cell identification \citep{Zhou:2002ew}, and drug activity classification \citep{Gohlke:2002in}.
 Neural networks are popular choices for these tasks due to their ability to extract the signal from complex patterns.
 
-\section{Overtraining and overfitting are common pitfalls in the use of ANNs for pattern recognition}
+\section{Overtraining and overfitting are common pitfalls in the use of \ac{ANN}s for pattern recognition}
 \label{sec:intro_overtraining}
-While ANN based approaches have been valuable to many fields, they are often difficult to use in practice.
+While \ac{ANN} based approaches have been valuable to many fields, they are often difficult to use in practice.
 Due to the very large number of free parameters in a neural network, they are very prone to over-fitting.
 In over-fitting, the neural network effectively "memorizes" the dataset, and becomes a model that exactly implements the set of data used for training \citep{Tetko:1995cm}.
 The consequence of overfitting is that the model will be capable of exactly reproducing the training data set, but will have no ability to make predictions beyond that.
@@ -231,7 +231,7 @@ cross-validation makes it possible to determine when over-fitting is occurring a
 
 \subsubsection{Deep networks and node dropout as novel methods for improving network generalizability}
 Very recently, new methods in network training have been developed to improve the generalizability of neural networks and prevent over-training.
-The development of inexpensive General Purpose GPU hardware has made it possible for extremely large networks to be efficiently trained. 
+The development of inexpensive General Purpose \ac{GPU} hardware has made it possible for extremely large networks to be efficiently trained. 
 Additionally, development of new training methodologies \citep{Hinton:2006dy} has made it possible to train networks with very large numbers of nodes, and more than 2 layers of hidden nodes.
 These so-called "deep networks" appear to be capable of learning abstract features and concepts in an un-supervised fashion \citep{Le:2013kz}, and appear to exhibit the kinds of learning behaviors that were originally envisioned by the developers of early perceptron methods. 
 Another promising and broadly applicable new method in the training of neural networks is the so-called "node dropout" method.
@@ -239,23 +239,23 @@ In this method, every time a new training case is provided to the network, 50\% 
 This has the effect of preventing nodes from becoming dependent on each other, which leads to over-training.
 By using node dropout, it has been possible to both conventional shallow networks and deep networks using a larger number of nodes than would normally be allowable, increasing the generalizability and performance of the models \citep{Hinton:2012tv}.
 
-\section{Using ANNs to make predictions regarding drug activity is a major area of current research}
+\section{Using \ac{ANN}s to make predictions regarding drug activity is a major area of current research}
 
-As a result of their properties to model complex interactions in natural systems, ANN based methods are a popular choice for constructing models of drug activity and binding. 
+As a result of their properties to model complex interactions in natural systems, \ac{ANN} based methods are a popular choice for constructing models of drug activity and binding. 
 In many ways, drug activity is a harder problem to solve than image recognition.
 Unlike images, The activity of a drug depends in large part on its conformation \citep{Nicklaus:1995tu}.
 A cat does not become a bobsled if it folds its legs, but active small molecules can become inactive in certain geometric conformations.
-to sidestep this, ANN based methods are often used to make 2D ligand-based QSAR models which are trained using the 2 dimensional structures of known active and inactive small molecules without including protein structure information \citep{Myint:2012ts}.
+to sidestep this, \ac{ANN} based methods are often used to make 2D ligand-based \ac{QSAR} models which are trained using the 2 dimensional structures of known active and inactive small molecules without including protein structure information \citep{Myint:2012ts}.
 While 2D descriptors do frequently outperform 3D descriptors, 3D descriptors can be made useful.
-By encoding 3D information in the form of Radial Distribution Functions (RDFs), the 3D geometry of the small molecule is described in a way that is rotation and translation independent.
-Additionally, RDFs encode 3 dimensional protein data as a one dimensional fingerprint, making them ideally suited as ANN descriptors.
-RDF based descriptors, in conjunction with 2D descriptors, have been used to build a QSAR model capable of predicting novel active compounds \citep{Mueller:2010dx}, demonstrating the value of the technique as a whole.
+By encoding 3D information in the form of a \ac{RDF}, the 3D geometry of the small molecule is described in a way that is rotation and translation independent.
+Additionally, \ac{RDF}s encode 3 dimensional protein data as a one dimensional fingerprint, making them ideally suited as \ac{ANN} descriptors.
+\ac{RDF} based descriptors, in conjunction with 2D descriptors, have been used to build a \ac{QSAR} model capable of predicting novel active compounds \citep{Mueller:2010dx}, demonstrating the value of the technique as a whole.
 
-While ligand-based QSAR methods have proven valuable for predicting the activity of drugs against specific targets, these models have a fundamental limitation in that they can only be applied to the target they were trained against.
+While ligand-based \ac{QSAR} methods have proven valuable for predicting the activity of drugs against specific targets, these models have a fundamental limitation in that they can only be applied to the target they were trained against.
 While techniques exist to define and maximize the domain of applicability of these models \citep{Sahigara:2012kb}, they are fundamentally tuned to a specific target or subset of targets. 
-Furthermore, the training of a ligand based QSAR model requires that a set of experimentally known active and inactive compounds exist, which limits the use of ligand based methods to targets which have already been experimentally evaluated.
-As a result of this limitation, some recent research has focused on using ANN based models to score protein-ligand docking positions.
-Because of the ability of modern ANN based methods to recognize very complex and noisy signals, the potential exists to develop an ANN model which is capable of distinguishing between active and inactive small molecule poses even in cases where the scoring function of the docking system is unable to do so. 
-A number of methods have been developed to do this \citep{Durrant:2013db}, and while they have in general been successful \citep{Durrant:2011dx}, the dream of a vHTS method that acts as a generally applicable model of protein-ligand binding affinity has not yet been realized, and research in the area continues. 
+Furthermore, the training of a ligand based \ac{QSAR} model requires that a set of experimentally known active and inactive compounds exist, which limits the use of ligand based methods to targets which have already been experimentally evaluated.
+As a result of this limitation, some recent research has focused on using \ac{ANN} based models to score protein-ligand docking positions.
+Because of the ability of modern \ac{ANN} based methods to recognize very complex and noisy signals, the potential exists to develop an \ac{ANN} model which is capable of distinguishing between active and inactive small molecule poses even in cases where the scoring function of the docking system is unable to do so. 
+A number of methods have been developed to do this \citep{Durrant:2013db}, and while they have in general been successful \citep{Durrant:2011dx}, the dream of a \ac{vHTS} method that acts as a generally applicable model of protein-ligand binding affinity has not yet been realized, and research in the area continues. 
 
 
