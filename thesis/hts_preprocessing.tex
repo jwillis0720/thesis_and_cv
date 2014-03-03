@@ -50,7 +50,7 @@ ligand_1,path/to/ligand1
 ligand_2,path/to/ligand2
 \end{verbatim}
 
-The list file is a mapping of protein names to sdf file paths.
+The list file is a mapping of protein names to \ac{SDF} file paths.
 
 Many filesystems perform poorly if large numbers of files are stored in the same directory. 
 The hashed directory structure is a method for splitting the generated ligand files across 256 roughly evenly sized subdirectories, improving filesystem performance.
@@ -110,20 +110,24 @@ The next step is to generate params files. \texttt{make\_params.py} is a script 
 \texttt{molfile\_to\_params.py} and generates params files in an automated fashion.
 params files will be given random names that do not conflict with existing Rosetta residue names (no ligands will be named ALA, for example).
 This script routinely results in warnings from \texttt{molfile\_to\_params.py}, these warnings are not cause for concern. 
-Occasionally, \texttt{molfile\_to\_params.py} is unable to properly process an sdf file, if this happens, the ligand will be skipped. 
+Occasionally, \texttt{molfile\_to\_params.py} is unable to properly process an \ac{SDF} file, if this happens, the ligand will be skipped. 
 In order to run \texttt{make\_params.py} you need to specify the path to a copy of \texttt{molfile\_to\_params.py}, as well as the path to the Rosetta database.
 
 \texttt{make\_params.py} should be run like this:
 
+\singlespace
 \begin{verbatim}
-make_params.py -j 4 --database path/to/Rosetta/main/database \
---path_to_params path/to/molfile_to_params.py database.db3 output_dir/
+make_params.py -j 4 \
+--database path/to/Rosetta/main/database \
+--path_to_params path/to/molfile_to_params.py \
+database.db3 output_dir/
 \end{verbatim}
+\doublespace
 
-In the command line above, the -j option indicates the number of \ac{CPU} cores which should be used when generating params files.
-If you are using a multiple core machine, setting -j equal to the number of availible cpu cores.
+In the command line above, the \texttt{-j} option indicates the number of \ac{CPU} cores which should be used when generating params files.
+If you are using a multiple core machine, setting \texttt{-j} equal to the number of available cpu cores.
 
-The script will create a directory params/ containing all params files, pdb files and conformer files.
+The script will create a directory \texttt{params/} containing all params files, \ac{PDB} files and conformer files.
 
 \subsection{Create job files}
 
@@ -144,10 +148,12 @@ Jobs should be small enough to fit into available memory.
 To make this process easier, the \texttt{make\_evenly\_grouped\_jobs.py} script will attempt to group your protein-ligand docking problem into a set of jobs that are sized as evenly possible. 
 The script is run like this:
 
+\singlespace
 \begin{verbatim}
 make_evenly_grouped_jobs.py --n_chunks=10 \
  --max_per_job=1000 param_dir/ structure_dir/ output_prefix
 \end{verbatim}
+\doublespace
 
 If the script was run as written above, it would use param files from the directory \texttt{param\_dir/}, and structure files from the directory \texttt{structure\_dir/}.
 It would attempt to split the available protein-ligand docking jobs into 10 evenly grouped job files (\texttt{--n\_chunks}).
@@ -163,6 +169,7 @@ RosettaLigand Job files are \ac{JSON} files which contain the paths to protein a
 and the params files necessary to load the ligand \ac{PDB} files.
 An example file is below:
 
+\singlespace
 \begin{verbatim}
  "jobs": [
   {
@@ -189,6 +196,7 @@ An example file is below:
   "AJ.params"
  ]
 \end{verbatim}
+\doublespace
 
 \subsection{Submit jobs}
 

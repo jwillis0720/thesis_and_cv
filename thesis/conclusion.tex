@@ -5,15 +5,15 @@
 \subsection{Development of a Novel Energy Function and Benchmarking Method for Protein Design }
 The development of of tools for accurate structural biology predictions is an important area of current research.
 Tools which can accurately model the effect of mutations on protein stability will make it possible to both explore the basic physical principles that drive protein stability, as well as engineer new proteins and enzymes for pharmaceutical and chemical purposes.
-While supercharging\citep{MichaelSLawrence:2007cv,Kurnik:2012dz,Simeonov:2011jf} of protein surfaces has been an effective means of improving the solubility of designed proteins, this technique has and impact on the rate of folding.
+While supercharging \citep{MichaelSLawrence:2007cv,Kurnik:2012dz,Simeonov:2011jf} of protein surfaces has been an effective means of improving the solubility of designed proteins, this technique has and impact on the rate of folding.
 Artificially recapitulating the balance between solubility and ability to fold which is seen in natural proteins.
 In the service of this goal, chapter \ref{chap:nv_kbp} describes a novel method for designing native-like protein surfaces, as well as a novel quality metric for assessing protein designs.
 
-The new energy function implements a knowledge based potential previously developed by Durham et al.\citep{Durham:2009kt} which was computed based on the propensity of amino acids existing at various degrees of burial in X-ray crystal structures of soluble proteins.
+The new energy function implements a knowledge based potential previously developed by Durham et al. \citep{Durham:2009kt} which was computed based on the propensity of amino acids existing at various degrees of burial in X-ray crystal structures of soluble proteins.
 This energy function is effectively an environment potential, which provides an energy bonus to amino acids which are frequently in nature at a given degree of burial within the protein.
 In addition to the implementation of this knowledge based potential, the weights of the RosettaDesign energy function were re-optimized to maximize the \ac{PSSM} score of the protein, based on a \ac{PSSM} generated using \ac{BLAST}.
 To assess the quality of the proteins designed with the new energy function, two metrics were used.
-The first metric was sequence recovery\citep{Kuhlman:2000tc}, the percentage of amino acids which were designed to be identical to the native amino acid.
+The first metric was sequence recovery \citep{Kuhlman:2000tc}, the percentage of amino acids which were designed to be identical to the native amino acid.
 The second metric, \ac{PSSM} recovery, was originally presented in chapter \ref{chap:nv_kbp}.
 \ac{PSSM} recovery is the percentage of amino acids with a favorable \ac{PSSM} score according to a \ac{PSSM} created using \ac{BLAST}.
 \ac{PSSM} recovery is advantageous over sequence recovery as a metric of protein design because it measures evolutionarily favorable mutations, rather than simply counting exact amino acid recovery.
@@ -21,7 +21,7 @@ Through the combination of this optimization function and the environment based 
 Specifically, \ac{PSSM} recovery improved from 72\% with the standard energy function to 77.2\% with the optimized energy function.
 
 \subsection{Improvement of the speed and sampling efficiency of RosettaLigand}
-While RosettaLigand has been previously successful at ligand docking\citep{Lemmon:2012ku,Combs:2011db,Allison:2013ir}, it is too slow for use in high throughput ligand docking applications.
+While RosettaLigand has been previously successful at ligand docking \citep{Lemmon:2012ku,Combs:2011db,Allison:2013ir}, it is too slow for use in high throughput ligand docking applications.
 To address this, chapters \ref{chap:lowres_paper} and \ref{chap:lowres_appendix} describe the development of a grid based Monte Carlo sampling algorithm for initially placing ligands in the protein binding site prior to refinement and a modular scoring system for defining cartesian grid based scoring functions.
 The best performing results with the new method were obtained using the new Monte Carlo initial placement algorithm combined with the originally published grid based energy function.
 This method resulted in a 10-fold reduction in the number of protein models required to obtain a successful binding pose, as well as a 6 fold reduction in the time necessary to generate a single model.
@@ -33,7 +33,7 @@ The results presented in chapter \ref{chap:lowres_paper} make it possible for th
 \subsection{Development of RosettaHTS: A structure based virtual screening protocol}
 The methods developed in chapter \ref{chap:lowres_paper} lead naturally to chapter \ref{chap:rosetta_hts}, which describes the development of a protocol for docking large numbers of small molecules using RosettaLigand and a novel \ac{ANN} based classification model for predicting the activity of these compounds.
 To training the \ac{ANN} model, a training data set was constructed using cross-docking so as to be highly diverse in chemical and protein space, as well as balanced in chemical space between active and inactive compounds.
-In addition to previously developed Rosetta energy terms, interface quality metrics, and ligand descriptor information, a new set of protein-ligand interface descriptors were developed based on Radial Distribution Functions.
+In addition to previously developed Rosetta energy terms, interface quality metrics, and ligand descriptor information, a new set of protein-ligand interface descriptors were developed based on \ac{RDF}s.
 Several networks were trained using various combinations of these descriptor sets.
 Analysis of the cross-validation performance of the trained networks indicated that the majority of the useful information to the networks was provided by the Rosetta energy term and interface quality metric data.
 The cross-validation performance also demonstrated that the networks were well-trained and capable of making more accurate ligand activity classifications than the RosettaLigand interface scores alone. 
@@ -66,7 +66,7 @@ In this method, the target acceptance rate is gradually lowered over the course 
 To reach the target acceptance rate, the Boltzmann temperature is modulated continuously.
 
 Pre-computed grid based scoring functions lend themselves well to a variety of sampling methods, some of which may be far more efficient than a monte carlo search.
-In particular, if more informative scoring grids can be developed, geometric hashing methods, such as those previously used for CryoEM fitting\citep{Woetzel:2011id} could be of great value.
+In particular, if more informative scoring grids can be developed, geometric hashing methods, such as those previously used for CryoEM fitting \citep{Woetzel:2011id} could be of great value.
 A geometric hashing algorithm would be capable of identifying potential initial ligand positions far more rapidly than a Monte Carlo search.
 Additionally, such an algorithm would make it possible to greatly expand the size of the scoring grid, potentially allowing RosettaLigand to be used to perform binding site detection, rather than requiring that the user provide the initial binding site. 
 
@@ -74,7 +74,7 @@ Additionally, such an algorithm would make it possible to greatly expand the siz
 
 The results of the benchmarking performed in chapter \ref{chap:lowres_paper} demonstrate that the currently optimal RosettaLigand protocol is capable of docking nearly every protein in the benchmark set used.
 For this reason, further development of the sampling and scoring methods described above will likely require the use of a more challenging benchmark, so that the effects of changes to the algorithm can be easily seen. 
-To accomplish this, the homology modeling benchmark used by Kaufmann et al.\citep{Kaufmann:2012ck} will be used to for future benchmarking studies.
+To accomplish this, the homology modeling benchmark used by Kaufmann et al. \citep{Kaufmann:2012ck} will be used to for future benchmarking studies.
 Preparation of this benchmarking set for use with the modern RosettaLigand protocol is currently underway.
 
 \subsection{RosettaHTS method development}
@@ -85,10 +85,10 @@ Despite this, it is likely that it is possible to develop meaningful fingerprint
 The RDF fingerprint implementation has several parameters which can be potentially optimized to improve performance.
 Specifically, the magnitude of the smoothing factor, number of bins in the fingerprint, and maximum fingerprint range are being optimized.
 In addition to optimizing the parameters of the RDF fingerprints, several other methods for producing fingerprints can be explored.
-The FEATURE framework\citep{Halperin:2008ce} is a method producing fixed length protein environment fingerprints.
+The FEATURE framework \citep{Halperin:2008ce} is a method producing fixed length protein environment fingerprints.
 This method has been successfully used to identify protein-ligand binding pockets and classify protein binding interactions. 
 The FEATURE framework describes the chemical environment surrounding points in space, as a result it can be adapted for use as a ligand interaction descriptor.
-Similarly, a 3D autocorrelation function, similar to that implemented in ADRIANA\citep{Code:2011uf} could be valuable as a fingerprinting method.
+Similarly, a 3D autocorrelation function, similar to that implemented in ADRIANA \citep{Code:2011uf} could be valuable as a fingerprinting method.
 The FEATURE framework and 3D Autocorrelation methods are less detailed than the \ac{RDF} fingerprints and may result in less noisy and therefore more effective descriptions of the protein-ligand interface.
 
 \subsubsection{Improving neural network generality}
@@ -96,7 +96,7 @@ The ANN models trained in chapter \ref{chap:rosetta_hts} improved classification
 However, application of these models to a benchmark with chemical space that significantly diverged from the training set resulted in degraded performance, suggesting that the \ac{ANN} models are still limited in their ability to make general predictions.
 While the most computationally straightforward means of improving the ability of the network to make general predictions would be to improve the size and scope of the training data set, the lack of available binding affinity and structural data makes this approach infeasible. 
 Luckily, several recent innovations in machine learning techniques may provide a method for improving the ability of \ac{ANN}s to make general predictions without massively increasing the size of the training dataset.
-\ac{DBN} methods \citep{Hinton:2006dy} have recently been shown useful in the training of networks capable of making general predictions in the fields of image recognition\citep{Le:2013kz,Bengio:2009kb} and speech recognition\citep{Heigold:2013us}.
+\ac{DBN} methods \citep{Hinton:2006dy} have recently been shown useful in the training of networks capable of making general predictions in the fields of image recognition \citep{Le:2013kz,Bengio:2009kb} and speech recognition \citep{Heigold:2013us}.
 These \ac{DBN}s consist of many layers of hidden neurons, with each layer consisting of hundreds or thousands of neurons.
 The large number of hidden neurons makes these networks capable of modeling more complex, indirect relationships than traditional \ac{ANN}s are capable of.
 Furthermore, these networks can be "pre-trained" using unlabeled data, and can identify features in the descriptor space in an unsupervised fashion, then fine-tuned using a smaller subset of data with known outputs.
@@ -107,7 +107,7 @@ This network will then be fine-tuned using the known training data, and then app
 
 There are several potential pitfalls and complications regarding this approach.
 First, the \ac{BCL} machine learning tools do not currently implement a \ac{DBN} in a means that would be amenable to this training method.
-Theano\citep{Bergstra:2010tc} is a Python library designed to facilitate the implementation of complex machine learning systems.
+Theano \citep{Bergstra:2010tc} is a Python library designed to facilitate the implementation of complex machine learning systems.
 Theano will be used to rapidly prototype a \ac{DBN} capable of using the previously implemented RosettaLigand descriptors.
 The second complication relates to the nature of the descriptors available for protein-ligand binding activity prediction.
 The majority of research in \ac{DBN} pattern recognition has focused on machine vision and audio recognition problems.

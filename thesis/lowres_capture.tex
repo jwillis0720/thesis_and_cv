@@ -16,50 +16,58 @@ The following command was used to generate conformers:
 \begin{verbatim}
 bcl.exe molecule:ConformerGeneration -conformers \
 pdb_refinedsupplemented_lib.sdf.bz2 -ensemble \
-rosetta_inputs/ligands/all_ligands.sdf -conformation_comparer \
-DihedralBins -temperature 1.0 -max_iterations 1000 \
--top_models 100 -bin_size 30.0 -scheduler PThread 8 \
--add_h -conformers_single_file conformers
+rosetta_inputs/ligands/all_ligands.sdf 
+-conformation_comparer DihedralBins \
+-temperature 1.0 \
+-max_iterations 1000 \
+-top_models 100 \
+-bin_size 30.0 \
+-scheduler PThread 8 \
+-add_h \
+-conformers_single_file conformers
 \end{verbatim}
 \doublespace
 You can use any conformer generation tool you have available to you for this step.
 Your generated conformers should be output to a single \ac{SDF} file.
 Every conformer must have 3D coordinates and hydrogens added.
 Conformers of the same ligand should have the same name in the \ac{SDF} file.
-For convenience, an example conformer file is provided at rosetta\_inputs/ligands/all\_ligands.sdf.
+For convenience, an example conformer file is provided at \texttt{rosetta\_inputs/ligands/all\_ligands.sdf}.
 
 \subsection{Params file generation}
 
 Params files contain the parameterization information for a ligand.
 Every  ligand or Residue in a protein structure input into Rosetta must have a corresponding params file.
-Rosetta is distributed with a script called molfile\_to\_params.py which generates these files.
+Rosetta is distributed with a script called \texttt{molfile\_to\_params.py} which generates these files.
 However, this script is generally cumbersome for the generation of more than a small handful of ligands.
 The protocol below is designed for the preparation of large numbers of ligands.
 
 All the scripts needed for this process are in the tools directory in the Rosetta distribution. 
-Each of the scripts below would normally be preceded by Rosetta/tools/hts\_tools, but this directory prefix has been omitted for brevity.
+Each of the scripts below would normally be preceded by\\
+\texttt{Rosetta/tools/hts\_tools}, but this directory prefix has been omitted for brevity.
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
 	\emph{Split ligand files}
 
-	The conformers for all ligands are initially stored in a single \ac{SDF} file, but molfile\_to\_params.py expects one \ac{SDF} file per ligand.
-	sdf\_split\_organize.py accomplishes this task. 
-	It takes as input a single sdf file, and will split that file into multiple files, each file containing all the conformers for one ligand.
-	Different ligands must have different names in the sdf records, and all conformers for one ligand must have the same name. 
+	The conformers for all ligands are initially stored in a single \ac{SDF} file, but\\ \texttt{molfile\_to\_params.py} expects one \ac{SDF} file per ligand.\\
+\texttt{sdf\_split\_organize.py} accomplishes this task. 
+	It takes as input a single \ac{SDF} file, and will split that file into multiple files, each file containing all the conformers for one ligand.
+	Different ligands must have different names in the \ac{SDF} records, and all conformers for one ligand must have the same name. 
 	Output filenames are based on the SHA1 hash of the input filename, and are placed in a directory hashed structure.
 	Thus, a ligand with the name "Written by BCL::WriteToMDL,CHEMBL29197" will be placed in the path\\
-	 /41/412d1d751ff3d83acf0734a2c870faaa77c28c6c.mol.
+	 \texttt{/41/412d1d751ff3d83acf0734a2c870faaa77c28c6c.mol}.
 
 	The script will also output a list file in the following format:
-
+	
+	\singlespace
 	\begin{verbatim}
 	ligand_id,filename
 	string,string
 	ligand_1,path/to/ligand1
 	ligand_2,path/to/ligand2
 	\end{verbatim}
+	\doublespace
 
 	The list file is a mapping of protein names to \ac{SDF} file paths.
 
@@ -68,17 +76,20 @@ Each of the scripts below would normally be preceded by Rosetta/tools/hts\_tools
 
 	The script is run as follows:
 
+	\singlespace
 	\begin{verbatim}
-	sdf_split_organize.py rosetta_inputs/ligands/conformers.sdf \
+	sdf_split_organize.py \
+	rosetta_inputs/ligands/conformers.sdf \
 	split_conformers/ ligand_names.csv
 	\end{verbatim}
-
-	Be sure the split\_conformers/ directory exists before running the script.
-	Examples of the output of this script are in example\_outputs/ligand\_prep/
+	\doublespace
+	
+	Be sure the \texttt{split\_conformers/} directory exists before running the script.
+	Examples of the output of this script are in \texttt{example\_outputs/ligand\_prep/}
 \item
 	\emph{Create Projet Database}
 
-	The ligand preparation pipeline uses an sqlite3 database for organization during the pipeline.
+	The ligand preparation pipeline uses an SQLite3 database for organization during the pipeline.
 	The database keeps track of ligand metadata and the locations of ligand files.
 	The project database is created using the following command:
 
@@ -86,7 +97,7 @@ Each of the scripts below would normally be preceded by Rosetta/tools/hts\_tools
 	setup_screening_project.py ligand_names.csv ligand_db.db3
 	\end{verbatim}
 
-  	An example of the project database is in example\_outputs/ligand\_prep
+  	An example of the project database is in \texttt{example\_outputs/ligand\_prep}
 \item
 	\emph{Append binding information to project database}
 
@@ -104,15 +115,15 @@ Each of the scripts below would normally be preceded by Rosetta/tools/hts\_tools
 	\begin{itemize}
 	\itemsep1pt\parskip0pt\parsep0pt
 	\item
-		ligand\_id -- ligand\_id is the name of the ligand, which must match the ligand\_id in the file\_list.csv file created by sdf\_split\_organize.py.
+		\textbf{ligand\_id} --- ligand\_id is the name of the ligand, which must match the ligand\_id in the file\_list.csv file created by sdf\_split\_organize.py.
 	\item
- 		tag -- The name of the protein the ligand should be docked into.
+ 		\textbf{tag} --- The name of the protein the ligand should be docked into.
 		If a ligand should be docked into multiple proteins, it should have multiple entries in the binding data file.
 		Note that this protocol makes a distinction between protein name, and file name.
 		If you have 4 protein files: foo\_0001.pdb, foo\_0002.pdb, bar\_0001.pdb, and bar\_0002.pdb, then you have two proteins with the names foo and bar.
 		The scripts expect that the protein \ac{PDB} files begin with the protein name.
 	\item
-		value -- The activity of the ligand. If you are doing a benchmarking study and know the activity of your ligand, you should enter it here.
+		\textbf{value} --- The activity of the ligand. If you are doing a benchmarking study and know the activity of your ligand, you should enter it here.
 		If you are not doing a benchmarking study, or if ligand activity is not relevant to your study, value can be set to 1.0 (or anything else). 
 		This field is currently only used in a few specific Rosetta protocols that are in the experimental stages, and is  typically ignored, so it is safe to set arbitrarily in almost every  case.
 	\end{itemize}

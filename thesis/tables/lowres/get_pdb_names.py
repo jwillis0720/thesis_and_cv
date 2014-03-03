@@ -17,6 +17,8 @@ pdb_ids = []
 
 with open(pdb_id_list) as infile:
     for line in infile:
+        if line == "\n":
+            continue
         pdb_ids.append(line.strip())
 
 for pdb_id in pdb_ids:

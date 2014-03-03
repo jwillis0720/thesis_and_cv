@@ -4,8 +4,8 @@
 
 \subsection{Ligand docking methods are inconsistently able to predict binding affinity}
 
-While protein-ligand docking tools are frequently capable of correctly predicting poses\citep{Trott:2010km,Friesner:2004hm,Ewing:2001wu}, these methods have proven limited in their ability to distinguish between active and inactive compounds\citep{Bauer:2013de,Huang:2006gi,Davis:2009fx}.
-The DEKOIS 2.0 benchmark published in 2013 \citep{Bauer:2013de} and a blind study of protein-ligand docking tools conducted in 2009\citep{Davis:2009fx} demonstrated that the majority of protein-targets can successfully be studied with protein-ligand docking tools, although the tool with the best performance varies based on the target.
+While protein-ligand docking tools are frequently capable of correctly predicting poses \citep{Trott:2010km,Friesner:2004hm,Ewing:2001wu}, these methods have proven limited in their ability to distinguish between active and inactive compounds \citep{Bauer:2013de,Huang:2006gi,Davis:2009fx}.
+The DEKOIS 2.0 benchmark published in 2013 \citep{Bauer:2013de} and a blind study of protein-ligand docking tools conducted in 2009 \citep{Davis:2009fx} demonstrated that the majority of protein-targets can successfully be studied with protein-ligand docking tools, although the tool with the best performance varies based on the target.
 This suggests that protein-ligand docking as a broad class of technique generally has the ability to be successful. 
 However, the overall variance in ligand docking performance suggests that while active and inactive ligands can be classified for most protein systems by at least one available tool, no tool is universally reliable.
 Furthermore, it has not been possible to easily predict which protein systems can be successfully targeted by which by which ligand docking tools. 
@@ -13,8 +13,8 @@ Furthermore, it has not been possible to easily predict which protein systems ca
 \subsection{Neural Network based methods can be used to re-score protein-ligand binding prediction}
 
 In recent years, several tools have been developed to re-score protein-ligand binding predictions using neural networks.
-NNScore\citep{Durrant:2010js} and NNScore\citep{Durrant:2011dx} are two such tools.
-A benchmark of neural network based scoring methods published in 2013 suggested that while these methods are frequently capable of improving activity classification and binding affinity prediction beyond protein-ligand docking, the success of the method remains highly dependent on protein target.\citep{Durrant:2013db}
+NNScore \citep{Durrant:2010js} and NNScore \citep{Durrant:2011dx} are two such tools.
+A benchmark of neural network based scoring methods published in 2013 suggested that while these methods are frequently capable of improving activity classification and binding affinity prediction beyond protein-ligand docking, the success of the method remains highly dependent on protein target. \citep{Durrant:2013db}
 
 \subsection{Existing limitations in training data sources}
 
@@ -26,18 +26,18 @@ Because the goal is to compare ligands independent of protein target, \ki\ must 
 This substantially reduces the availability of data from public databased such as ChEMBL or PubChem. 
 Furthermore, the active compounds selected must bind to a wide and evenly distributed range of targets, and have a wide and evenly distributed range of known activities.
 Due to the realities of the drug discovery process, neither publicly nor privately available compound databases meet these requirements.
-For example, while ChEMBL contains 481050 \ki\ value measurements across 164 distinct targets with known \ki values, 90\% of these targets have fewer than 891 measurements each.
+For example, while ChEMBL contains 481050 \ki\ value measurements across 164 distinct targets with known \ki\ values, 90\% of these targets have fewer than 891 measurements each.
 In other words, nearly all of the available \ki\ values are confined to a small handful of protein targets.
 
 \subsubsection{The limitations of existing sources of inactive ligands}
 The difficulty of selecting a high quality training dataset is compounded by the availability of known inactive ligands. 
 The activity data of inactive ligands is less frequently published than active ligands.
 Additionally, most inactive ligands are measured as inactive by \ic\ rather than \ki.
-Because \ic\ and \ki are distinct properties, a compound with no measurable \ic\ cannot necessarily be said to have no measurable binding affinity.
+Because \ic\ and \ki\ are distinct properties, a compound with no measurable \ic\ cannot necessarily be said to have no measurable binding affinity.
 
 \subsubsection{Property matching schemes used for ligand docking benchmarks are not sufficient for training purposes}
 The above-mentioned issue of the lack of known inactive compounds is frequently addressed by the use of property matching.
-In this process, compounds that have similar chemical properties to the known active ligands but dissimilar structures are selected and designated as presumed inactive compounds\citep{Huang:2006gi, Mysinger:2012hu, Bauer:2013de}.
+In this process, compounds that have similar chemical properties to the known active ligands but dissimilar structures are selected and designated as presumed inactive compounds \citep{Huang:2006gi, Mysinger:2012hu, Bauer:2013de}.
 This property matching scheme can be useful for the benchmarking of ligand docking methods, but cannot be used as the basis of training data sets for machine learning techniques.
 Because the property matching scheme is algorithmically selecting ligands in a slightly different part of chemical space compared to the known active ligands, the risk exists of the neural network learning to classify ligands based not on their binding affinity but rather the property matching scheme used to select them.
 
@@ -49,7 +49,7 @@ Because the property matching scheme is algorithmically selecting ligands in a s
 \subsubsection{Cross-docking a diverse set of ligands to create a balanced set of training data}
 \label{subsubsec:pdbbind_overview}
 A cross docking approach is used to create the training dataset.
-PDBBind\citep{Wang:2004cm} is a collection of Protein-ligand binding pairs for which known binding affinities and X-ray crystal structures exist.
+PDBBind \citep{Wang:2004cm} is a collection of Protein-ligand binding pairs for which known binding affinities and X-ray crystal structures exist.
 Since it's original publication in 2004, The PDBBind database has been periodically updated, and as of 2013, contains 10776 total complexes, of which 2959 have known \ki\ values, are non-covalently bound, have only a single ligand in the binding site,  and have crystal structures with a resolution of less than 2.5 \AA.
 Compounds from this "refined" subset of the PDBBind database were used as the basis of the training dataset.
 
@@ -60,7 +60,7 @@ The set of proteins must be diverse, every protein in the set should come from a
 While RosettaLigand is capable of docking ligands into proteins into ligands of any side, extremely large proteins require the allocation of large amounts of memory, which makes screening more time consuming.
 As a result, all proteins in the training set should have <1000 total residues across all chains.
 RosettaLigand must be capable of predicting the pose of each complex such that the lowest Rosetta score has an \ac{RMSD} of < 2.0 \AA\ to the crystal structure.
-the 2959 complexes in the PDBBind refined set were filtered based on the first two criteria, and then docked using the RosettaLigand protocol described in chapter \ref{chap:lowres_paper}, resulting in a set of 507 unique protein-ligand complexes (Table \ref{table:training_pdbs}. 
+The 2959 complexes in the PDBBind refined set were filtered based on the first two criteria, and then docked using the RosettaLigand protocol described in chapter \ref{chap:lowres_paper}, resulting in a set of 507 unique protein-ligand complexes (Table \ref{table:training_pdbs}). 
 This set of compounds is very diverse in chemical space, ranging from small fragments to small peptides, with the bulk of the distribution consisting of small drug-like molecules.
 Specifically, the number of atoms ranges from 6 to 171, with a median of 44, the number of rings ranges from 0 to 8 with a median of 2. The number of rotatable bonds ranges from 0 to 49 with a median of 6, and the weight ranges from 87.06 to 1107.58 with a median of 107.
 Figure \ref{fig:training_ligands} shows histograms of these plots.
@@ -70,7 +70,7 @@ The large diversity of this training set is desirable, as the goal is to produce
 \centering
 \includegraphics[width=4in]{figures/hts/basic_ligand_properties.pdf}
 \caption{
-The basic property distribution of ligands in the training data set.  Histograms are plotted of the atom count, rotatable bond count, ring count, Topological Polar Surface area, log(\ki) and molecular weight of the 507 ligands in the binding site. 
+The basic property distribution of ligands in the training data set.  Histograms are plotted of the atom count, rotatable bond count, ring count, Topological Polar Surface Area, log(\ki) and molecular weight of the 507 ligands in the binding site. 
 }
 \label{fig:training_ligands}
 \end{figure}
@@ -87,7 +87,7 @@ The basic property distribution of ligands in the training data set.  Histograms
 The best scoring, lowest \ac{RMSD} binding poses selected in section \ref{subsubsec:active_poses} will comprise the active component of the training set.
 The inactive component of the training set was generated through cross-docking.
 Each ligand in the 507 compound set was docked into each of the proteins in the set except the one with measured activity data.
-Due to the size of chemical space\citep{Reymond:2012un} and the diversity of the protein-ligand complexes in the dataset, it can be reasonably assumed that every cross-docked complex has no binding affinity.
+Due to the size of chemical space \citep{Reymond:2012un} and the diversity of the protein-ligand complexes in the dataset, it can be reasonably assumed that every cross-docked complex has no binding affinity.
 The lowest scoring Rosetta model for each cross-docked complex was selected, and the resultant set of 250970 protein-ligand complexes will comprise the inactive component of the training set.
 
 \subsection{Development and description of ligand descriptors}
@@ -95,7 +95,7 @@ The lowest scoring Rosetta model for each cross-docked complex was selected, and
 \subsubsection{Sources of descriptor data} 
 
 The proper selection of descriptors is critical for the training of an effective model.
-It is frequently difficult to determine \textit{a priori} which descriptors will be the most useful, so three classes of descriptor information were evaluated.  Specifically: scalar scores and statistics describing the protein-ligand interface,  \ac{RDF} descriptors describing the arrangement of atoms in the protein-ligand interface, and scalar metrics describing the ligand chemistry.
+It is frequently difficult to determine \textit{a priori} which descriptors will be the most useful, so three classes of descriptor information were evaluated.  Specifically: scalar scores and statistics describing the protein-ligand interface,  \ac{RDF} descriptors representing the arrangement of atoms in the protein-ligand interface, and scalar metrics describing the ligand chemistry.
 
 \subsubsection{Scalar protein-ligand interface descriptors}
 \label{subsubsec:scalar_rosetta}
@@ -109,7 +109,7 @@ Table \ref{table:rosetta_scalar} summarizes the specific scalar interface descri
 \centering
 \input{tables/hts/rosetta_scalar.tex}
 \caption{A summary of the names and definitions of the scalar descriptors generated by Rosetta.
-Rosetta energy descriptors were originally described by Rohl\citep{Rohl:2004dh} }
+Rosetta energy descriptors were originally described by Rohl \citep{Rohl:2004dh} }
 \label{table:rosetta_scalar}
 \end{table}
 
@@ -127,7 +127,7 @@ Table \ref{table:bcl_scalar} summarizes the scalar ligand descriptors.
 \caption{A summary of the names and definitions of the scalar descriptors generated by the \acs{BCL}. }
 \label{table:bcl_scalar}
 \end{table}
-The number of descriptors used to describe the ligand is relatively small compared to previous machine learning studies performed using the \ac{BCL}\citep{Mueller:2010dx}.
+The number of descriptors used to describe the ligand is relatively small compared to previous machine learning studies performed using the \ac{BCL} \citep{Mueller:2010dx}.
 The rationale for including a smaller number of descriptors is that a relatively small number of ligands is being used to train the classifier.
 As a result, the descriptions of the ligand chemistry used should be broad enough that the range of the descriptor space is well covered.
 
@@ -142,10 +142,10 @@ The function $g(r)$ computes the \ac{RDF} for a single distance.  To compute the
 The resulting fingerprint represents the probability of two atoms existing within a sphere of radius $r$ with some property. 
 More broadly, these fingers can be interpreted as a 1 dimensional representation of the 3 dimensional distribution of geometric and chemical properties in the protein-ligand interface. 
 A range of fingerprints were computed using this method, with various chemical properties used to compute $score_{ij}$.
-Fingerprints are computed using the attractive, repulsive,electrostatic, solvation and hydrogen bonding scores used by Rosetta.  Additionally, a charge based function is implemented in which $score_{ij}$ is computed as the product of the charges of each atom pair, and a hydrogen bond count function is computed in which $score_{ij}$ is 1.0 if the pair of atoms are a hydrogen bond donor and acceptor, and 0.0 otherwise.
+Fingerprints are computed using the attractive, repulsive, electrostatic, solvation, and hydrogen bonding scores used by Rosetta.  Additionally, a charge based function is implemented in which $score_{ij}$ is computed as the product of the charges of each atom pair, and a hydrogen bond count function is computed in which $score_{ij}$ is 1.0 if the pair of atoms are a hydrogen bond donor and acceptor, and 0.0 otherwise.
 The fingerprints are computed directly by Rosetta.
 Table \ref{table:rosetta_fingerprint} summarizes the \ac{RDF} fingerprints computed by Rosetta.
-Based on previous experience with \ac{RDF} fingerprints in the \ac{BCL}, all fingerprints are computed using 24 evenly spaced distance steps between 0 and 6.0 \AA.
+Based on previous experience with \ac{RDF} fingerprints in the \ac{BCL}, all fingerprints are computed using 24 evenly spaced distance steps between 0.0 and 6.0 \AA.
 \begin{table}
 \scriptsize
 \renewcommand{\tabcolsep}{0.09cm}
@@ -160,9 +160,9 @@ Based on previous experience with \ac{RDF} fingerprints in the \ac{BCL}, all fin
 \subsubsection{Cross validation scheme}
 In addition to selecting a set of input descriptors, a reasonable training mechanism and neural network architecture must be selected.
 As described in section \ref{sec:intro_overtraining}, \ac{ANN}s are prone to overtraining, and the proper design of a training protocol is critical to avoid this problem.
-Based on previous experience using \ac{ANN}s to predict drug activity\citep{Mueller:2010dx,Mueller:2012gn,Butkiewicz:2013ka}, a 10 fold cross validation was used.
+Based on previous experience using \ac{ANN}s to predict drug activity \citep{Mueller:2010dx,Mueller:2012gn,Butkiewicz:2013ka}, a 10 fold cross validation was used.
 In this scheme, the combined set of active and inactive compounds described in section \ref{subsec:dataset_description} was randomized and split into 10 evenly sized blocks.
-In each round of cross validation, 1 block is selected as an "independent" set, 1 block is selected as a "monitoring" set, and the remaining blocks are selected for training.
+In each round of cross validation, one block is selected as an "independent" set, one block is selected as a "monitoring" set, and the remaining blocks are selected for training.
 Figure \ref{fig:crossval_schematic} provides a schematic illustration of this cross validation scheme.
 Note that the cross validation is set up such that each block in the dataset plays a role as both an independent and a monitoring set.
 During training, the training dataset is used to train the \ac{ANN}, and after every iteration of training, enrichment is calculated using the monitoring set.
@@ -183,7 +183,7 @@ The dataset is partitioned, and sufficient rounds of cross validation are perfor
 \subsubsection{Network architecture and training}
 
 For the purposes of this study, a feed-forward network with two hidden layers of 100 nodes each was used.
-The network was trained using a back-propagation algorithm with network dropout\citep{Hinton:2012tv}.
+The network was trained using a back-propagation algorithm with network dropout \citep{Hinton:2012tv}.
 At each iteration, network dropout disabled 12.5\% of input nodes and 50\% of hidden nodes.
 The purpose of network dropout is to prevent the neural network from becoming dependent on the relationships between specific input and hidden nodes in its representation of the model.
 This so-called "co-adaptation" can contribute to over-fitting, and thus network dropout makes it possible conduct many more iterations of network training without over-fitting.
@@ -204,7 +204,7 @@ The network is trained for 800 iterations, and the model with the highest averag
 \subsubsection{Summary of networks trained}
 \label{subsubsec:network_training}
 Several networks were trained using a variety of input descriptors.
-The "Rosetta scalar" network was trained using only the Rosetta generated scalar descriptors in table \ref{table:rosetta_scalar}, the "Rosetta+BCL scalar" network was trained using the Rosetta scalar descriptors combined with the \ac{BCL} descriptors in table \ref{table:bcl_scalar}, and the "Rosetta fingerprint + scalar" network is trained using both the Rosetta scalar, and Rosetta fingerprint descriptors in table\ref{table:rosetta_fingerprint}.
+The "Rosetta scalar" network was trained using only the Rosetta generated scalar descriptors in table \ref{table:rosetta_scalar}, the "Rosetta+BCL scalar" network was trained using the Rosetta scalar descriptors combined with the \ac{BCL} descriptors in table \ref{table:bcl_scalar}, and the "Rosetta fingerprint + scalar" network is trained using both the Rosetta scalar, and Rosetta fingerprint descriptors in table \ref{table:rosetta_fingerprint}.
 As a control, the "\ac{BCL} scalar" network is trained using only the \ac{BCL} descriptors.
 Because the set of training data is balanced in chemical space, we expect that the \ac{BCL} scalar network will not achieve any reasonable enrichment, as no signal should be available for classification.
 
@@ -270,7 +270,7 @@ Average enrichment is the average enrichment within the first 1\% of the each da
 Inspection of the \ac{PPV} of the models, however demonstrates significant performance differences.
 Figure \ref{fig:ppv_plot} plots the \ac{PPV} of each model as a function of the \ac{FPR}.
 These plots provide a visual depiction of the accuracy of each classifier.
-We can see from these models that the models using Rosetta scalar descriptors, or a combination of Rosetta and \ac{BCL} scalar descriptors have siginificantly improved performance relative to the model using Rosetta scalar and fingerprint information.
+We can see from these models that the models using Rosetta scalar descriptors, or a combination of Rosetta and \ac{BCL} scalar descriptors have significantly improved performance relative to the model using Rosetta scalar and fingerprint information.
 This suggests that the introduction of fingerprint data results in a loss of model accuracy early in screening.
 
 \begin{figure}
@@ -319,7 +319,7 @@ The former behavior is easily explainable.
 It is possible that under certain circumstances, ligand descriptor information may be beneficial to this type of classification model, and that some emergent property might exist between (for example) the flexibility of the ligand and the behavior of that ligand in the RosettaLigand docking simulation.
 However, at least in the training dataset used here, there is no evidence for the existence of such an emergent property, and indeed if one does exist it would almost certainly require a dataset comprising a very large range of ligand chemical space to become apparent. 
 The loss of accuracy seen upon the addition of the Rosetta fingerprint descriptors suggests that rather than conveying meaningful information about the protein-ligand interface, these descriptors are, instead, introducing noise into the system.
-While there is ample historical precedent\citep{Mueller:2010dx,Butkiewicz:2013ka,Hristozov:2007bz} for the value of \ac{RDF} based fingerprint descriptors as \ac{ANN} input, it appears that in this case, the descriptors as implemented are not providing meaningful information.
+While there is ample historical precedent \citep{Mueller:2010dx,Butkiewicz:2013ka,Hristozov:2007bz} for the value of \ac{RDF} based fingerprint descriptors as \ac{ANN} input, it appears that in this case, the descriptors as implemented are not providing meaningful information.
 Regardless, the RosettaLigand based scalar descriptors do provide sufficient information to create a well trained model the performance of which exceeds the performance obtained simply by using the RosettaLigand energy function. 
 
 \subsection{Development of a truly global classifier of protein-ligand binding affinity remains challenging}

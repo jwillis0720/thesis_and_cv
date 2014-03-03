@@ -15,7 +15,7 @@ The shape complementarity scoring grid is computed by computing the distance bet
 The fully populated grid then represents the maximum possible radius that an atom at any given point within the grid can have without resulting in a clash with any other atom.
 The effective complementarity of a given ligand atom is then computed by subtracting the radius of that atom from the value in the nearest grid square, resulting in the gap between the ligand atom and the nearest protein atom (Figure \ref{fig:shape_schematic}A). 
 To compute an energy based on this gap, a knowledge based potential was used. 
-The knowledge based potential was derived by computing the $?log?(propensity)$ of a pair of protein and ligand atoms having a gap of a given distance length.
+The knowledge based potential was derived by computing the $-log(propensity)$ of a pair of protein and ligand atoms having a gap of a given distance length.
 The knowledge based potential was derived using the Top8000 set of high quality crystal structures curated by the Richardson Lab.
 The resulting potential is shown in Figure \ref{fig:shape_schematic}C.
 The left hand (clashing) side of the potential is computed as a linear slope (indicated in red) when it passes above zero on the x axis, while the left hand side is computed as zero when it reaches the zero axis.
@@ -42,7 +42,7 @@ In red are linear functions applied to values beyond the bounds of the potential
 
 Two scoring grids are used to model hydrogen bonding.
 As the goal of the initial placement algorithm is to provide a rapid first approximation of ligand position, only distance between hydrogen bond donor and acceptor are taken into account, and angular information is ignored.
-A knowledge based potential was created based on the $?log?(propensity)$ of a hydrogen bond donor atom being within some distance of a hydrogen bond acceptor atom, using the same Top8000 set of proteins described above (Figure \ref{fig:hbond_schematic}A).
+A knowledge based potential was created based on the $-log(propensity)$ of a hydrogen bond donor atom being within some distance of a hydrogen bond acceptor atom, using the same Top8000 set of proteins described above (Figure \ref{fig:hbond_schematic}A).
 Separate scoring grids are computed for hydrogen bond donors and acceptors. To compute the hydrogen bond donor scoring grid, the distance from each grid square to the nearest hydrogen bond donor is computed, and the score from the knowledge based potential is stored in the grid square (Figure \ref{fig:hbond_schematic}B).
 The same process is followed to compute the hydrogen bond acceptor scoring grid.
 Hydrogen bond donor atoms are scored based on the value of the nearest grid square in the appropriate scoring grid.  

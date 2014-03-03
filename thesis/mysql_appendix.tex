@@ -7,7 +7,7 @@ For example, a screen of 250,000 compounds will result in 50,000,000 generated R
 Because RosettaHTS only needs the top 1 model generated for each ligand, 99.995\% of this data will not be needed.
 To avoid unnecessarily storing data, RosettaHTS stores generated models in a relational database.
 Here  the technical details of the database storage framework used by RosettaHTS are described.
-This framework was developed collaboratively by myself, Matt O'Meara at the University of North Carolina, and Tim Jacobs at the University of North Carolina, all of whom contributed equally to the project. 
+This framework was developed collaboratively by myself, Chris Miles at the University of Washington, Matt O'Meara at the University of North Carolina, and Tim Jacobs at the University of North Carolina, all of whom contributed equally to the project. 
 
 \section{Features reporter architecture}
 
@@ -36,7 +36,7 @@ residues.add_column(resNum);
 residues.add_column(name3);
 residues.add_column(res_type);
 residues.add_foreign_key(
-	ForeignKey(struct_id, "structures", "struct_id", true));
+  ForeignKey(struct_id, "structures", "struct_id", true));
 
 residues.write(db_session);
 \end{Verbatim}
@@ -45,7 +45,7 @@ residues.write(db_session);
 This model of database interaction allows multiple database systems to be supported with a single code base, which is critical given the diversity of hardware and software operated by Rosetta users.
 Additionally, it allows support to be added for additional database systems without any change to the code defining feature tables. 
 
-The Features Reporter has been previously described in the literature\citep{LeaverFay:2013fn} as a method for collecting and analyzing statistics from large numbers of Rosetta models.  
+The Features Reporter has been previously described in the literature \citep{LeaverFay:2013fn} as a method for collecting and analyzing statistics from large numbers of Rosetta models.  
 In the sections below we will describe the specific application and usage of this framework for the storage and retrieval of protein models in a high throughput screening environment. 
 
 \section{Pose storage schema}
@@ -82,9 +82,9 @@ A new Protocol is generated every time a Rosetta process outputs to a database.
 Each protocol has a unique number identifying it which is assigned by the database server.
 The Protocol stores the version of Rosetta that was used, as well as the command line options and XML script specified by the user.
 Each Protocol can generate one or more "Batch" which is the second level of the identification system.
-A batch is generated every time a Protocol outputs structural data. If RosettaHTS is only outputting completed protein models, only one batch exists per protocol.
+A Batch is generated every time a Protocol outputs structural data. If RosettaHTS is only outputting completed protein models, only one batch exists per protocol.
 If the Features Reporter is also being used in the middle of the protocol to generate extra statistics, additional batches will be generated. 
-Each batch has a unique number identifying it, and references the protocol that was responsible for creating it.
+Each Batch has a unique number identifying it, and references the protocol that was responsible for creating it.
 The last tier in the identification system is the "Structure".
 A new structure is generated every time Rosetta produces a model.
 Each structure has a unique number identifying it, and references the batch that resulted in the creation of that structure.
@@ -96,20 +96,20 @@ The Structure ID described above is used as the central unique identifier, and a
 The RosettaHTS database IO schema stores the following information:
 
 \begin{itemize}
-	\item Text and numeric comment data that some Rosetta components insert in a pose for scoring and tagging purposes during the protocl
-	\item The range of b-factors for atoms in each residue.
+	\item Text and numeric comment data that some Rosetta components insert in a pose for scoring and tagging purposes during the protocol.
+	\item The range of B-factors for atoms in each residue.
 	\item The "Jumps" in the structure.  Jumps are data structures which represent the spatial relationship between protein chains as a Rotation and Translation matrix.
 	\item The sequence associated with the structure, annotated with the identity of any non-canonical, modified or ligand residues.
-	\item The ending position of each chain
-	\item The "Fold Tree" defining the structure.  The Fold tree is a data structure used by Rosetta to describe how different parts of the protein are related in space.  Fold Trees can be configured to make it possible to rapidly perturb large parts of the protein as a rigid body.  DiMaio et al.\citep{DiMaio:2011cu} provides an example of a fold tree manipulation in practice.
+	\item The ending position of each chain.
+	\item The "Fold Tree" defining the structure.  The Fold tree is a data structure used by Rosetta to describe how different parts of the protein are related in space.  Fold Trees can be configured to make it possible to rapidly perturb large parts of the protein as a rigid body.  DiMaio et al. \citep{DiMaio:2011cu} provides an example of a fold tree manipulation in practice.
 	\item The Chain ID, insertion code, and residue number present in the original PDB file
 	\item The values of each energy term in the score function when the structure was last scored.
-	\item The cartesian coordinates of each atom
-	\item The chi angles of each canonical amino acid
+	\item The cartesian coordinates of each atom.
+	\item The chi angles of each canonical amino acid.
 	\item The rotation angles of each non-canonical amino acid or non-protein molecule.
 \end{itemize}
 
-In addition to providing infrastructure for outputting Rosetta models, the RosettaHTS pose IO schema provides infrastructure for using this data as input into rosetta.
+In addition to providing infrastructure for outputting Rosetta models, the RosettaHTS pose IO schema provides infrastructure for using this data as input into Rosetta.
 Both output to and input from the database is handled by the Rosetta job distribution system.
 This means that any Rosetta application can use a database as a data storage mechanism, without any additional programming on the part of the developer of the application.
 Furthermore, because the same database can be used for both output and input simultaneously, a Rosetta modeling protocol that relies on different applications being used in different stages can use the database for data management at each stage.
@@ -124,7 +124,7 @@ However, while this decision was critical to making Rosetta a maintainable piece
 Specifically, filters could historically be created only based on single protein metrics.
 A filter could, for example, output models with a score lower than a certain fixed cutoff, or that had a degree of packing better than a cutoff.
 However, in the case of protein-ligand docking, we are unable to set fixed score cutoffs, as the range of scores seen will vary from ligand to ligand.
-The preferred means of filtering ligand poses is to accept the lowest scoring model generated for each protein-ligand pair.
+The preferred means of filtering ligand models is to accept the lowest scoring model generated for each protein-ligand pair.
 This type of filter cannot be created with the traditional Rosetta filter system, requiring that all models be output, and filtered after the fact.
 The RosettaHTS docking protocol requires that 200 models be generated per protein-ligand pair. 
 Given that each compressed model requires approximately 90 kilobytes of storage space, the total requirement per protein-ligand pair is roughly 18 megabytes.
@@ -139,11 +139,11 @@ To accomplish this the Database Filter conducts a query of the existing structur
 Currently, filters exist to filter models by the top percent or top count by score.
 The creation of additional filters can be accomplished by the implementation of a new DatabaseFilter class with a single method.
 While the current usage for filtering by score percentile is relatively simple, the Database Filter framework could hypothetically be used to implement histogram matching filters or other filters requiring deep analysis of the existing dataset.
-This would be effectively impossible in the context of the classical Rosetta filtering system, but relatively trivial with the Database Filter Framework.
+This would be effectively impossible in the context of the classical Rosetta filtering system, but relatively trivial with a Database Filter.
 
 \section{Performance Considerations and Selection of a Database backends}
 
-Currently, the Rosetta database system supports 3 different database back ends.
+Currently, the Rosetta database system supports three different database back ends.
 The selection of the appropriate back end is an important consideration, and will depend largely on the way in which the database will be used.
 
 \subsection{SQLite3}
@@ -155,12 +155,12 @@ Additionally, SQLite3 produces a very large number of random access operations t
 The nature of these operations is such that heavy usage of SQLite3 can severely degenerate the performance of a network file system.
 For this reason, we recommend that SQLite3 only be used only with local disks, and preferably with Solid State Drives rather than traditional "Spinning" disks.
 Despite these limitations, Rosetta protocols requiring large amounts of memory and complex statistical analysis can be performed very efficiently using SQLite3.
-The majority of the data collection and analysis described in Leaver-Fay et al.\citep{LeaverFay:2013fn} was conducted using an SQLite3 database.
+The majority of the data collection and analysis described in Leaver-Fay et al. \citep{LeaverFay:2013fn} was conducted using an SQLite3 database.
 
 \subsection{PostgreSQL and MySQL}
 
 PostgreSQL(http://www.postgresql.org/) and MySQL (http://www.mysql.com/) are freely available server based SQL solutions.
-In both cases, an independent server is set up, and Rosetta communicates with this server over the network.
+In both cases, an independent server is used, and Rosetta communicates with this server over the network.
 The details of the installation and configuration of these systems are beyond the scope of this document, however either piece of software is acceptable for use with RosettaHTS. 
 For large scale data operations, PostgreSQL and MySQL have substantial advantages over SQLite3. 
 In both cases, many processes can simultaneously write to a single database, and the database server ensures that data is written correctly even for large numbers of concurrent reads and writes.
@@ -168,7 +168,7 @@ Additionally, the use of a server based SQL solution offloads the computational 
 This separation of work can have a substantial performance benefit.
 It is possible to create a Rosetta protocol which produces database requests that outstrip the processing ability of even a reasonably powerful database server.
 The precise nature of these limitations will depend on the Rosetta protocol, as well as the specific details not only of the database server software configuration but also the server and network infrastructure being used.
-For this reason, we advise empirically determining the performance limitations and requirements of your specific protocol through benchmarking tests.
+For this reason, we advise empirically determining the performance limitations and requirements of your specific protocol through benchmarking tests prior to large scale screening. 
 
 \section{Storing and retrieving poses from the Rosetta command line}
 
@@ -186,7 +186,7 @@ Connecting to a Rosetta database depends on the type of database back end being 
 \end{Verbatim}
 \doublespace
 
-where \texttt{<mode>} should be replaced by the database mode (either "mysql","sqlite" or "postgres"), and \texttt{<db\_name>} should be replaced by the name of the database file if using sqlite, the schema name if using MySQL, and the database name if using PostgreSQL.
+where \texttt{<mode>} should be replaced by the database mode (either \texttt{mysql}, \texttt{sqlite} or \texttt{postgres}), and \texttt{<db\_name>} should be replaced by the name of the database file if using sqlite, the schema name if using MySQL, and the database name if using PostgreSQL.
 
 If you are using MySQL or PostgreSQL as a back end, you must specify several additional options connect to the server
 
@@ -201,7 +201,7 @@ If you are using MySQL or PostgreSQL as a back end, you must specify several add
 
 Where \texttt{<host>} is the address of the database server, \texttt{<username>} is the username of a user with permission to read and write from the database, \texttt{<password>} is the password of that user, and \texttt{<port>} is the TCP port that the server is running on. 
 
-Additionally, if you will be running RosettaHTS or any other protocol that results in very large numbers of structures being output to a single database (more than 100,000), the database should be configured to reduce the number of INSERT statements necessary to write a complete model.
+Additionally, if you will be running RosettaHTS or any other protocol that results in very large numbers of structures being output to a single database (more than 100,000), the database should be configured to reduce the number of \texttt{INSERT} statements necessary to write a complete model.
 This is accomplished by modifying the database storage schema to produce a single record per residue rather than a single record per atom.  This enormously reduces the storage and network bandwidth requirements at the cost of data analyzability, and should be considered a required setting when using RosettaHTS.
 Compact schema mode is enabled with the following option:
 
