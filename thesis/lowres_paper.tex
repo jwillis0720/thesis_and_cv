@@ -2,7 +2,7 @@
 \label{chap:lowres_paper}
 \section{Abstract}
 
-RosettaLigand has been successfully used to predict protein-ligand binding poses in a number of cases\citep{Turlington:2013et,Davis:2009fx,Combs:2013bl}.
+RosettaLigand has been successfully used to predict protein-ligand binding poses in a number of cases \citep{Turlington:2013et,Davis:2009fx,Combs:2013bl}.
 However, the RosettaLigand docking protocol is relatively inefficient at sampling the ligand binding site space, making it unfeasibly slow for use as a \ac{vHTS} tool.
 We show here that the development of a new sampling algorithm for initially placing the ligand in the protein binding site dramatically improves both the overall success rate of small molecule docking as well as speed of RosettaLigand.
 The new algorithm improves the docking success rate by 10-15\% in a 43 protein benchmarking set, reduces the average time to generate a model from 50 seconds to 10 seconds, and reduces the necessary number of models to generate from 1000 to 150.
@@ -13,33 +13,33 @@ We also demonstrate that accurate initial placement of the ligand prior to full 
 \subsection{Ligand docking background}
 
 Computational ligand docking has been a historically successful method for predicting the binding pose of small molecules in a protein.
-Beginning with PJ Goodford's work in computational drug design\citep{Goodford:1985bf}, many methods have been developed to predict the interactions between proteins and small molecules.
-While early tools focused primarily on rigid body goodness of fit between a small molecule and a protein crystal structure, further study of the changes observed in protein conformation upon the binding of a small molecule\citep{Bystroff:1991tl} suggested that modeling of protein and ligand flexibility was important to correctly model protein-ligand interactions.
+Beginning with PJ Goodford's work in computational drug design \citep{Goodford:1985bf}, many methods have been developed to predict the interactions between proteins and small molecules.
+While early tools focused primarily on rigid body goodness of fit between a small molecule and a protein crystal structure, further study of the changes observed in protein conformation upon the binding of a small molecule \citep{Bystroff:1991tl} suggested that modeling of protein and ligand flexibility was important to correctly model protein-ligand interactions.
 
 \subsubsection{An overview of popular ligand docking tools}
 
 Over the past several decades, numerous tools have been developed to attempt to better address the ligand docking problem.
-DOCK\citep{Ewing:2001wu}, FlexX\citep{Hindle:2002tk}, AutoDock\citep{Morris:1998vi}, and Glide\citep{Friesner:2004hm} are currently among the most popular tools.
+DOCK \citep{Ewing:2001wu}, FlexX \citep{Hindle:2002tk}, AutoDock \citep{Morris:1998vi}, and Glide \citep{Friesner:2004hm} are currently among the most popular tools.
 They utilize a wide range of protein representations, sampling algorithms and scoring functions in order to accurately predict protein-ligand binding poses.
 Approximations in scoring and sampling must be made in order to allow ligand binding predictions to be made in a reasonable time.
 To accomplish this, most ligand docking tools operate in stages, so that the size of the search space is limited as the complexity of the scoring function and sampling density within the search space is increased.
 
 \subsubsection{Summary of popularly used docking algorithms}
 Docking methods differ in their means of accomplishing this step-wise increase in sampling resolution coupled with the reduction of search space.
-For example, the DOCK algorithm creates a "negative space" model of the binding site created by placing spheres inside the solvent accessible area of the binding site, and uses this model to guide docking of the ligand, while an AMBER based molecular mechanics force field is used to score the resulting binding poses\citep{Moustakas:2006fe}.
+For example, the DOCK algorithm creates a "negative space" model of the binding site created by placing spheres inside the solvent accessible area of the binding site, and uses this model to guide docking of the ligand, while an AMBER based molecular mechanics force field is used to score the resulting binding poses \citep{Moustakas:2006fe}.
 FlexX, on the other hand, represents the protein by "interaction centers" consisting of surfaces surrounding common ligand interaction groups (hydrogen bond donors and acceptors, metals, aromatic rings, etc.).
-Atoms in a based fragment of the ligand are then matched to the interaction centers to provide an ensemble of potential initial placements\citep{Rarey:1996hf}.
-AutoDock represents the receptor using a Cartesian scoring grid populated with information from an empirically derived energy function.
-A \ac{LGA} in combination with simulated annealing is then used to optimize both the ligand conformation and position\citep{Morris:1998vi}.
+Atoms in a based fragment of the ligand are then matched to the interaction centers to provide an ensemble of potential initial placements \citep{Rarey:1996hf}.
+AutoDock represents the receptor using a cartesian scoring grid populated with information from an empirically derived energy function.
+A \ac{LGA} in combination with simulated annealing is then used to optimize both the ligand conformation and position \citep{Morris:1998vi}.
 Glide uses a grid based representation of the protein binding site. A rapid exhaustive search is first performed to find generally favorable areas for ligand placement.
 A size filter is then used to exclude areas without sufficient space for ligand placement.
 Finally, \ac{MCM} of the binding pose using the grid based scoring function is performed.
-The scoring girds themselves are generated using a scoring function derived from ChemScore\citep{Friesner:2004hm}.
+The scoring girds themselves are generated using a scoring function derived from ChemScore \citep{Friesner:2004hm}.
 
 \subsection{Performance comparison}
 
 \subsubsection{Performance of ligand docking tools is inconsistent} 
-Despite the large differences between scoring and sampling algorithm implementations across the different ligand docking tools, a blind study of ligand docking performance conducted by Davis et al.\citep{Davis:2009fx} suggested that while certain methods of docking perform better than others for a given protein target, in the aggregate, the commonly used systems have a similar range of performance.
+Despite the large differences between scoring and sampling algorithm implementations across the different ligand docking tools, a blind study of ligand docking performance conducted by Davis et al. \citep{Davis:2009fx} suggested that while certain methods of docking perform better than others for a given protein target, in the aggregate, the commonly used systems have a similar range of performance.
 Interestingly, while some protein systems appear to be relatively easy (Chk1 kinase) or difficult (Hepatitis C RNA Polymerase) for most ligand docking tools, the results for most systems vary depending on the ligand docking tool.
 
 \subsection{Limitations of the RosettaLigand low resolution docking step}
@@ -47,9 +47,9 @@ Interestingly, while some protein systems appear to be relatively easy (Chk1 kin
 \subsubsection{Introduction to the RosettaLigand docking process}
 As currently implemented, RosettaLigand consists of a two stage docking process consisting of an initial placement stage followed by a refinement stage.
 The overall effect of the initial placement algorithm is to place the ligand in a non-clashing position at random.
-To accomplish this, the initial placement algorithm consists of three steps, which were initially described in Davis et al.\citep{Davis:2009bf}
+To accomplish this, the initial placement algorithm consists of three steps, which were initially described in Davis et al. \citep{Davis:2009bf}
 The algorithm uses a binary scoring grid to identify non-clashing regions of the protein.
-The binary scoring grid consists of "attractive" rings between 2.25 and 4.75 \AA\ of every heavy atom, and ?repulsive? spheres between 0 and 2.25 \AA\ of each backbone heavy atom. 
+The binary scoring grid consists of "attractive" rings between 2.25 and 4.75 \AA\ of every heavy atom, and "repulsive" spheres between 0 and 2.25 \AA\ of each backbone heavy atom. 
 The first step of the initial placement algorithm ("Translate") consists of up to 50 random translations within 5.0 \AA\ of the starting position.
 After each translation, the heavy atom closest to the geometric center of the ligand, termed the "neighbor atom" is scored using the binary scoring grid.
 If the score is -1 or 0 (attractive or neutral), move is accepted, and the translation step terminates.
@@ -78,7 +78,7 @@ For example a rod-shaped ligand would easily enter a rod-shaped pocket but only 
 A ligand with a bent shape might require reorientation while entering the binding pocket in order to avoid clashes.
 Therefore, RosettaLigand will miss out on favorable initial placements for other ligands but spend substantial time performing refinement and minimization moves on ligands placed in unfavorable initial positions.
 The result of this inefficiency would be an increased failure rate as some ligands are never placed in favorable starting positions, and for other ligands an effectively increased runtime, as the number of ligand poses which must be generated to reliably produce a high quality binding pose is increased.
-Lemmon et al.\citep{Lemmon:2013jd} determined that as many as 1000 models may be necessary to produce at least one high quality binding pose in a challenging docking case.
+Lemmon et al. \citep{Lemmon:2013jd} determined that as many as 1000 models may be necessary to produce at least one high quality binding pose in a challenging docking case.
 Given this, improving the efficiency of protein binding site sampling by starting from more favorable initial placements has the potential to drastically reduce the computational cost of RosettaLigand, allowing for a larger number of predictions to be made given a fixed amount of computing resources.
 
 \section{Results}
@@ -92,7 +92,7 @@ The implementation described here allows for the rapid implementation of new sco
 
 The new score function consists of a set of scoring grids which are controlled by a scoring manager.
 Each scoring grid is responsible for computing a single term in the energy function.
-It consists of a 3D tensor of floating point values representing Cartesian space.
+It consists of a 3D tensor of floating point values representing cartesian space.
 It also contains functions to populate that tensor, and to score a ligand positioned in that tensor.
 The scoring manager is responsible for keeping every scoring grid up to date with respect to the protein pose, and for making sure that the ligand is scored in every grid.
 Additionally, the scoring manager is responsible for handling the weighting of the individual scoring terms to compute the total score.
@@ -124,9 +124,9 @@ Because the initial placement and refinement steps are independent, the two init
 \subsubsection{Introduction to the docking process}
 The overall docking protocol is illustrated in the schematic flowchart in Figure \ref{fig:docking_flowchart}.
 The study compares different configurations of both the initial placement step and the refinement step, described below.
-Complete RosettaScripts \ac{XML} files for each experiment can be found in the supplementary information.
-As a baseline we use the \textsc{TransRot} initial placement algorithm, where translation and rotation moves are performed separately using the binary scoring grids described by Davis et al.\citep{Davis:2009bf} and summarized in the introduction.
-The specific TransRot protocol used here is originally described in Fleishman et al.\citep{Fleishman:2011ji}, and is conceptually identical to the process described in the Davis paper, though the user interface is different. 
+Complete RosettaScripts \ac{XML} files for each experiment can be found in chapter \ref{chap:lowres_capture}.
+As a baseline we use the \textsc{TransRot} initial placement algorithm, where translation and rotation moves are performed separately using the binary scoring grids described by Davis et al. \citep{Davis:2009bf} and summarized in the introduction.
+The specific TransRot protocol used here is originally described in Fleishman et al. \citep{Fleishman:2011ji}, and is conceptually identical to the process described in the Davis paper, though the user interface is different. 
 
 \subsubsection{Description of the \textsc{Transform} based initial placement algorithm}
 
@@ -142,7 +142,7 @@ The move is the accepted or rejected using the Metropolis criterion, and the bes
 During \ac{MCM} refinement, the scoring grids are not used, and the full atom Rosetta energy function is used for energy computation.
 \ac{MCM} refinement consists of two steps: high resolution docking, and gradient-based minimization.
 Six steps of high resolution docking are performed. The steps consist of either repacking followed by minimization, or ligand perturbation.
-In the repacking and minimization step, the side-chain positions are optimized using side-chain rotamers from the Dunbrack rotamer library\citep{Shapovalov:2011bw}, and the ligand is allowed to change conformation using the pre-computed ligand conformers.
+In the repacking and minimization step, the side-chain positions are optimized using side-chain rotamers from the Dunbrack rotamer library \citep{Shapovalov:2011bw}, and the ligand is allowed to change conformation using the pre-computed ligand conformers.
 Following repacking, a gradient based minimization is applied to minimize the energy of the side-chain and ligand atoms.
 In the perturbation step, the ligand is randomly perturbed within a range of 0.1 \AA\ and rotated within a range of 5\textdegree.
 The two moves are alternated such that the first, third and final moves are repacking and minimization, while the remaining are ligand perturbations. The six moves are performed using a \ac{MCM} algorithm, and the best scoring pose of the six moves is selected.
@@ -154,10 +154,19 @@ Because no ligand perturbation is performed during \ac{MIN} refinement, the liga
 
 \subsection{Benchmarking setup}
 \subsubsection{Introduction to benchmarking scheme}
-To benchmark the performance of the new initial placement algorithm, a docking benchmark derived from the \ac{CSAR}\citep{DunbarJr:2011kq} dataset was used.
-A subset of 43 proteins from the \ac{CSAR} data set was used (Supplemental table). % TODO: add supplement
+To benchmark the performance of the new initial placement algorithm, a docking benchmark derived from the \ac{CSAR} \citep{DunbarJr:2011kq} dataset was used.
+A subset of 43 proteins from the \ac{CSAR} data set was used (table \ref{table:43_protein_names}). 
 This subset omits protein/ligand complexes with co-factors, metal ions, or water molecules that bridge ligand and protein.
-While Rosetta has successfully been used in such cases\citep{Lemmon:2013jd},  the inclusion of critical waters, co-factors or metal ions greatly increases the number of degrees of freedom in the docking simulation, which in turn would make the results of benchmarking more complex to interpret.
+While Rosetta has successfully been used in such cases \citep{Lemmon:2013jd},  the inclusion of critical waters, co-factors or metal ions greatly increases the number of degrees of freedom in the docking simulation, which in turn would make the results of benchmarking more complex to interpret.
+ 
+\begin{table}
+\scriptsize
+\renewcommand{\tabcolsep}{0.09cm}
+\centering
+\input{tables/lowres/pdb_descriptions.tex}
+\caption{A table showing the the \acs{PDB} IDs and gene names of the proteins in the 43 protein benchmark set derived from \acs{CSAR}. }
+\label{table:43_protein_names}
+\end{table}
  
 \subsubsection{Description of the three sets of input proteins used for benchmarking}
 Because the new initial placement algorithm relies on a pre-computed scoring grid, the initial positions of the protein atoms are going to have an effect on the quality of the generated binding poses.
@@ -184,7 +193,7 @@ A combination of the new \textsc{Transform} initial placement algorithm and \ac{
 \includegraphics[width=4in]{figures/lowres/time_per_model.pdf}
 \caption{
 The average time and standard deviation to produce a single model for each docking algorithm and type of input pose.
-\textsc{TransRot}/\acs{MCM} is the algorithm previously published by Davis et al\citep{Davis:2009bf}. 
+\textsc{TransRot}/\acs{MCM} is the algorithm previously published by Davis et al. \citep{Davis:2009bf}. 
 }
 \label{fig:time_per_model}
 \end{figure}
@@ -200,7 +209,7 @@ Figure \ref{fig:fraction_successful_time} and Figure \ref{fig:fraction_successfu
 These figures indicate that the choice of initial placement algorithm is far more important than choice of low resolution scoring method or refinement method.
 Docking protocols which make use of the \textsc{Transform} initial placement algorithm can reliably dock an additional 10-15\% of models within roughly 15 minutes of \ac{CPU} time, or 150 models, compared to protocols which use the previously published \textsc{TransRot} initial placement algorithm.
 The choice of refinement algorithm appears to play little role in the overall performance of the docking protocol, except in the case of the previously published algorithm (\textsc{TransRot}/\ac{MCM}), in which case docking performance begins to approach the \textsc{Transform} based protocols after roughly 800-1000 models have been generated (Figure \ref{fig:fraction_successful_time}).
-This observed behavior is consistent with previously published studies of RosettaLigand performance using this protocol\citep{Davis:2009fx,Combs:2013bl,Lemmon:2012ku}. 
+This observed behavior is consistent with previously published studies of RosettaLigand performance using this protocol \citep{Davis:2009fx,Combs:2013bl,Lemmon:2012ku}. 
 
 \begin{figure}
 %figure 4 in orginal paper
@@ -225,13 +234,13 @@ The fraction of protein systems in which the lowest scoring model has an \acs{RM
 A large pool of models were generated, and random subsamples were taken.  20 random samples were taken for each point, and the means are plotted, with the error bars representing the standard deviation.
 Docking protocols which make use of the \textsc{Transform} algorithm are reliably converged after approximately 150 models (dotted line).
 }
-\label{fig:fraction_successful_time}
+\label{fig:fraction_successful_count}
 \end{figure}
 
 \subsubsection{The new algorithm is still tolerant of backbone and side-chain perturbations}
-It is clear from Figure \ref{fig:fraction_successful_time} and Figure \ref{fig:fraction_successful_time} that despite using a pre-computed scoring grid during initial placement, RosettaLigand with the new initial placement algorithm is still tolerant of changes to the side-chain and backbone conformations of the protein binding site. In all tested protocols, the success rate of RosettaLigand decreases as the uncertainty associated with the protein side-chain and backbone atoms increases.
-In other words, after 1000 models have been generated docking ligands into crystal structures (Figure \ref{fig:fraction_successful_time}A), The \textsc{TransRot}/\ac{MCM} protocol has successfully docked 81\% of models, while the \textsc{Transform}/\ac{MCM} protocol has successfully docked 87\%.
-When ligands are docked into relaxed models in which both backbone and side-chain atoms are perturbed (Figure \ref{fig:fraction_successful_time}C), The \textsc{TransRot}/\ac{MCM} protocol has successfully docked 60\% of models, while the \textsc{Transform}/\ac{MCM} protocol has successfully docked 75\%.
+It is clear from Figure \ref{fig:fraction_successful_time} and Figure \ref{fig:fraction_successful_count} that despite using a pre-computed scoring grid during initial placement, RosettaLigand with the new initial placement algorithm is still tolerant of changes to the side-chain and backbone conformations of the protein binding site. In all tested protocols, the success rate of RosettaLigand decreases as the uncertainty associated with the protein side-chain and backbone atoms increases.
+In other words, after 1000 models have been generated docking ligands into crystal structures (Figure \ref{fig:fraction_successful_count}A), The \textsc{TransRot}/\ac{MCM} protocol has successfully docked 81\% of models, while the \textsc{Transform}/\ac{MCM} protocol has successfully docked 87\%.
+When ligands are docked into relaxed models in which both backbone and side-chain atoms are perturbed (Figure \ref{fig:fraction_successful_count}C), The \textsc{TransRot}/\ac{MCM} protocol has successfully docked 60\% of models, while the \textsc{Transform}/\ac{MCM} protocol has successfully docked 75\%.
 The reduction in success rate is expected because the addition of side-chain and backbone perturbation effectively adds noise to the protein structure.
 However, we see that the \textsc{Transform}/\ac{MCM} protocol results in a 12\% decrease in success rate between relaxed and crystal structures, rather than 21\% for the \textsc{TransRot}/\ac{MCM} protocol, so the new \textsc{Transform} protocol is more tolerant of inaccurate protein structures than the original protocol.
 Because the new initial placement algorithm is more likely to place the ligand in a high quality binding pose, a greater percentage of total docking time is spent in proximity or the correct binding site and pose.
@@ -245,7 +254,7 @@ Because the \textsc{Transform} initial placement algorithm uses an \ac{MCM} algo
 
 \subsection{Details of performance optimization in the \textsc{Transform} algorithm}
 While the \textsc{Transform} initial placement algorithm performs roughly the same number of sampling moves during initial placement as the \textsc{TransRot} algorithm, the speed improvements seen are a result of differences in how those moves are computed.
-Rosetta uses a system called the "fold tree" to represent the relationships between rigid body regions of the protein system\citep{Davis:2009bf,Das:2008gf}.
+Rosetta uses a system called the "fold tree" to represent the relationships between rigid body regions of the protein system \citep{Davis:2009bf,Das:2008gf}.
 Because permutations of the protein structure made using the fold tree are performed in internal coordinate space, it is possible to rapidly modify a large system.
 In the case of ligand docking, however, the system being manipulated is quite small, and the computation of fold tree based permutations quickly becomes dominated by conversions between internal and cartesian coordinate space.
 Because only the scoring grids are used for pose evaluation during the initial placement step, the \textsc{Transform} algorithm represents the ligand as a list of points, which are directly transformed using a rotation and translation matrix.
@@ -286,12 +295,12 @@ The ligand is deeply buried in the protein, making close contacts with protein-s
 This drastically reduces the possible sampling space available during both initial placement and minimization.
 Figure \ref{fig:specific_comparison}C is an example which demonstrates a failure of the \textsc{TransRot} algorithm which is corrected by the \textsc{Transform} algorithm.
 The lowest scoring model generated by the \textsc{TransRot} is offset from the actual binding position, and the polar NH$_{2}$ group facing the outside of the binding site does not make polar contacts with the polar protein residues at the exterior of the binding site. 
-On the other hand, the the lowest scoring model generated by the \textsc{Transform} mover is correctly making polar contacts, and though the binding site has not been exactly recovered, it is below the 2.0\AA\ cutoff, and is additionally more chemically correct.
+On the other hand, the the lowest scoring model generated by the \textsc{Transform} mover is correctly making polar contacts, and though the binding site has not been exactly recovered, it is below the 2.0 \AA\ cutoff, and is additionally more chemically correct.
 Because the \textsc{Transform} mover is able to sample translation and rotation simultaneously, more time will be spent sampling reasonable docking positions, which increases the probability of the initial placement algorithm identifying a near-correct binding position for the refinement algorithm to refine and score.
 In the case of a ligand in a relatively shallow binding pocket such as the one depicted in Figure \ref{fig:specific_comparison}C, this additional sampling is necessary to recover critical polar contacts. 
 There are some cases in which neither protocol is able to predict the binding pose.
 Figure \ref{fig:specific_comparison}B is one such example.  In this case, the problem is most likely a failure of the Rosetta scoring function used in the Refinement stage.
-In neither case does the ligand pose fall below the 2.0\AA\ cutoff.  In the case of the \textsc{TransRot} protocol, the ligand is rotated around the short axis of the ligand, while in the case of the \textsc{Transform} mover the ligand is rotated around the long axis.
+In neither case does the ligand pose fall below the 2.0 \AA\ cutoff.  In the case of the \textsc{TransRot} protocol, the ligand is rotated around the short axis of the ligand, while in the case of the \textsc{Transform} mover the ligand is rotated around the long axis.
 Due to the constrained nature of the binding site, it is unlikely that improper sampling is at fault.
 More likely, the fault is with the Rosetta scoring function, as the ligand here is somewhat symmetric, and the scoring function appears to lack the detail necessary to distinguish between the correct and incorrect binding pose. 
 
@@ -315,7 +324,7 @@ Because the original \textsc{TransRot} algorithm performs translation and rotati
 By simultaneously transforming the ligand in all dimensions, the space of the binding site can be more effectively sampled. 
 
 \subsection{The benefit of the \acs{MIN} refinement is primarily logistical, but important for \acs{vHTS} studies}
-While Figure \ref{fig:fraction_successful_time} and Figure \ref{fig:fraction_successful_time} indicate that both the \ac{MIN} and \ac{MCM} refinement algorithms have a similar impact on sampling performance and average run time, the substantially reduced variability in run time of the \ac{MIN} refinement algorithm illustrated in Figure \ref{fig:time_per_model} provides a major practical advantage to using \ac{MIN} rather than \ac{MCM} for refinement.
+While Figure \ref{fig:fraction_successful_time} and Figure \ref{fig:fraction_successful_count} indicate that both the \ac{MIN} and \ac{MCM} refinement algorithms have a similar impact on sampling performance and average run time, the substantially reduced variability in run time of the \ac{MIN} refinement algorithm illustrated in Figure \ref{fig:time_per_model} provides a major practical advantage to using \ac{MIN} rather than \ac{MCM} for refinement.
 When docking a large number of ligands on a computing cluster, a protocol with a predictable run time is highly advantageous as it allows for more efficient utilization of the available resources of the cluster. 
 For this reason, while the two refinement methods have similar scientific performance, we recommend using \ac{MIN} refinement, rather than \ac{MCM} refinement. 
 
@@ -328,8 +337,8 @@ This development makes the use of RosettaLigand as a \ac{vHTS} tool computationa
 The binary scoring grid used in the experiments described above provides a limited amount of information about the protein binding pocket.
 A more informative scoring grid could be valuable in further improving the efficiency and performance of RosettaLigand.
 Three novel grids based on knowledge based potentials describing shape complementarity and hydrogen bonding information were developed to explore this possibility.
-The implementation and benchmarking of these novel grids are described in the attached supplementary information. 
-As described in the supplement, these new scoring grids do not have a significant impact on sampling efficiency.
+The implementation and benchmarking of these novel grids are described in chapter \ref{chap:lowres_appendix}.  
+As described in chapter \ref{chap:lowres_appendix}, these new scoring grids do not have a significant impact on sampling efficiency.
 While the incorporation of additional information is potentially very valuable, the uncertainty associated with the position of backbone and side-chain atoms during low resolution docking limits the value of this scoring data.
 Research into effective methods of introducing useful scoring data into the initial placement phase is ongoing.
 The results described here demonstrate that even in very complex optimization problems such as protein-ligand docking, relatively small changes in sampling and score function evaluation can have a  large impact on performance. 
@@ -345,7 +354,7 @@ The side-chains and protein backbone were left at the crystallographic positions
 
 \subsubsection{Description of repacked structure preparation}
 The crystal structures prepared above were repacked in the absence of the ligand using the Rosetta fixbb application.
-The backbone was kept fixed, and all side-chain positions were allowed to repack\citep{Kortemme:2004ia}.
+The backbone was kept fixed, and all side-chain positions were allowed to repack \citep{Kortemme:2004ia}.
 
 \subsubsection{Description of relaxed structure preparation}
 For each of the crystal structures prepared above, 10 relaxed models were produced using the Rosetta relax application.
