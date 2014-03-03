@@ -290,12 +290,18 @@ While the performance metrics described in section \ref{subsubsec:classifier_per
 However, the ability of the networks to generalize beyond the training dataset needs to be assessed.
 In order to answer the question of whether the \ac{ANN} models demonstrated here are capable of making general predictions, the DEKOIS 2.0 \ref{Bauer:2013de} dataset was used for benchmarking. 
 All proteins and ligands were prepared in the same manner as the training data set, and the best scoring model for each protein-ligand complex was selected.
-The classifiers previously described were used to re-score the selected protein-ligand complexes, and the \ac{ROC-AUC} for each complex was computed. 
+
+First, the classifiers were used to screen the entire DEKOIS 2.0 benchmarking set, and \ac{ROC} curve plots were generated using each classifier.
+The \ac{ROC} curves are show in figure \ref{fig:tpr_fpr_overall}.
+As expected, the \ac{ROC-AUC} of the \ac{ANN} trained using only BCL ligand descriptors is 0.51, with classification performance equivalent to a random classifier.
+Unfortunately, the performance of the ANN classifiers trained with Rosetta descriptors is marginal, with \ac{ROC-AUC} values ranging from 0.60-0.62.
+Additionally, this performance is equivalent to using the Rosetta scores alone as a classifier.
+
+More insight into the details of the performance of these classifiers can be obtained by computing \ac{ROC-AUC} for every protein target in the benchmark set seperately.
 The distribution of \ac{ROC-AUC} across each of the 74 protein-ligand systems is plotted in figure \ref{fig:dekois_roc_all}A.
 As expected, the model created using only \ac{BCL} ligand descriptors has no predictive power, and the 3 \ac{ANN} based classifiers have similar, but positive predictive power.
 Figure \ref{fig:dekois_roc_all}B shows the Rosetta Fingerprint and scalar model, the RosettaLigand interface score model, and the \ac{BCL} only descriptors.
 Closely inspecting this plot, we can see that the primary effect of the Rosetta fingerprint and scalar model (and the other \ac{ANN} classifiers) is to reduce the width of the distribution of \ac{ROC-AUC} scores.  Some highly performing protein targets perform less well, but other targets which are classified worse than random perform better. 
-
 \begin{figure}
 \centering
 \includegraphics[width=4in]{figures/hts/auc_distributions.pdf}
@@ -306,6 +312,14 @@ The dotted vertical line indicates the \acs{ROC-AUC} associated with a random mo
 \acs{ROC-AUC} values less than 0.5 are worse than random. 
 }
 \label{fig:dekois_roc_all}
+\end{figure}
+\begin{figure}
+\centering
+\includegraphics[width=4in]{figures/hts/tpr_fpr_overall.pdf}
+\caption{
+A plot showing the \acs{ROC} curves of the various classification models trained across all protein targets in the DEKOIS 2.0 benchmark.
+}
+\label{fig:tpr_fpr_overall}
 \end{figure}
 
 \section{Discussion}
