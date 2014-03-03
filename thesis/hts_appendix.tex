@@ -11,7 +11,7 @@ The files referenced in this chapter can be found in the DVD attached to the the
 \label{subsec:training_data_prep}
 The PDBBind refined dataset was obtained from http://www.pdbbind.org.cn/.
 for each protein in the refined dataset, 3 protein crystal structure files are provided.
-The "complex" file contains the protein in complex with the ligand, the "pocket" file contains only protein atoms within 10\AA\ of the binding pocket, and the "protein" file contains the entire protein, but no ligand.
+The "complex" file contains the protein in complex with the ligand, the "pocket" file contains only protein atoms within 10 \AA\ of the binding pocket, and the "protein" file contains the entire protein, but no ligand.
 For the purposes of docking in Rosetta, the "protein" files will be used for our protein input.
 
 \subsubsection{protein structure preparation}
@@ -54,7 +54,8 @@ DihedralBins -temperature 1.0 -max_iterations 1000 \
 \doublespace
 After conformers are generated, params files and rosetta screening job files are produced using the protocol described in chapter \ref{chap:hts_preprocess}.
 This protocol will generate screening job files for the active ligands.
-To generate files used for cross-docking, the make\_evenly\_grouped\_jobs.py script should be re-run with the addition of the flag "--inactive\_cross\_dock", which will result in the creation of a second set of screening job files which will dock every ligand into every protein except the native protein.
+To generate files used for cross-docking, the\\
+\texttt{make\_evenly\_grouped\_jobs.py} script should be re-run with the addition of the flag \texttt{--inactive\_cross\_dock}, which will result in the creation of a second set of screening job files which will dock every ligand into every protein except the native protein.
 
 \subsection{Training data docking}
 
@@ -428,14 +429,22 @@ Combine(
     values per molecule=24),
   MiscProperty(hbond_matching_pair_pocket_rdf,
     values per molecule=24),
-  MiscProperty(elec_interface_rdf,values per molecule=24),
-  MiscProperty(elec_pocket_rdf,values per molecule=24),
-  MiscProperty(charge_minus_interface_rdf,values per molecule=24),
-  MiscProperty(charge_minus_pocket_rdf,values per molecule=24),
-  MiscProperty(charge_plus_interface_rdf,values per molecule=24),
-  MiscProperty(charge_plus_pocket_rdf,values per molecule=24),
-  MiscProperty(charge_unsigned_interface_rdf,values per molecule=24),
-  MiscProperty(charge_unsigned_pocket_rdf,values per molecule=24),
+  MiscProperty(elec_interface_rdf,
+    values per molecule=24),
+  MiscProperty(elec_pocket_rdf,
+    values per molecule=24),
+  MiscProperty(charge_minus_interface_rdf,
+    values per molecule=24),
+  MiscProperty(charge_minus_pocket_rdf,
+    values per molecule=24),
+  MiscProperty(charge_plus_interface_rdf,
+    values per molecule=24),
+  MiscProperty(charge_plus_pocket_rdf,
+    values per molecule=24),
+  MiscProperty(charge_unsigned_interface_rdf,
+    values per molecule=24),
+  MiscProperty(charge_unsigned_pocket_rdf,
+    values per molecule=24),
   MiscProperty(dSASA_hphobic,values per molecule=1),
   MiscProperty(dSASA_int,values per molecule=1),
   MiscProperty(dSASA_polar,values per molecule=1),
@@ -511,10 +520,10 @@ dropout(0.125,0.5))
 \doublespace
 Here, the average enrichment over the first 1\% of the dataset is used as an objective function.
 2 layers of hidden neurons are used, with each layer containing 100 neurons. 
-The network dropout method\citep{Hinton:2012tv} is used to regularize the network and prevent over-fitting.
-A 90 fold cross-validation is used, so the config.ini file will result in the creation of 90 networks.
+The network dropout method \citep{Hinton:2012tv} is used to regularize the network and prevent over-fitting.
+A 90 fold cross-validation is used, so the \texttt{config.ini} file will result in the creation of 90 networks.
 
-The submit.py script is run from the directory containing the config.ini file as follows:
+The \texttt{submit.py} script is run from the directory containing the \texttt{config.ini} file as follows:
 \singlespace
 \begin{verbatim}
 submit.py -t cross_validation
@@ -523,13 +532,13 @@ submit.py -t cross_validation
 This script will set up the cross-validation, and dispatch each of the 90 network training processes to a cluster.
 \subsection{Neural network analysis}
 
-The submit.py script also performs a basic analysis of the trained networks.
+The \texttt{submit.py} script also performs a basic analysis of the trained networks.
 The average enrichment across the entire cross-validation is computed, as are the \ac{TPR}, \ac{FPR} and \ac{PPV} plots which are used to assess the performance of the network.
-The results of this analysis are output in the results/ directory produced by the submit.py script.
+The results of this analysis are output in the \texttt{results/} directory produced by the \texttt{submit.py} script.
 
 \subsection{Benchmark data preparation}
 
-The DEKOIS 2.0\citep{Bauer:2013de} dataset was used for benchmarking purposes.
+The DEKOIS 2.0 \citep{Bauer:2013de} dataset was used for benchmarking purposes.
 The ligand \ac{SDF} files used for the dataset are obtained from http://www.dekois.com/, and the associated protein files were obtained directly from the \ac{PDB}. 
 Cleaned and prepared data are in the attached DVD, and were prepared and docked identically to the process described in section \ref{subsec:training_data_prep}
 
@@ -543,7 +552,8 @@ The cross-validation process used for network training produces an ensemble of 9
 molecule:Properties is run with the following command:
 \singlespace
 \begin{verbatim}
-bcl.exe molecule:Properties -input_filenames input_ligands.sdf \
+bcl.exe molecule:Properties -input_filenames \
+input_ligands.sdf \
 -add 'Mean(
   PredictedActivity(
     storage=File(directory=<model_dir>,prefix=model)))' \
@@ -556,7 +566,7 @@ bcl.exe molecule:Properties -input_filenames input_ligands.sdf \
 -output_table output.csv
 \end{verbatim}
 \doublespace
-Where \texttt{<model\_dir>} is the path to a directory oft trained neural network models, and output.csv is the path to an output file.
+Where \texttt{<model\_dir>} is the path to a directory of trained neural network models, and \texttt{output.csv} is the path to an output file.
 
 \subsubsection{\acs{ROC} curve generation}
 The \ac{CSV} files produced in the previous step contain all predicted and experimental activities for all ligands in the DEKOIS 2.0 set.
@@ -575,16 +585,19 @@ bcl::linal::Matrix<float>
 The first line is a header indicating that the data is a \ac{BCL} matrix, the second line indicates that the matrix has 1207 rows and 2 columns, and the remaining rows are the data values.
 In this case, the first column should be the experimental values, and the second column should be the predicted values.
 The second column should be sorted such that the best predicted scores are first.
-To accomplish this task, the make\_bcl\_inputs\_for\_plotting.py script is used. 
+To accomplish this task, the\\
+\texttt{make\_bcl\_inputs\_for\_plotting.py} script is used. 
 The script is run as follows:
 \singlespace
 \begin{verbatim}
-make_bcl_inputs_for_plotting.py --exp_label 'Cached(log_ki)' \
---pred_label 'Cached(predicted_activity)' input_data.csv output_dir/
+make_bcl_inputs_for_plotting.py \
+--exp_label 'Cached(log_ki)' \
+--pred_label 'Cached(predicted_activity)' \
+input_data.csv output_dir/
 \end{verbatim}
 \doublespace
-This script will create \ac{BCL} matrix files for each protein system found in the dataset and output these files to the specified output\_dir.
-The \ac{ROC-AUC} values are then computed using these output table files and the script collect\_enrichment.py
+This script will create \ac{BCL} matrix files for each protein system found in the dataset and output these files to the specified directory \texttt{output\_dir/}.
+The \ac{ROC-AUC} values are then computed using these output table files and the script \texttt{collect\_enrichment.py}
 This script is run as:
 \singlespace
 \begin{verbatim}
@@ -593,4 +606,4 @@ collect_enrichment.py output_dir/ tag
 \doublespace
 Where tag is a user specified tag.
 The script will output the protein system name, \ac{ROC-AUC} and the tag for each protein system to standard output.
-Additionally, it will produce data files for each protein system in the output\_dir directory, which can be used to graph \ac{ROC} curves. 
+Additionally, it will produce data files for each protein system in the \texttt{output\_dir} directory, which can be used to graph \ac{ROC} curves. 
