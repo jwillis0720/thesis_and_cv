@@ -27,7 +27,8 @@ This manuscript describes a \ac{vHTS} protocol which uses predictions generated 
 This chapter describes the design of a set of data for training the \ac{ANN} model which is both diverse in protein and chemical space and also balanced in chemical space between active and inactive compounds.
 Additionally, a set of \ac{RDF} based fingerprint descriptors representing the geometric and chemical properties of the protein-ligand interface are introduced.
 The goal of this work is to eventually produce a model which is capable of accurately classifying compounds based on activity.
-The \ac{ANN} models described in this chapter are generally less likely to have significantly worse than random classification performance compared to the use of RosettaLigand interface scores alone as a classifier.
+The \ac{ANN} models described in this chapter substantially improve upon the performance of RosettaLigand alone when making classification predictions within the cross-validation data set
+However, these methods are less able to make predictions outside of the cross-valdiation data set.  When applied to a large benchmark, they are generally less likely to have significantly worse than random classification performance compared to the use of RosettaLigand interface scores alone as a classifier.
 However, the maximum classification performance obtained is also lower than with RosettaLigand alone, indicating that while the method shows promise as a means of improving the reliability of ligand docking methods, additional research is required to refined the method.
 
 Chapter \ref{chap:conclusion} outlines the findings and future directions of the research presented in the prior chapters.

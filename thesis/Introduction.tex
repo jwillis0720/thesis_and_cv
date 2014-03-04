@@ -35,10 +35,10 @@ Simulations with Rosetta can be classified based on whether amino acid side-chai
 Both modes have optimized energy functions that have been reviewed previously by Rohl  \citep{Rohl:2004dh}.
 
 \subsubsection{Knowledge based centroid energy function}
-The low-resolution energy function treats the side-chains as centroids  \citep{Simons:1997do,Simons:1999wp}.
-The energy function models solvation, electrostatics, hydrogen bonding between beta strands, and steric clashes.
+The Rosetta low-resolution energy function treats the side-chains as centroids  \citep{Simons:1997do,Simons:1999wp}.
+This energy function models solvation, electrostatics, hydrogen bonding between beta strands, and steric clashes.
 Solvation effects are modeled as the probability of seeing a particular amino acid residue with a given number of alpha carbons within an amino acid dependent cutoff distance.
-Electrostatics interactions are modeled as the probability of observing a given distance between centroids of amino acids.
+Electrostatic interactions are modeled as the probability of observing a given distance between centroids of amino acids.
 Hydrogen bonding between beta strands is evaluated based on the relative geometric arrangement of strand fragments.
 Backbone atom and side-chain centroid overlap is penalized providing the repulsive component to a van der Waals force.
 A radius of gyration term is used to model the effect of van der Waals attraction.
