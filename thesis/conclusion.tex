@@ -32,7 +32,7 @@ The results presented in chapter \ref{chap:lowres_paper} make it possible for th
 
 \subsection{Development of RosettaHTS: A structure based virtual screening protocol}
 The methods developed in chapter \ref{chap:lowres_paper} lead naturally to chapter \ref{chap:rosetta_hts}, which describes the development of a protocol for docking large numbers of small molecules using RosettaLigand and a novel \ac{ANN} based classification model for predicting the activity of these compounds.
-To training the \ac{ANN} model, a training data set was constructed using cross-docking so as to be highly diverse in chemical and protein space, as well as balanced in chemical space between active and inactive compounds.
+To train the \ac{ANN} model, a training data set was constructed using cross-docking so as to be highly diverse in chemical and protein space, as well as balanced in chemical space between active and inactive compounds.
 In addition to previously developed Rosetta energy terms, interface quality metrics, and ligand descriptor information, a new set of protein-ligand interface descriptors were developed based on \ac{RDF}s.
 Several networks were trained using various combinations of these descriptor sets.
 Analysis of the cross-validation performance of the trained networks indicated that the majority of the useful information to the networks was provided by the Rosetta energy term and interface quality metric data.
@@ -45,12 +45,12 @@ Further work is underway to address this issue, and is detailed in section \ref{
 \subsection{RosettaLigand method development}
 
 \subsubsection{Scoring function development}
-While the RosettaLigand algorithm improvements described in chapter \ref{chap:lowres_paper} are highly encouraging, there is likely further improvements which can be made in both the speed and scientific performance of the software.
+While the RosettaLigand algorithm improvements described in chapter \ref{chap:lowres_paper} are highly encouraging, there are likely further improvements which can be made in both the speed and scientific performance of the software.
 One obvious area of further development is in the grid based energy function used by the initial placement algorithm.
 The current energy function serves primarily to identify regions of the protein binding site in which atoms placed would result in major clashes with the protein backbone.  
 Adding additional information would potentially improve the efficiency with which the Initial placement algorithm can identify high quality binding poses, further reducing the number of binding poses required for a high quality prediction.
 The shape complementarity and hydrogen bonding potentials described in chapter \ref{chap:lowres_appendix} represent one attempt to address this problem, but these energy functions did not serve to improve the performance of RosettaLigand.
-The likely culprit here is the over-reliance on side-chain positions.
+The likely culprit here is the over-reliance on side-chain atom positions.
 Because the shape complementarity and hydrogen bonding potentials are constructed using all protein atoms, incorrect side-chain positions will result in poor binding position predictions.
 Because starting side-chain positions can be assumed to be incorrect if a ligand is being cross-docked, or docked into a comparative model or relaxed structure, any method which relies on side-chain information is likely to be unsuccessful.
 To address this problem, research into the development of knowledge based potentials using backbone, C$\alpha$ and C$\beta$ atoms is ongoing.
@@ -74,7 +74,7 @@ Additionally, such an algorithm would make it possible to greatly expand the siz
 
 The results of the benchmarking performed in chapter \ref{chap:lowres_paper} demonstrate that the currently optimal RosettaLigand protocol is capable of docking nearly every protein in the benchmark set used.
 For this reason, further development of the sampling and scoring methods described above will likely require the use of a more challenging benchmark, so that the effects of changes to the algorithm can be easily seen. 
-To accomplish this, the homology modeling benchmark used by Kaufmann et al. \citep{Kaufmann:2012ck} will be used to for future benchmarking studies.
+To accomplish this, the homology modeling benchmark used by Kaufmann et al. \citep{Kaufmann:2012ck} will be used for future benchmarking studies.
 Preparation of this benchmarking set for use with the modern RosettaLigand protocol is currently underway.
 
 \subsection{RosettaHTS method development}

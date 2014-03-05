@@ -60,7 +60,7 @@ The second step in the initial placement algorithm is the Rotate step.
 The Rotate step consists of up to 500 random rotations with a maximum of 360\textdegree\ from the starting orientation.
 The Rotate step accumulates a set of diverse non-clashing ligand orientations, and then selects one of these orientations at random for further refinement.
 The size of the set of diverse orientations is either 5 or 5 times the number of rotatable bonds in the ligand, whichever is larger.
-The ligand is randomly reoriented, and then accepted into the set of diverse orientations if the following conditions are met: No atoms are located in repulsive squares, 85\% of the atoms are located on attractive squares, and the \ac{RMSD} of the new orientation with respect to all previously accepted conformations is greater than $0.65*\sqrt{number\ of\ heavy\ atoms}$.
+The ligand is randomly reoriented, and then accepted into the set of diverse orientations if the following conditions are met: No atoms are located in repulsive squares, 85\% of the atoms are located on attractive squares, and the \ac{RMSD} of the new orientation with respect to all previously accepted conformations is greater than $0.65\sqrt{number\ of\ heavy\ atoms}$.
 After either 500 orientations have been created, or the maximum set size has been achieved, a random orientation from the set is selected, and the Rotate step terminates.
 
 \subsubsection{Description of the Slide Together step}
@@ -214,7 +214,7 @@ This observed behavior is consistent with previously published studies of Rosett
 \begin{figure}
 %figure 4 in orginal paper
 \centering
-\includegraphics[width=4in]{figures/lowres/fraction_successful_time.pdf}
+\includegraphics[width=6in]{figures/lowres/fraction_successful_time.pdf}
 \caption{
 The fraction of protein systems in which the lowest scoring model has an RMSD < 2.0 \AA\ to the native structure as a function of \acs{CPU} time using the 3 evaluated RosettaLigand docking algorithms when docked into A) Crystal structures, B) Repacked crystal structures, and C) Relaxed crystal structures.
 A large pool of models were generated, and random subsamples were taken corresponding to time points at 5 minute intervals.
@@ -228,7 +228,7 @@ Docking protocols which make use of the \textsc{Transform}  algorithm are reliab
 \begin{figure}
 %figure 5 in orginal paper
 \centering
-\includegraphics[width=4in]{figures/lowres/fraction_successful_count.pdf}
+\includegraphics[width=6in]{figures/lowres/fraction_successful_count.pdf}
 \caption{
 The fraction of protein systems in which the lowest scoring model has an \acs{RMSD} < 2.0 \AA\ to the native structure as function of the total number of structures generated using the 3 evaluated RosettaLigand docking algorithms when docked into A) Crystal structures, B) Repacked crystal structures, and C) Relaxed crystal structures.
 A large pool of models were generated, and random subsamples were taken.  20 random samples were taken for each point, and the means are plotted, with the error bars representing the standard deviation.
@@ -274,11 +274,10 @@ While 14 of the 43 proteins show improvement in \ac{RMSD}, only 3 exhibit suffic
 Comparison of the \textsc{TransRot} and \textsc{Transform} initial placement (Center) shows substantial improvement when the \textsc{Transform} initial placement algorithm is used, with 32/43 proteins having improved \ac{RMSD}, and 13/43 having enough improvement to cross the 2.0 \AA\ threshold.
 Comparison of the \ac{MCM} and \ac{MIN} refinement algorithms when the \textsc{Transform} initial placement algorithm is used shows that in this context the two refinement algorithms have nearly identical performance (Right).
 From this data we can conclude that the improvements seen are driven primarily by the new initial placement algorithm. 
-
 \begin{figure}
 %figure 3 in orginal paper
 \centering
-\includegraphics[width=4in]{figures/lowres/rmsd_vs_rmsd_relax.pdf}
+\includegraphics[width=6in]{figures/lowres/rmsd_vs_rmsd_relax.pdf}
 \caption{
 \acs{RMSD} vs. \acs{RMSD} plots comparing the performance of various docking protocols when docking ligands into relaxed structures.
 20 samples of 150 models were collected, and the average of the \acs{RMSD} of the lowest scoring model is plotted for each protein-ligand system.
@@ -286,7 +285,6 @@ The standard deviation of these 20 samples is shown with error bars. Dotted line
 }
 \label{fig:rmsd_vs_rmsd}
 \end{figure}
-
 \subsection{Examination of the successes and failures of RosettaLigand illustrates the impact of the \textsc{Transform} algorithm}
 Figure \ref{fig:specific_comparison} illustrates several examples of the successes and failures of RosettaLigand.
 Figure \ref{fig:specific_comparison}A is an example of a case in which both the \textsc{Transform} and \textsc{TransRot} based algorithms are capable of successfully docking the ligand.
@@ -307,7 +305,7 @@ More likely, the fault is with the Rosetta scoring function, as the ligand here 
 \begin{figure}
 %figure 6 in orginal paper
 \centering
-\includegraphics[width=4in]{figures/lowres/specific_comparison.pdf}
+\includegraphics[width=6in]{figures/lowres/specific_comparison.pdf}
 \caption{
 Comparison of specific successes and failures between the RosettaLigand protocols.
 Native structures are in grey, lowest scoring models generated by the \textsc{Transform}/\acs{MIN} protocol in blue, and lowest scoring models generated by \textsc{TransRot}/\acs{MIN} in pink.

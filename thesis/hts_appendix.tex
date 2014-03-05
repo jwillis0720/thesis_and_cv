@@ -3,7 +3,6 @@
 \section{Introduction}
 
 This chapter describes the details of the protocol which was described in chapter \ref{chap:lowres_paper}.
-The files referenced in this chapter can be found in the DVD attached to the thesis.
 
 \section{Protocol}
 
@@ -274,9 +273,12 @@ The following \ac{XML} file is used for descriptor computation:
   </LIGAND_AREAS>
   
   <INTERFACE_BUILDERS>
-    <side_chain_for_docking ligand_areas="docking_sidechain"/>
-    <side_chain_for_final ligand_areas="final_sidechain"/>
-    <backbone ligand_areas="final_backbone" extension_window="3"/>
+    <side_chain_for_docking 
+      ligand_areas="docking_sidechain"/>
+    <side_chain_for_final 
+      ligand_areas="final_sidechain"/>
+    <backbone ligand_areas="final_backbone" 
+      extension_window="3"/>
   </INTERFACE_BUILDERS>
   
   <MOVEMAP_BUILDERS>

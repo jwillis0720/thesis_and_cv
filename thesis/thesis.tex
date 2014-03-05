@@ -1,9 +1,7 @@
 %This is a comment, it will not be compiled...
 
 \listfiles
-\documentclass[12pt]{report}  %%% Changed from 12pt. Fixed demensions
-                              %%% have not been updated
-%%%%
+\documentclass[12pt]{report} 
 %%nomenclature hack from http://www.freiheitsfreund.de/2010/10/24/automatically-run-makeindex-from-within-a-latex-document-with-write18/%%%
 
 \usepackage[intoc]{nomencl}
@@ -167,16 +165,10 @@ Approved: \hskip 2.9in Date:\\[1.2em]
 \doublespacing
 \pagenumbering{roman} \setcounter{page}{1}
  
-%:
-%:
-%:
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \include{acknowledgements}
 \include{summary}
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \singlespacing
 \tableofcontents
 
@@ -187,8 +179,7 @@ Approved: \hskip 2.9in Date:\\[1.2em]
 \newpage
 \listoffigures
 \newpage
-\include{acronyms}
-%\printnomenclature
+\include{acronyms} %table of acronymns
 \newpage
 \endgroup
 

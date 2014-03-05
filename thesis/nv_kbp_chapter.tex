@@ -9,10 +9,10 @@ Thermostabilization of enzymes and design of proteins with novel folds are two p
 As there are relatively few explicit interactions of amino acids on the protein surface, the total energy of a residue is dominated by Rosetta's implicit solvation model.
 The solvation model currently used by Rosetta is a function developed by Lazaridis and Karplus \citep{Lazaridis:1999wi}.
 This potential estimates the solvation free energy of an atom from a reference free energy, where the atom is essentially fully solvent-exposed.
-For every proximal atom, a cost of "desolvation" is added in a pairwise decomposable and distance-dependent manner.
-This procedure aligns with the protein folding process, where amino acids move from a completely exposed location (reference state) into varying degrees of burial.
+For every nearby atom, a cost of "desolvation" is added in a pairwise decomposable and distance-dependent manner.
+This procedure aligns with the protein folding process, where amino acids move from a completely exposed location into varying degrees of burial.
 While the model is parameterized for all amino acid atom types, it is driven by high desolvation penalties of polar atoms.
-It is quite insensitive to the burial of apolar atoms because desolvation energies are small. 
+For this reason, it is quite insensitive to the burial of apolar atoms because desolvation energies are small. 
 
 \subsection{RosettaDesign currently has difficulty designing protein surfaces}
 This paradigm of desolvation is useful for determining energy changes in the folding of a monomeric protein.
@@ -260,7 +260,7 @@ The \ac{NV} environment \ac{KBP} showed a 3.2\% overall improvement in sequence 
 \subsection{Improvement in the quality of both buried and surface designs is seen}
 When sequence recovery is broken down by group (Figure \ref{fig:recovery_by_group} ), a large improvement (decrease) in the percentage of unrecovered buried charged residues is observed, from 8.78\% to 1.96\% unrecovered residues function in the 100 protein benchmark set.
 Additionally, a decrease from 8.77\% to 3.46\% unrecovered non-polar residues on the surface is observed.
-Additionally, Figure \ref{fig:recovery_by_group} reveals a fundamental difference in the two datasets.
+Additionally, figure \ref{fig:recovery_by_group} reveals a fundamental difference in the two datasets.
 The lower recovery values seen in all categories in the 42-protein benchmark set suggest that it is a much more challenging target for design than the 100-protein benchmark set used in optimization.
 The proteins of the 42-protein benchmark set are substantially larger (average length of 207 residues) than those in the 100-protein benchmark set (average length of 120 residues).
 Each additional residue drastically increases the number of possible sequences to consider, decreasing the probability of a high quality design.
@@ -344,7 +344,7 @@ While the achievable sequence recovery is somewhat higher due to the correlation
 Tables \ref{table:burial_100} and \ref{table:burial_42} show that for the 100 protein benchmark set, total overall sequence recovery is 45.7\% with the standard energy function and 47.0\% with the \ac{NV} environment \ac{KBP}.
 For the 42 protein benchmark set, total overall sequence recovery is 35.7\% with the standard energy function and 38.9\% with the \ac{NV} environment \ac{KBP}.
 This explains the relatively small increases in sequence recovery, as current recovery values are approaching the practical maximum.
-For that reason we introduce the \ac{PSSM} recovery value.
+For that reason we introduce the \ac{PSSM} recovery metric.
 In this context it is important to note that the scoring functions were not directly optimized for sequence recovery but rather \ac{PSSM} recovery.
 As a result, it is not surprising that the sequence recovery is not necessarily maximized during optimization. 
 
@@ -361,9 +361,9 @@ This substantial difference is likely a result of the different criteria used to
 The proteins in the 42 protein benchmark set are larger than those in the 100 protein set, and will therefore have a larger total surface area and thus be more challenging targets for design.
 
 \subsection{The sequence recovery values observed are realistic, given previous values reported in the literature}
-Despite the difference inherent to different design targets, these values are similar to those obtained in the literature.
+Despite the differences inherent to different design targets, these values are similar to those obtained in the literature.
 Schneider et al. designed a set of proteins of size between 89-223 amino acids based on high resolution crystal structures.
-They observed surface sequence recovery rates of 22\%+/- 11\%, and buried recovery rates of 56\%+/- 13.7\% when designing with RosettaDesign \citep{Schneider:2009ig}.
+They observed surface sequence recovery rates of 22\% $\pm$ 11\%, and buried recovery rates of 56\% $\pm$ 13.7\% when designing with RosettaDesign \citep{Schneider:2009ig}.
 These values are similar to those seen in Tables \ref{table:burial_100} and \ref{table:burial_42}.
 Additionally, Sharabi et al. reported overall sequence recovery values of between 40\% and 70\% depending on the weights of the scoring function used during their design \citep{Sharabi:2011ev}.
 These numbers are within the range of the sequence recovery values obtained during the experiments described in this manuscript.
@@ -426,7 +426,7 @@ To achieve reasonably good performance despite these inaccuracies, both energy t
 As expected, addition of the \ac{NV} environment \ac{KBP} term reduces the impact of solvation and reference energies on the surface.
 As these adjustments apply throughout all degrees of burial, the artificially inflated weight of the solvation and reference energies can be decreased, improving performance also in the buried regions of the protein as well.
 
-\subsection{the \acs{NV} environment \acs{KBP} term may encode environmental effects reducing aggregation potential}
+\subsection{The \acs{NV} environment \acs{KBP} term may encode environmental effects reducing aggregation potential}
 In addition to providing information about solvation effects, the \ac{NV} environment potential also sheds light on the evolutionary and environmental forces on protein composition.
 Soluble proteins have evolved to be non-aggregative and generally stable in the environment of a cell.
 These properties are difficult to model via physics-based methods, as they arise from numerous inter-protein interactions that are difficult to explicitly model.

@@ -3,7 +3,6 @@
 \section{Introduction}
 
 This chapter describes the details of the protocol which was described in chapter \ref{chap:lowres_paper}.
-The files referenced in this chapter can be found in the DVD attached to the thesis.
 
 \section{Protocol}
 
@@ -28,13 +27,13 @@ You can use any conformer generation tool you have available to you for this ste
 Your generated conformers should be output to a single \ac{SDF} file.
 Every conformer must have 3D coordinates and hydrogens added.
 Conformers of the same ligand should have the same name in the \ac{SDF} file.
-For convenience, an example conformer file is provided at rosetta\_inputs/ligands/all\_ligands.sdf.
+For convenience, an example conformer file is provided at \texttt{rosetta\_inputs/ligands/all\_ligands.sdf}.
 
 \subsection{Params file generation}
 
 Params files contain the parameterization information for a ligand.
 Every  ligand or Residue in a protein structure input into Rosetta must have a corresponding params file.
-Rosetta is distributed with a script called molfile\_to\_params.py which generates these files.
+Rosetta is distributed with a script called \texttt{molfile\_to\_params.py} which generates these files.
 However, this script is generally cumbersome for the generation of more than a small handful of ligands.
 The protocol below is designed for the preparation of large numbers of ligands.
 

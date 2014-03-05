@@ -102,7 +102,7 @@ The RosettaHTS database IO schema stores the following information:
 	\item The sequence associated with the structure, annotated with the identity of any non-canonical, modified or ligand residues.
 	\item The ending position of each chain.
 	\item The "Fold Tree" defining the structure.  The Fold tree is a data structure used by Rosetta to describe how different parts of the protein are related in space.  Fold Trees can be configured to make it possible to rapidly perturb large parts of the protein as a rigid body.  DiMaio et al. \citep{DiMaio:2011cu} provides an example of a fold tree manipulation in practice.
-	\item The Chain ID, insertion code, and residue number present in the original PDB file
+	\item The Chain ID, insertion code, and residue number present in the original PDB file.
 	\item The values of each energy term in the score function when the structure was last scored.
 	\item The cartesian coordinates of each atom.
 	\item The chi angles of each canonical amino acid.
@@ -134,7 +134,7 @@ The infrastructure required to store and analyze a dataset of this size outstrip
 The Database Filter system leverages the properties of the \ac{SQL} database system to make it possible for the first time to create Rosetta filters which take into account the context of previously generated models.
 \ac{SQL} is designed to conduct rapid queries of stored data, and as these queries are conducted by the database engine itself, rather than Rosetta, the operation of the filter does not require that state be kept between Rosetta jobs and does not result in additional memory requirements.
 
-A Rosetta Database Filter can have 3 possible outcomes:  The current model is not output, the current model is output, or the current model replaces an existing model.
+A Rosetta Database Filter can have 3 possible outcomes:  The current model is not output, the current model is added, or the current model replaces an existing model.
 To accomplish this the Database Filter conducts a query of the existing structures in the database  to identify if the current model is suitable to be output, and to identify the model that it will replace if necessary. 
 Currently, filters exist to filter models by the top percent or top count by score.
 The creation of additional filters can be accomplished by the implementation of a new DatabaseFilter class with a single method.
@@ -211,7 +211,7 @@ Compact schema mode is enabled with the following option:
 \end{Verbatim}
 \doublespace
 
-\subsection{Writing to database}
+\subsection{Writing to a database}
 
 Once the database connection options above are specified, Rosetta can be configured to write all output models to the specified database with a single output option:
 
