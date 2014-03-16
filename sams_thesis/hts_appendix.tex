@@ -1,0 +1,611 @@
+\chapter{Appendix:  Protocol capture for chapter \ref{chap:rosetta_hts}}
+\label{chap:hts_appendix}
+\section{Introduction}
+
+This chapter describes the details of the protocol which was described in chapter \ref{chap:lowres_paper}.
+
+\section{Protocol}
+
+\subsection{Training data preparation}
+\label{subsec:training_data_prep}
+The PDBBind refined dataset was obtained from http://www.pdbbind.org.cn/.
+for each protein in the refined dataset, 3 protein crystal structure files are provided.
+The "complex" file contains the protein in complex with the ligand, the "pocket" file contains only protein atoms within 10 \AA\ of the binding pocket, and the "protein" file contains the entire protein, but no ligand.
+For the purposes of docking in Rosetta, the "protein" files will be used for our protein input.
+
+\subsubsection{protein structure preparation}
+
+For the purposes of this protocol, the only protein structure preparation required is the addition of hydrogen atoms, which can be performed using the Rosetta score\_jd2 application.
+A list of the protein structure \ac{PDB}s is generated with the following command:
+\singlespace
+\begin{Verbatim}
+ls -1 v2013-refined/*/*protein.pdb > input_files.txt
+\end{Verbatim}
+\doublespace
+Hydrogens can then be added with:
+\singlespace
+\begin{Verbatim}
+score_jd2.default.linuxgccrelease -s input_files.txt -out:pdb
+\end{Verbatim}
+\doublespace
+
+\subsubsection{ligand structure preparation}
+
+PDBBind provides \ac{SDF} files for each input ligand.
+The provided \ac{SDF} files are in the crystallographic conformation, and already have 3D coordinates and hydrogens present. 
+Params files are produced by concatenating the \ac{SDF} files using the command:
+\singlespace
+\begin{Verbatim}
+cat v2013-refined/*/*ligand.sdf > crystal_ligands.sdf
+\end{Verbatim}
+\doublespace
+The resulting crystal\_ligands.sdf file is then used to prepare conformers and param files.
+Conformers are generated using the unpublished BCL::ConformerGeneration command:
+\singlespace
+\begin{verbatim}
+bcl.exe molecule:ConformerGeneration -conformers \
+pdb_refinedsupplemented_lib.sdf.bz2 -ensemble \
+crystal_ligands.sdf -conformation_comparer \
+DihedralBins -temperature 1.0 -max_iterations 1000 \
+-top_models 100 -bin_size 30.0 -scheduler PThread 8 \
+-add_h -conformers_single_file conformers
+\end{verbatim}
+\doublespace
+After conformers are generated, params files and rosetta screening job files are produced using the protocol described in chapter \ref{chap:hts_preprocess}.
+This protocol will generate screening job files for the active ligands.
+To generate files used for cross-docking, the\\
+\texttt{make\_evenly\_grouped\_jobs.py} script should be re-run with the addition of the flag \texttt{--inactive\_cross\_dock}, which will result in the creation of a second set of screening job files which will dock every ligand into every protein except the native protein.
+
+\subsection{Training data docking}
+
+\subsubsection{Docking script}
+
+The RosettaLigand docking protocol used in this protocol is reported in detail in chapter \ref{chap:lowres_paper}.
+As RosettaLigand is implemented through the RosettaScripts system, the following \ac{XML} script implements the protocol:
+\singlespace
+\begin{verbatim}
+<ROSETTASCRIPTS>
+  <SCOREFXNS>
+    <ligand_soft_rep weights="ligand_soft_rep">
+      <Reweight scoretype="fa_elec" weight="0.42"/>
+      <Reweight scoretype="hbond_bb_sc" weight="1.3"/>
+      <Reweight scoretype="hbond_sc" weight="1.3"/>
+      <Reweight scoretype="rama" weight="0.2"/>
+    </ligand_soft_rep>
+  
+    <hard_rep weights=ligand>
+      <Reweight scoretype="fa_intra_rep" weight="0.004"/>
+      <Reweight scoretype="fa_elec" weight="0.42"/>
+      <Reweight scoretype="hbond_bb_sc" weight="1.3"/>
+      <Reweight scoretype="hbond_sc" weight="1.3"/>
+      <Reweight scoretype="rama" weight="0.2"/>
+    </hard_rep>
+  </SCOREFXNS>
+  <LIGAND_AREAS>
+    <docking_sidechain chain="X" cutoff="6.0"
+      add_nbr_radius="true" all_atom_mode="true"
+      minimize_ligand="10"/>
+    <final_sidechain chain="X" cutoff="6.0" 
+      add_nbr_radius="true" all_atom_mode="true"/>
+    <final_backbone chain="X" cutoff="7.0" 
+      add_nbr_radius="false" all_atom_mode="true"
+      Calpha_restraints="0.3"/>
+  </LIGAND_AREAS>
+  
+  <INTERFACE_BUILDERS>
+    <side_chain_for_docking
+      ligand_areas="docking_sidechain"/>
+    <side_chain_for_final
+      ligand_areas="final_sidechain"/>
+    <backbone ligand_areas="final_backbone"
+      extension_window="3"/>
+  </INTERFACE_BUILDERS>
+  
+  <MOVEMAP_BUILDERS>
+    <docking sc_interface="side_chain_for_docking"
+      minimize_water="true"/>
+    <final sc_interface="side_chain_for_final"
+      bb_interface="backbone" minimize_water="true"/>
+  </MOVEMAP_BUILDERS>
+  
+  <SCORINGGRIDS ligand_chain="X" width="15">
+    <vdw grid_type="ClassicGrid" weight="1.0"/>
+  </SCORINGGRIDS>
+  
+  <MOVERS>
+    <Transform name="transform" chain="X"
+      box_size="5.0" move_distance="0.1"
+      angle="5" cycles="500" repeats="1"
+      temperature="5" initial_perturb="5.0"/>
+    <HighResDocker name="high_res_docker"
+      cycles="1" repack_every_Nth="1"
+      scorefxn="ligand_soft_rep"
+      movemap_builder="docking"/>
+    <FinalMinimizer name="final"
+      scorefxn="hard_rep" 
+      movemap_builder="final"/>
+    <InterfaceScoreCalculator name="add_scores"
+      chains="X" scorefxn="hard_rep" 
+      compute_grid_scores="0"/>
+    <AddJobPairData name="system_name"
+      key="system_name"
+      value_type="string"
+      value_from_ligand_chain="X" />
+    <AddJobPairData name="log_ki"
+      key="log_ki" value_type="real"
+      value_from_ligand_chain="X" />
+    
+    <ParsedProtocol name="low_res_dock">
+      <Add mover_name="transform"/>
+    </ParsedProtocol>
+    
+    <ParsedProtocol name="high_res_dock">
+      <Add mover_name="high_res_docker"/>
+      <Add mover_name="final"/>
+    </ParsedProtocol>
+
+    <ParsedProtocol name="reporting">
+      <Add mover_name="add_scores"/>
+      <Add mover_name="system_name"/>
+      <Add mover_name="log_ki"/>
+    </ParsedProtocol>
+  </MOVERS>
+  
+  <PROTOCOLS>
+    <Add mover_name="low_res_dock"/>
+    <Add mover_name="high_res_dock"/>
+    <Add mover_name="reporting"/>
+  </PROTOCOLS>
+  
+</ROSETTASCRIPTS>
+\end{verbatim}
+\doublespace
+The \ac{XML} script above is used for docking the native ligands into the associated proteins.
+The script for cross-docking is nearly identical, with this mover:
+\singlespace
+\begin{verbatim}
+        <AddJobPairData name="log_ki"
+            key="log_ki" value_type="real"
+            value_from_ligand_chain="X" />
+\end{verbatim}
+\doublespace
+Replaced by this mover:
+\singlespace
+\begin{verbatim}
+        <AddJobPairData name="log_ki"
+            key="log_ki" value_type="real"
+            value="0.0" />
+\end{verbatim}
+\doublespace
+This change will cause the stored log(\ki) value for each ligand to be 0.0 rather than the experimental value stored in the params files for the native ligands.
+
+\subsubsection{Docking command}
+\label{subsubsec:hts_docking_command}
+The full cross-docked training dataset requires the generation of an extremely large number of models.
+For each protein-ligand complex, 200 models will be generated.
+Since the training dataset contains 507 proteins and 507 ligands, a total of ~50,000,000 models must be calculated, the storage of which would require an unreasonable amount of disk space.
+Because only the lowest scoring model for each protein-ligand complex is required, the structures will be stored in a MySQL database, and a database filter will be used to ensure that only the lowest scoring models are stored.
+
+In addition to the normal command line options used in ligand docking, an additional set of MySQL related flags are required:
+\singlespace
+\begin{verbatim}
+-inout
+ -dbms
+  -mode mysql
+  -host <host>
+  -port <port>
+  -user <username>
+  -password <password>
+\end{verbatim}
+\doublespace
+Here, \texttt{<host>}, \texttt{<port>}, \texttt{<username>}, and \texttt{<password>} should be replaced with the address of MySQL server, the port it runs on, and a valid mysql username and password. 
+The following flags control the ligand docking process itself:
+\singlespace
+\begin{verbatim}
+-packing:ignore_ligand_chi true
+-ex1
+-ex2
+-qsar
+ -max_grid_cache_size 1
+-restore_pre_talaris_2013_behavior true
+-nstruct 200
+-out
+ -use_database
+ -database_filter TopCountOfEachInput interface_delta_X 1
+-inout
+ -dbms
+ -use_compact_residue_schema
+ -database_name <db_name>
+\end{verbatim}
+\doublespace
+Here, \texttt{<db\_name>} should be replaced with the name of an existing schema in the MySQL server.
+The \texttt{-database\_filter} option instructs Rosetta to only output models that are better than any existing model for that protein-ligand pair to the database server. 
+
+The RosettaLigand processes can be executed as follows:
+\singlespace
+\begin{verbatim}
+rosetta_scripts.mpimysql.linuxgccrelease  @flags.txt \
+-in:file:screening_job_file <job_file> -parser:protocol <xml>
+\end{verbatim}
+\doublespace
+Where \texttt{<job\_file>} is the path to a screening job file, and \texttt{<xml>} is the \ac{XML} script used for docking.
+
+\subsection{Training data descriptor generation}
+
+Once the ligand docking process is complete, descriptors and \ac{SDF} files for each of the generated ligand poses need to be produced.
+
+\subsubsection{Rosetta descriptors}
+
+The Rosetta descriptors are generated using RosettaScripts.
+Specifically, the \ac{RDF} fingerprint functions are generated using the ComputeLigandRDF mover, the interface score descriptors are generated with the InterfaceScoreCalculator mover, and the interface quality descriptors are generated with the InterfaceAnalyzerMover mover. 
+After the features are computed, they are output along with an \ac{SDF} file containing the ligand poses using the WriteLigandMolFile mover.
+WriteLigandMolFile will produce once file per \ac{CPU} core that RosettaScripts is run on.
+The following \ac{XML} file is used for descriptor computation:
+\singlespace
+\begin{verbatim}
+<ROSETTASCRIPTS>
+  <SCOREFXNS>
+    <ligand_soft_rep weights="ligand_soft_rep">
+      <Reweight scoretype="fa_elec" weight="0.42"/>
+      <Reweight scoretype="hbond_bb_sc" weight="1.3"/>
+      <Reweight scoretype="hbond_sc" weight="1.3"/>
+      <Reweight scoretype="rama" weight="0.2"/>
+    </ligand_soft_rep>
+  
+    <hard_rep weights="ligand">
+      <Reweight scoretype="fa_intra_rep" weight="0.004"/>
+      <Reweight scoretype="fa_elec" weight="0.42"/>
+      <Reweight scoretype="hbond_bb_sc" weight="1.3"/>
+      <Reweight scoretype="hbond_sc" weight="1.3"/>
+      <Reweight scoretype="rama" weight="0.2"/>
+    </hard_rep>
+    
+  </SCOREFXNS>
+  <LIGAND_AREAS>
+    <docking_sidechain chain="X" cutoff="6.0"
+      add_nbr_radius="true" all_atom_mode="true"
+      minimize_ligand="10"/>
+    <final_sidechain chain="X" cutoff="6.0"
+      add_nbr_radius="true" all_atom_mode="true"/>
+    <final_backbone chain="X" cutoff="7.0"
+      add_nbr_radius="false" all_atom_mode="true" 
+      Calpha_restraints="0.3"/>
+  </LIGAND_AREAS>
+  
+  <INTERFACE_BUILDERS>
+    <side_chain_for_docking 
+      ligand_areas="docking_sidechain"/>
+    <side_chain_for_final 
+      ligand_areas="final_sidechain"/>
+    <backbone ligand_areas="final_backbone" 
+      extension_window="3"/>
+  </INTERFACE_BUILDERS>
+  
+  <MOVEMAP_BUILDERS>
+    <docking sc_interface="side_chain_for_docking"
+      minimize_water="true"/>
+    <final sc_interface="side_chain_for_final"
+      bb_interface="backbone" minimize_water="true"/>
+  </MOVEMAP_BUILDERS>
+  
+  <MOVERS>
+    <ComputeLigandRDF name="rdf_compute_pocket" 
+      ligand_chain="X" mode="pocket" range="6"
+      bin_count="24">
+      <RDF name="RDFEtableFunction"
+        scorefxn="hard_rep"/>
+      <RDF name="RDFElecFunction"
+        scorefxn="hard_rep"/>
+      <RDF name="RDFChargeFunction"
+        sign_mode="ligand_plus" />
+      <RDF name="RDFChargeFunction"
+        sign_mode="ligand_minus" />
+      <RDF name="RDFChargeFunction"
+        sign_mode="same_sign" />
+      <RDF name="RDFHbondFunction"
+        sign_mode="ligand_acceptor"/>
+      <RDF name="RDFHbondFunction"
+        sign_mode="ligand_donor"/> 
+      <RDF name="RDFBinaryHbondFunction"
+        sign_mode="ligand_acceptor"/>
+      <RDF name="RDFBinaryHbondFunction"
+        sign_mode="ligand_donor"/>
+      <RDF name="RDFBinaryHbondFunction"
+        sign_mode="matching_pair"/>      
+
+    </ComputeLigandRDF>
+    <ComputeLigandRDF name="rdf_compute_interface"
+      ligand_chain="X" mode="interface" range="6" 
+      bin_count="24">
+      <RDF name="RDFEtableFunction"
+        scorefxn="hard_rep"/>
+      <RDF name="RDFElecFunction"
+        scorefxn="hard_rep"/>
+      <RDF name="RDFChargeFunction"
+        sign_mode="ligand_plus" />
+      <RDF name="RDFChargeFunction"
+        sign_mode="ligand_minus" />
+      <RDF name="RDFChargeFunction"
+        sign_mode="same_sign" />
+      <RDF name="RDFHbondFunction"
+        sign_mode="ligand_acceptor"/>
+      <RDF name="RDFHbondFunction"
+        sign_mode="ligand_donor"/> 
+      <RDF name="RDFBinaryHbondFunction"
+        sign_mode="ligand_acceptor"/>
+      <RDF name="RDFBinaryHbondFunction"
+        sign_mode="ligand_donor"/>
+      <RDF name="RDFBinaryHbondFunction"
+        sign_mode="matching_pair"/>  
+    </ComputeLigandRDF>
+
+    <InterfaceAnalyzerMover name="interface_analyzer"
+      scorefxn="hard_rep" packstat="true"
+      pack_separated="true" ligandchain="X"/>
+    <InterfaceScoreCalculator name="add_scores" 
+      chains="X" scorefxn="hard_rep"/>
+    
+    <AddJobPairData name="system_name" key="system_name"
+      value_type="string" value_from_ligand_chain="X" />
+    <AddJobPairData name="log_ki" key="log_ki"
+      value_type="real" value_from_ligand_chain="X" />
+    
+    <WriteLigandMolFile name="write_ligand" chain="X"
+      directory="output_ligands" prefix="%%PREFIX%%"/>
+
+    <ParsedProtocol name="reporting">
+      <Add mover_name="rdf_compute_pocket"/>
+      <Add mover_name="rdf_compute_interface"/>
+      <Add mover_name="interface_analyzer"/>
+      <Add mover_name="add_scores"/>
+      <Add mover_name="system_name"/>
+      <Add mover_name="log_ki"/>
+    </ParsedProtocol>
+  </MOVERS>
+  
+  <PROTOCOLS>
+    <Add mover_name="reporting"/>
+    <Add mover_name="write_ligand"/>
+  </PROTOCOLS>
+  
+</ROSETTASCRIPTS>
+\end{verbatim}
+\doublespace
+This script will be applied to all of the structures produced by the docking step described in section \ref{subsubsec:hts_docking_command}.
+The command line used to run the script is as follows:
+\singlespace
+\begin{verbatim}
+rosetta_scripts.mpimysql.linuxgccrelease @flags.txt \
+-out:path:pdb <pdb_dir> -inout:dbms:database_name <db_name> \
+-in:use_database -parser:protocol <xml> \
+-script_vars PREFIX=<prefix> \
+-in:file:extra_res_batch_path <params> -out:pdb_gz \
+-restore_pre_talaris_2013_behavior true \
+-packing:ignore_ligand_chi true \
+-inout:dbms:use_compact_residue_schema \
+-inout:dbms:retry_failed_reads true
+\end{verbatim}
+\doublespace
+Where flags.txt contains the database authentication flags described in section \ref{subsubsec:hts_docking_command}.
+\texttt{<prefix>} should be replaced with the desired prefix for the output \ac{SDF} files.  
+
+\subsubsection{\acs{BCL} descriptors}
+
+Once the descriptors and \ac{SDF} files have been generated using Rosetta, a \ac{BCL} binary dataset can be constructed.
+This dataset files contain all the descriptor information for each ligand pose used in training.
+Rosetta derived descriptors are read out of the miscellaneous properties of the \ac{SDF} files output by Rosetta, while the ligand descriptors are produced directly by the \ac{BCL}.
+The features which will be used for the input and output of the network are described using object files.
+The output object file is very simple, as it contains only the log(\ki) value stored in the \ac{SDF} files output by Rosetta:
+\singlespace
+\begin{verbatim}
+Combine(
+  MiscProperty(log_ki,values per molecule=1)
+)
+\end{verbatim}
+\doublespace
+The input object contains all the features that may be used as input to the neural networks:
+\singlespace
+\begin{verbatim}
+Combine(
+  MiscProperty(solv_interface_rdf,values per molecule=24),
+  MiscProperty(solv_pocket_rdf,values per molecule=24),
+  MiscProperty(rep_interface_rdf,values per molecule=24),
+  MiscProperty(rep_pocket_rdf,values per molecule=24),
+  MiscProperty(hbond_acceptor_interface_rdf,
+    values per molecule=24),
+  MiscProperty(hbond_acceptor_pocket_rdf,
+    values per molecule=24),
+  MiscProperty(hbond_binary_acceptor_interface_rdf,
+    values per molecule=24),
+  MiscProperty(hbond_binary_acceptor_pocket_rdf,
+    values per molecule=24),
+  MiscProperty(hbond_binary_donor_interface_rdf,
+    values per molecule=24),
+  MiscProperty(hbond_binary_donor_pocket_rdf,
+    values per molecule=24),
+  MiscProperty(hbond_donor_interface_rdf,
+    values per molecule=24),
+  MiscProperty(hbond_donor_pocket_rdf,
+    values per molecule=24),
+  MiscProperty(hbond_matching_pair_interface_rdf,
+    values per molecule=24),
+  MiscProperty(hbond_matching_pair_pocket_rdf,
+    values per molecule=24),
+  MiscProperty(elec_interface_rdf,
+    values per molecule=24),
+  MiscProperty(elec_pocket_rdf,
+    values per molecule=24),
+  MiscProperty(charge_minus_interface_rdf,
+    values per molecule=24),
+  MiscProperty(charge_minus_pocket_rdf,
+    values per molecule=24),
+  MiscProperty(charge_plus_interface_rdf,
+    values per molecule=24),
+  MiscProperty(charge_plus_pocket_rdf,
+    values per molecule=24),
+  MiscProperty(charge_unsigned_interface_rdf,
+    values per molecule=24),
+  MiscProperty(charge_unsigned_pocket_rdf,
+    values per molecule=24),
+  MiscProperty(dSASA_hphobic,values per molecule=1),
+  MiscProperty(dSASA_int,values per molecule=1),
+  MiscProperty(dSASA_polar,values per molecule=1),
+  MiscProperty(delta_unsatHbonds,values per molecule=1),
+  MiscProperty(hbond_E_fraction,values per molecule=1),
+  MiscProperty(hbond_lr_bb,values per molecule=1),
+  MiscProperty(hbond_sc,values per molecule=1),
+  MiscProperty(hbond_sr_bb,values per molecule=1),
+  MiscProperty(if_X_fa_atr,values per molecule=1),
+  MiscProperty(if_X_fa_elec,values per molecule=1),
+  MiscProperty(if_X_fa_intra_rep,values per molecule=1),
+  MiscProperty(if_X_fa_pair,values per molecule=1),
+  MiscProperty(if_X_fa_rep,values per molecule=1),
+  MiscProperty(if_X_fa_sol,values per molecule=1),
+  MiscProperty(if_X_hbond_bb_sc,values per molecule=1),
+  MiscProperty(if_X_hbond_lr_bb,values per molecule=1),
+  MiscProperty(if_X_hbond_sc,values per molecule=1),
+  MiscProperty(if_X_hbond_sr_bb,values per molecule=1),
+  MiscProperty(interface_delta_X,values per molecule=1),
+  MiscProperty(nres_int,values per molecule=1),
+  MiscProperty(packstat,values per molecule=1),
+  Divide(
+    lhs=MiscProperty(total_score,values per molecule=1),
+    rhs=MiscProperty(nres_all,values per molecule=1)
+  ),
+  Weight,
+  HbondDonor,
+  HbondAcceptor,
+  LogP,
+  TotalCharge,
+  NRotBond,
+  NAromaticRings,
+  NRings,
+  TopologicalPolarSurfaceArea,
+  Girth
+)
+\end{verbatim}
+\doublespace
+
+The input and output object files and the \ac{SDF} files produced by Rosetta are provided to the \ac{BCL} descriptor::GenerateDataset application, which produces the binary dataset file needed for neural network training:
+\singlespace
+\begin{verbatim}
+bcl.exe descriptor:GenerateDataset -source \
+'Randomize(SdfFile(filename="output_ligands.sdf"))' \
+-feature_labels input.obj \
+-result_labels output.obj \
+-output dataset.bin
+\end{verbatim}
+\doublespace
+
+This command will produce the file dataset.bin containing all necessary descriptor data.
+
+\subsection{Neural network training}
+
+The \ac{BCL} is also used for neural network training.
+The DVD attached to the thesis contains the specific configuration file used for training (config.ini).
+The following network and training architecture was used:
+\singlespace
+\begin{verbatim}
+NeuralNetwork( transfer function = Sigmoid,
+weight update = Simple(eta=0.1,alpha=0.5),
+objective function = EnrichmentAverage(
+  cutoff=0.5,
+  enrichment max=0.01,
+  step size=0.00001,
+  parity=1),
+steps per update=1, 
+hidden architecture(100,100),
+iteration weight update=MaxNorm(in=10,out=1),
+shuffle=True,data selector=Tolerant(tolerance=0.1),
+dropout(0.125,0.5))
+\end{verbatim}
+\doublespace
+Here, the average enrichment over the first 1\% of the dataset is used as an objective function.
+2 layers of hidden neurons are used, with each layer containing 100 neurons. 
+The network dropout method \citep{Hinton:2012tv} is used to regularize the network and prevent over-fitting.
+A 90 fold cross-validation is used, so the \texttt{config.ini} file will result in the creation of 90 networks.
+
+The \texttt{submit.py} script is run from the directory containing the \texttt{config.ini} file as follows:
+\singlespace
+\begin{verbatim}
+submit.py -t cross_validation
+\end{verbatim}
+\doublespace
+This script will set up the cross-validation, and dispatch each of the 90 network training processes to a cluster.
+\subsection{Neural network analysis}
+
+The \texttt{submit.py} script also performs a basic analysis of the trained networks.
+The average enrichment across the entire cross-validation is computed, as are the \ac{TPR}, \ac{FPR} and \ac{PPV} plots which are used to assess the performance of the network.
+The results of this analysis are output in the \texttt{results/} directory produced by the \texttt{submit.py} script.
+
+\subsection{Benchmark data preparation}
+
+The DEKOIS 2.0 \citep{Bauer:2013de} dataset was used for benchmarking purposes.
+The ligand \ac{SDF} files used for the dataset are obtained from http://www.dekois.com/, and the associated protein files were obtained directly from the \ac{PDB}. 
+Cleaned and prepared data are in the attached DVD, and were prepared and docked identically to the process described in section \ref{subsec:training_data_prep}
+
+\subsection{Benchmark data analysis}
+
+\subsubsection{descriptor computaton}
+Rather than using the \ac{SDF} files of the DEKOIS 2.0 docked ligand poses to train a network, we will score our dataset using an existing network.
+This process is performed using the 
+\ac{BCL} molecule:Properties command.
+The cross-validation process used for network training produces an ensemble of 90 trained models, so the predicted activity is computed as the average of the output of all 90 models.
+molecule:Properties is run with the following command:
+\singlespace
+\begin{verbatim}
+bcl.exe molecule:Properties -input_filenames \
+input_ligands.sdf \
+-add 'Mean(
+  PredictedActivity(
+    storage=File(directory=<model_dir>,prefix=model)))' \
+-rename 'Mean(
+  PredictedActivity(
+    storage=File(directory=<model_dir>,prefix=model)))' \
+     predicted_activity \
+-tabulate 'Cached(Name)' 'Cached(system_name)' \
+'Cached(log_ki)' 'Cached(predicted_activity)' \
+-output_table output.csv
+\end{verbatim}
+\doublespace
+Where \texttt{<model\_dir>} is the path to a directory of trained neural network models, and \texttt{output.csv} is the path to an output file.
+
+\subsubsection{\acs{ROC} curve generation}
+The \ac{CSV} files produced in the previous step contain all predicted and experimental activities for all ligands in the DEKOIS 2.0 set.
+For the purposes of this study, \ac{ROC} curves will be created individually for each system. 
+The \ac{BCL} application model:ComputeStatistics is used to compute \ac{ROC} plot and \ac{ROC-AUC} values for a set of network predictions.
+This application requires an input file in the following format:
+\singlespace
+\begin{verbatim}
+bcl::linal::Matrix<float>
+1207	2
+0.000000	0.123812
+1.000000	0.123218
+...
+\end{verbatim}
+\doublespace
+The first line is a header indicating that the data is a \ac{BCL} matrix, the second line indicates that the matrix has 1207 rows and 2 columns, and the remaining rows are the data values.
+In this case, the first column should be the experimental values, and the second column should be the predicted values.
+The second column should be sorted such that the best predicted scores are first.
+To accomplish this task, the\\
+\texttt{make\_bcl\_inputs\_for\_plotting.py} script is used. 
+The script is run as follows:
+\singlespace
+\begin{verbatim}
+make_bcl_inputs_for_plotting.py \
+--exp_label 'Cached(log_ki)' \
+--pred_label 'Cached(predicted_activity)' \
+input_data.csv output_dir/
+\end{verbatim}
+\doublespace
+This script will create \ac{BCL} matrix files for each protein system found in the dataset and output these files to the specified directory \texttt{output\_dir/}.
+The \ac{ROC-AUC} values are then computed using these output table files and the script \texttt{collect\_enrichment.py}
+This script is run as:
+\singlespace
+\begin{verbatim}
+collect_enrichment.py output_dir/ tag
+\end{verbatim}
+\doublespace
+Where tag is a user specified tag.
+The script will output the protein system name, \ac{ROC-AUC} and the tag for each protein system to standard output.
+Additionally, it will produce data files for each protein system in the \texttt{output\_dir} directory, which can be used to graph \ac{ROC} curves. 

@@ -1,0 +1,48 @@
+%This was supplement T1
+
+\begin{tabularx}{\textwidth}{|l||l|X|c|c|c|c|c|c|c|}
+\hline
+& & & \multicolumn{5}{c|}{\textbf{Five way cross validation sets}} & &  \\
+\hline
+& \textbf{Rosetta Scoring term} & \textbf{Scoring term description} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{Mean} & \textbf{Standard Deviation} \\
+\hline
+\hline
+\multirow{2}{*}{\textbf{Free Weights}} & fa\_sol & Solvation Free Energy Potential & 0.558 & 0.569 & 0.563 & 0.547 & 0.585 & 0.564 & 0.014 \\
+\cline{2-10}
+& neigh\_vect & NV environment KBP & 1.025 & 1.013 & 0.996 & 1.059 & 0.978 & 1.014 & 0.030 \\
+\hline
+\multirow{17}{*}{\textbf{Fixed Weights}} & fa\_atr & Attractive force & \multicolumn{5}{c|}{0.8} & 0.8 & 0.0\\
+\cline{2-10}
+& fa\_rep & Repulsive force & \multicolumn{5}{c|}{0.44} & 0.44 & 0.0\\
+\cline{2-10}
+& fa\_intra\_rep & Intra-residue repulsive force & \multicolumn{5}{c|}{0.004} & 0.004 & 0.0\\
+\cline{2-10}
+& pro\_close & Proline closure bonus & \multicolumn{5}{c|}{1.0} & 1.0 & 0.0\\
+\cline{2-10}
+& fa\_pair & Pair energy & \multicolumn{5}{c|}{0.49} & 0.49 & 0.0\\
+\cline{2-10}
+& hbond\_sr\_bb & Hydrogen bonding: short range backbone & \multicolumn{5}{c|}{0.585} & 0.585 & 0.0\\
+\cline{2-10}
+& hbond\_lr\_bb & Hydrogen bonding: long range backbone & \multicolumn{5}{c|}{1.17} & 1.17 & 0.0\\
+\cline{2-10}
+& hbond\_bb\_sc & Hydrogren bonding: backbone-sidechain & \multicolumn{5}{c|}{1.17} & 1.17 & 0.0\\
+\cline{2-10}
+& hbond\_sc & Hydrogen bonding: sidechain-sidechain & \multicolumn{5}{c|}{1.1} & 1.1 & 0.0 \\
+\cline{2-10}
+& dslf\_ss\_dst & Disulfide sidechain distance & \multicolumn{5}{c|}{1} & 1 & 0.0\\
+\cline{2-10}
+& dslf\_cs\_ang & Disulfide cystine sulfur angle & \multicolumn{5}{c|}{1} & 1 & 0.0\\
+\cline{2-10}
+& dslf\_ss\_dih & Disulfide sidechain-sidechain dihederal & \multicolumn{5}{c|}{1} & 1 & 0.0\\
+\cline{2-10}
+& dslf\_ca\_dih & Disulfide C$\alpha$-sidechain dihederal & \multicolumn{5}{c|}{1} & 1 & 0.0\\
+\cline{2-10}
+& rama & Ramachandran score & \multicolumn{5}{c|}{0.2} & 0.2 & 0.0\\
+\cline{2-10}
+& omega & Omega angle score & \multicolumn{5}{c|}{0.5} & 0.5 & 0.0\\
+\cline{2-10}
+& p\_aa\_pp & Probability of an AA given phi/psi angle & \multicolumn{5}{c|}{0.32} & 0.32 & 0.0 \\
+\cline{2-10}
+& fa\_dun & dunbrack rotamer library & \multicolumn{5}{c|}{0.56} & 0.56 & 0.0\\
+\hline
+\end{tabularx}

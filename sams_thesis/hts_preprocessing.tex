@@ -1,0 +1,205 @@
+\chapter{Appendix: Rosetta HTS ligand pre-processing}
+\label{chap:hts_preprocess}
+\section{Background}
+
+\ac{vHTS} in Rosetta poses a number of unique challenges.
+Large numbers of ligands must be prepared and managed.
+If multiple protein systems are being screened, the appropriate ligands must be matched with the appropriate proteins. 
+Additionally, because Rosetta currently stores ligand information after it is required, the memory requirements of the protocol increase as more ligands are screened.
+The most straight forward way to address this is to limit the number of ligands screened in each process.
+
+This protocol describes a series of scripts that can be used to rapidly prepare a set of proteins and ligand for virtual high throughput screening.
+
+All scripts referenced can be found in \texttt{tools/hts\_tools}
+
+\section{Prerequisites}
+
+This protocol requires the following:
+
+\begin{itemize}
+\item Python
+\item BioPython
+\item The most recent weekly release of Rosetta.
+\item A directory containing conformations of all the proteins in your screening study.
+\item An \ac{SDF} containing all the conformers of all the ligands you want to dock. All conformers of the same ligand must have the same name.
+	\begin{itemize}
+	\item All conformers of all ligands must have 3D coordinates and hydrogens.
+	You will receive no errors or warnings if you provide ligands with 2D coordinates or without hydrogens, but you will get very poor ligand docking results.
+	\end{itemize}
+\end{itemize}
+
+\section{Protocol}
+
+\subsection{Split ligands}
+
+The first step of the protocol is to split the ligand file.
+\texttt{sdf\_split\_organize.py} will accomplish this task. 
+It takes as input a single \ac{SDF} file, and will split that file into multiple files, each file containing all the conformers for one ligand.
+Different ligands must have different names in the \ac{SDF} records, and all conformers for one ligand must have the same name. 
+Output filenames are based on the sha1 hash of the input filename, and are placed in a directory hashed structure.
+Thus, a ligand with the name ``Written by BCL::WriteToMDL,CHEMBL29197''
+will be placed in the path\\
+\texttt{/41/412d1d751ff3d83acf0734a2c870faaa77c28c6c.mol}.
+
+The script will also output a list file in the following format:
+
+\begin{verbatim}
+ligand_id,filename
+string,string
+ligand_1,path/to/ligand1
+ligand_2,path/to/ligand2
+\end{verbatim}
+
+The list file is a mapping of protein names to \ac{SDF} file paths.
+
+Many filesystems perform poorly if large numbers of files are stored in the same directory. 
+The hashed directory structure is a method for splitting the generated ligand files across 256 roughly evenly sized subdirectories, improving filesystem performance.
+
+The script is run as follows:
+
+\begin{verbatim}
+sdf_split_organize.py input.sdf output_dir/ file_list.csv
+\end{verbatim}
+
+\subsection{Create ``project database''}
+
+The ligand preparation pipeline uses an sqlite3 database for organization during the pipeline.
+The database keeps track of ligand metadata and the locations of ligand files.
+The project database is created using the following command:
+
+\begin{verbatim}
+setup_screening_project.py file_list.csv output.db3 
+\end{verbatim}
+
+\subsection{Append binding information to project database}
+
+The next step is to create a binding data file. The binding data file should be in the following format:
+
+\begin{verbatim}
+ligand_id,tag,value
+string,string,float
+ligand_1,foo,1.5
+ligand_2,bar,-3.7
+\end{verbatim}
+
+The columns are defined as follows:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item \textbf{ligand\_id} --- ligand\_id is the name of the ligand, which must match the ligand\_id in the file\_list.csv file created by \texttt{sdf\_split\_organize.py}.
+\item \textbf{tag} --- The name of the protein the ligand should be docked into. If a ligand should be docked into multiple proteins, it should have multiple entries in the binding data file.
+  Note that this protocol makes a distinction between protein name, and file name.
+  If you have 4 files: \texttt{foo\_0001.pdb}, \texttt{foo\_0002.pdb}, \texttt{bar\_0001.pdb}, and \texttt{bar\_0002.pdb}, then you have two proteins with the names foo and bar.
+  The scripts expect that the protein \ac{PDB} files begin with the protein name.
+\item \textbf{value} --- The activity of the ligand. If you are doing a benchmarking study and know the activity of your ligand, you should enter it here.
+  If you are not doing a benchmarking study, or if ligand activity is not relevant to your study, value can be set to 1.0 (or anything else). 
+  This field is currently only used in a few specific Rosetta protocols that are in the experimental stages, and is typically ignored, so it is safe to set arbitrarily in almost every case.
+  Regardless, the scripts require that you provide some value.
+\end{enumerate}
+
+Once you have created this file, you can insert it into the project
+database with the following command:
+
+\begin{verbatim}
+add_activity_tags_to_database.py database.db3 tag_file.csv
+\end{verbatim}
+
+\subsection{Generate params files}
+
+The next step is to generate params files. \texttt{make\_params.py} is a script which wraps around\\
+\texttt{molfile\_to\_params.py} and generates params files in an automated fashion.
+params files will be given random names that do not conflict with existing Rosetta residue names (no ligands will be named ALA, for example).
+This script routinely results in warnings from \texttt{molfile\_to\_params.py}, these warnings are not cause for concern. 
+Occasionally, \texttt{molfile\_to\_params.py} is unable to properly process an \ac{SDF} file, if this happens, the ligand will be skipped. 
+In order to run \texttt{make\_params.py} you need to specify the path to a copy of \texttt{molfile\_to\_params.py}, as well as the path to the Rosetta database.
+
+\texttt{make\_params.py} should be run like this:
+
+\singlespace
+\begin{verbatim}
+make_params.py -j 4 \
+--database path/to/Rosetta/main/database \
+--path_to_params path/to/molfile_to_params.py \
+database.db3 output_dir/
+\end{verbatim}
+\doublespace
+
+In the command line above, the \texttt{-j} option indicates the number of \ac{CPU} cores which should be used when generating params files.
+If you are using a multiple core machine, setting \texttt{-j} equal to the number of available cpu cores.
+
+The script will create a directory \texttt{params/} containing all params files, \ac{PDB} files and conformer files.
+
+\subsection{Create job files}
+
+Because of the memory usage limitations of Rosetta, it is necessary to split the screen up into multiple jobs. 
+The optimal size of each job will depend on the following factors:
+
+\begin{itemize}
+\item The amount of memory available per \ac{CPU}
+\item The number of \ac{CPU}s being used
+\item The number of atoms in each ligand
+\item The number of conformers of each ligand
+\item The number of protein residues involved in the binding site.
+\end{itemize}
+
+Because of the number of factors that affect RosettaLigand memory usage, it is usually necessary to determine the optimal job size manually.
+Jobs should be small enough to fit into available memory.
+
+To make this process easier, the \texttt{make\_evenly\_grouped\_jobs.py} script will attempt to group your protein-ligand docking problem into a set of jobs that are sized as evenly possible. 
+The script is run like this:
+
+\singlespace
+\begin{verbatim}
+make_evenly_grouped_jobs.py --n_chunks=10 \
+ --max_per_job=1000 param_dir/ structure_dir/ output_prefix
+\end{verbatim}
+\doublespace
+
+If the script was run as written above, it would use param files from the directory \texttt{param\_dir/}, and structure files from the directory \texttt{structure\_dir/}.
+It would attempt to split the available protein-ligand docking jobs into 10 evenly grouped job files (\texttt{--n\_chunks}).
+The script will attempt to keep all the docking jobs involving one protein system in one job file. However, if the number of jobs in a group exceeds 1000,
+the jobs involving that protein system will be split across multiple files (\texttt{--max\_per\_job}). 
+The script will output the 10 job files with the given prefix, so in the command above, you would get files with names like ``output\_prefix\_01.js''.
+The script will output to the screen the total number of jobs in each file. All the numbers should be relatively similar. 
+If a job file at the beginning of the list is much larger than the others, it is a sign that you should reduce the value passed to \texttt{--max\_per\_job}. If the sizes of all jobs are larger than you want, increase \texttt{--n\_chunks}.
+
+\subsubsection{Job file specification}
+
+RosettaLigand Job files are \ac{JSON} files which contain the paths to protein and ligand \ac{PDB} files, the names of the protein systems,
+and the params files necessary to load the ligand \ac{PDB} files.
+An example file is below:
+
+\singlespace
+\begin{verbatim}
+ "jobs": [
+  {
+   "proteins": [
+    "set2_28_0001.pdb"
+   ],
+   "ligands": [
+    "A9.pdb"
+   ],
+   "group_name": "set2_28"
+  },
+  {
+   "proteins": [
+    "set1_42_0001.pdb"
+   ],
+   "ligands": [
+    "AJ.pdb"
+   ],
+   "group_name": "set1_42"
+  }
+ ],
+ "params": [
+  "A9.params",
+  "AJ.params"
+ ]
+\end{verbatim}
+\doublespace
+
+\subsection{Submit jobs}
+
+Once the jobs have been created they can be input into rosetta using the option\\
+\texttt{-in:file:screening\_job\_file job\_file.js}.
+If this option is being used, \texttt{-s}, \texttt{-l}, \texttt{-list} and \texttt{-in:file:extra\_res\_fa} should not be used.
