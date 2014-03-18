@@ -13,6 +13,7 @@ Page\endgraf} \addtocontents{lof}{\vspace{0.2in} \hspace{0.13in} \
 Figure\hfill Page\endgraf} \addtocontents{lot}{\vspace{0.2in}
 \hspace{0.13in} \ Table\hfill Page\endgraf}
 
+\usepackage{rotating}
 \usepackage[export]{adjustbox}
 \usepackage[T1]{fontenc}
 \usepackage{textcomp}
@@ -42,11 +43,16 @@ Figure\hfill Page\endgraf} \addtocontents{lot}{\vspace{0.2in}
 \usepackage{color}
 \usepackage[autostyle,english=american]{csquotes} 
 \usepackage{wrapfig}
+\usepackage{fixltx2e}
+\usepackage[shortcuts]{extdash}
+\usepackage{sidecap}
 \MakeOuterQuote{"}
 %%another algorithm package
 \usepackage{algorithm}
 \usepackage{algorithmic}
 
+\usepackage{sidecap}
+\sidecaptionvpos{figure}{t}
 %\renewcommand{\nomname}{LIST OF ABBREVIATIONS}
 %\makenomenclature
 
@@ -203,7 +209,7 @@ Approved: \hskip 2.9in Date:\\[1.2em]
 \setcounter{page}{1}
 
 \input{introduction/Introduction.tex}
-%\include{introduction}
+\input{chapter2/polyspecificity.tex}
 %\include{nv_kbp_chapter}
 %\include{lowres_paper}
 %\include{RosettaHTS}
