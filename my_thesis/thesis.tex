@@ -1,7 +1,7 @@
 %This is a comment, it will not be compiled...
 
 \listfiles
-\documentclass[12pt]{report} 
+\documentclass[12pt]{report}
 %%nomenclature hack from http://www.freiheitsfreund.de/2010/10/24/automatically-run-makeindex-from-within-a-latex-document-with-write18/%%%
 
 \usepackage[intoc]{nomencl}
@@ -41,7 +41,7 @@ Figure\hfill Page\endgraf} \addtocontents{lot}{\vspace{0.2in}
 \usepackage{datetime}
 \usepackage{fancyvrb}
 \usepackage{color}
-\usepackage[autostyle,english=american]{csquotes} 
+\usepackage[autostyle,english=american]{csquotes}
 \usepackage{wrapfig}
 \usepackage{fixltx2e}
 \usepackage[shortcuts]{extdash}
@@ -50,24 +50,25 @@ Figure\hfill Page\endgraf} \addtocontents{lot}{\vspace{0.2in}
 %%another algorithm package
 \usepackage{algorithm}
 \usepackage{algorithmic}
-
+%\usepackage{enumitem}
+\usepackage{paralist}
 \usepackage{sidecap}
 \sidecaptionvpos{figure}{t}
 %\renewcommand{\nomname}{LIST OF ABBREVIATIONS}
 %\makenomenclature
-
 \graphicspath{{images/intro/}}
 \DeclareGraphicsExtensions{.pdf,.jpeg,.png,.PNG, .eps, .tiff}
 
 \urlstyle{same}
 
+\usepackage{appendix}
 \usepackage{makecell}
 \usepackage{titletoc}
 \usepackage{sfchap}
 \usepackage{sfsection}
 \usepackage[authoryear]{natbib}
 %\usepackage{apacite}
-\usepackage{appendix}
+
 %\usepackage{tocbibind}
 %
 \usepackage[nottoc]{tocbibind}
@@ -101,7 +102,7 @@ Figure\hfill Page\endgraf} \addtocontents{lot}{\vspace{0.2in}
 \setlength{\cftparanumwidth}{5.5em}
 \setlength{\cftsubparanumwidth}{6.5em}
 \setlength{\cfttabnumwidth}{3.5em}
-\setlength{\cftfignumwidth}{3.5em} 
+\setlength{\cftfignumwidth}{3.5em}
 
 \renewcommand{\contentsname}{TABLE OF CONTENTS}
 \renewcommand{\listfigurename}{LIST OF FIGURES}
@@ -112,9 +113,9 @@ Figure\hfill Page\endgraf} \addtocontents{lot}{\vspace{0.2in}
   \markboth{\MakeUppercase{%
       \chaptername}\ \thechapter.%
     \ #1}{}}
-    
-    
-\interfootnotelinepenalty=10000 %prevents the splitting of long footnotes across multiple pages. Use with caution. 
+
+
+\interfootnotelinepenalty=10000 %prevents the splitting of long footnotes across multiple pages. Use with caution.
 
 %%Put useful shortcuts here:
 
@@ -136,7 +137,7 @@ Figure\hfill Page\endgraf} \addtocontents{lot}{\vspace{0.2in}
 	\vskip .3in
 	{Jordan  R. Willis}
 	\vskip .3in
-	
+
 	\begin{doublespace}
 		Dissertation\\
 		Submitted to the Faculty of the \\
@@ -144,7 +145,7 @@ Figure\hfill Page\endgraf} \addtocontents{lot}{\vspace{0.2in}
 		in partial fulfillment of the requirements \\
 		for the degree of \\ [.2in]
 	\end{doublespace}
-	
+
 	\MakeUppercase{Doctor of Philosophy} \\[.1in]
 	in \\[.2in]
 	\MakeUppercase{Chemical and Physical Biology} \\[.25in]
@@ -183,7 +184,7 @@ Approved: \hskip 2.9in Date:\\[1.2em]
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \doublespacing
 \pagenumbering{roman} \setcounter{page}{1}
- 
+
 
 %\include{acknowledgements}
 %\include{summary}
@@ -201,15 +202,14 @@ Approved: \hskip 2.9in Date:\\[1.2em]
 %\include{acronyms} %table of acronymns
 \newpage
 \endgroup
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \normalsize
 \doublespacing
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
-\input{introduction/Introduction.tex}
-\input{chapter2/polyspecificity.tex}
+%\input{introduction/Introduction.tex}
+%\input{chapter2/polyspecificity.tex}
 \input{chapter3/healthydonors.tex}
 %\include{nv_kbp_chapter}
 %\include{lowres_paper}

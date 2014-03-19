@@ -14,3 +14,6 @@ thesis.pdf
 *.blg
 *.bbl
 *.synctex.gz
+*fbd_latexmk
+*fls
+*.fdb*
