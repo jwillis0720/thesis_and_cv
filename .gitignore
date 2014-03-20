@@ -17,3 +17,5 @@ thesis.pdf
 *fbd_latexmk
 *fls
 *.fdb*
+*fdb_*
+*fls

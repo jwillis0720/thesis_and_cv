@@ -13,6 +13,8 @@ Page\endgraf} \addtocontents{lof}{\vspace{0.2in} \hspace{0.13in} \
 Figure\hfill Page\endgraf} \addtocontents{lot}{\vspace{0.2in}
 \hspace{0.13in} \ Table\hfill Page\endgraf}
 
+%\usepackage{enumitem}
+\usepackage{amsmath}
 \usepackage{rotating}
 \usepackage[export]{adjustbox}
 \usepackage[T1]{fontenc}
@@ -122,7 +124,7 @@ Figure\hfill Page\endgraf} \addtocontents{lot}{\vspace{0.2in}
 \newcommand{\ki}{K$_{i}$}
 \newcommand{\ic}{IC$_{50}$}
 \newcommand{\mcml}{$\mu$g/mL}
-\newcommand{\ec}{EC$_{50}$}
+\newcommand{\ec}{EC$_{50}$ }
 \newcommand{\naive}{na\"{i}ve }
 \newcommand{\silico}{\textit{in silico }}
 \begin{document}
@@ -211,20 +213,10 @@ Approved: \hskip 2.9in Date:\\[1.2em]
 \doublespacing
 \pagenumbering{arabic}
 \setcounter{page}{1}
-
 \input{introduction/Introduction.tex}
 \input{chapter2/polyspecificity.tex}
 \input{chapter3/healthydonors.tex}
-%\include{nv_kbp_chapter}
-%\include{lowres_paper}
-%\include{RosettaHTS}
-%\include{conclusion}
-%\include{hts_preprocessing}
-%\include{mysql_appendix}
-%\include{lowres_appendix}
-%\include{nv_capture}
-%\include{lowres_capture}
-%\include{hts_appendix}
+\input{chapter4/pg9redesign.tex}
 \singlespacing
 \bibliographystyle{apalike}
 \bibliography{full_library}
