@@ -19,3 +19,5 @@ thesis.pdf
 *.fdb*
 *fdb_*
 *fls
+*.fdb_latexmk
+*.fdb_latexmk

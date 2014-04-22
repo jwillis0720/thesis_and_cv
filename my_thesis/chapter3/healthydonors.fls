@@ -1,9 +1,0 @@
-PWD /Users/jordanwillis/Dropbox/git_thesis/control/my_thesis/chapter3
-INPUT /usr/local/texlive/2013/texmf.cnf
-INPUT /usr/local/texlive/2013/texmf-dist/web2c/texmf.cnf
-INPUT /usr/local/texlive/2013/texmf-var/web2c/pdftex/pdflatex.fmt
-INPUT /Users/jordanwillis/Dropbox/git_thesis/control/my_thesis/chapter3/healthydonors.tex
-OUTPUT /Users/jordanwillis/Dropbox/git_thesis/control/my_thesis/chapter3/healthydonors.log
-INPUT /usr/local/texlive/2013/texmf-dist/fonts/map/fontname/texfonts.map
-INPUT /usr/local/texlive/2013/texmf-dist/fonts/map/fontname/texfonts.map
-INPUT /usr/local/texlive/2013/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm
