@@ -1,7 +1,3 @@
-%In addition you need a substantial (10-20 pages) introductory chapter detailing
-%  Significance (Why was the research done needed?) and
-%  Innovation (Why was the research done novel? How does it relate to competing methods?) of the body of work in your thesis.
-%This chapter could ideally come form a review article you have written.
 \chapter{Introduction}
 \label{chap:introduction}
 \section{The sampling and scoring methods used by the Rosetta software suite}
@@ -9,9 +5,9 @@
 Rosetta is a software package for protein structure prediction and functional design.
 It has been applied to predict protein structures with and without the aid of sparse experimental data, perform protein-protein and protein-small molecule docking, design novel proteins, and redesign existing proteins for altered function.
 Rosetta allows for rapid tests of hypotheses in biomedical research which would be impossible or exorbitantly expensive to perform via traditional experimental methods.
-As a result, Rosetta methods have gained increasing importance in the interpretation of biological findings from genome projects, the engineering of therapeutics, probe molecules, and model systems in biomedical research. 
+As a result, Rosetta methods have gained increasing importance in the interpretation of biological findings from genome projects, the engineering of therapeutics, probe molecules, and model systems in biomedical research.
 
-While the Rosetta suite is capable of performing a wide range of modeling tasks, it uses a core set of sampling and scoring strategies to accomplish most of these. 
+While the Rosetta suite is capable of performing a wide range of modeling tasks, it uses a core set of sampling and scoring strategies to accomplish most of these.
 The majority of conformational sampling protocols in Rosetta use the Metropolis Monte Carlo algorithm to guide sampling.
 Gradient based minimization is often employed for last step refinement of initial models.
 Since each Rosetta protocol allows degrees of freedom specific for the task, Rosetta can perform a diverse set of protein modeling tasks  \citep{Wang:2007du}.
@@ -21,7 +17,7 @@ Rosetta separates large backbone conformational sampling from local backbone ref
 Large backbone conformational changes are modeled by exchanging the backbone conformations of 9 or 3 amino acid peptide fragments.
 Peptide conformations are collected from the \ac{PDB} for homologous stretches of sequence  \citep{Simons:1997do} which capture the structural bias of the local sequence  \citep{Bystroff:1996vl}.
 For local refinement of protein models, Rosetta utilizes Metropolis Monte Carlo sampling of phi and psi angles calculated not to disturb the global fold of the protein.
-Rohl  \citep{Rohl:2004dh} provides a review of the fragment selection and backbone refinement algorithms in Rosetta. 
+Rohl  \citep{Rohl:2004dh} provides a review of the fragment selection and backbone refinement algorithms in Rosetta.
 
 \subsection{Sampling strategies for side-chain degrees of freedom}
 Systematic sampling of side-chain degrees of freedom of even short peptides quickly becomes intractable  \citep{Levinthal:1968vd}.
@@ -69,7 +65,7 @@ The RosettaDesign method has been used for the \textit{de novo} design of a fold
 A starting backbone model consisting of a five stranded beta-sheet and two packed alpha-helices was constructed with the Rosetta \textit{de novo} protocol using distance constraints derived from a two-dimensional sketch  \citep{Rohl:2004dh}.
 The sequence was iteratively designed with five simulation trials of 15 cycles each.
 The final sequence was expressed and the structure was determined using X-ray crystallography.
-The experimental structure has an \ac{RMSD} to the computational design of less than 1.1 \AA\  \citep{Kuhlman:2003kp}. 
+The experimental structure has an \ac{RMSD} to the computational design of less than 1.1 \AA\  \citep{Kuhlman:2003kp}.
 
 Similarly, a molecular switch which folded into a trimeric coiled coil in the absence of zinc, and a monomeric zinc finger in the presence of zinc was designed by extending RosettaDesign to simultaneously optimize a sequence in two different folds.
 The sequence of an existing zinc finger domain was aligned with a coiled-coil hemaglutinin domain.
@@ -94,7 +90,7 @@ The two resulting crystal structures had RMSDs of 0.49 \AA\ and 0.87 \AA to the 
 While protein design has had frequent successes, there are outstanding challenges, particularly with respect to the design of the surfaces of soluble proteins.
 Solvent interactions are critical to accurately measuring the electrostatics and stability of protein surfaces  \citep{Park:2004kn}.
 However, due to the computational complexity associated with explicit solvent modeling, implicit models are frequently used, and may not be sufficiently detailed to make accurate energetic predictions.
-Furthermore, the network of interactions between protein surface residues and the overall stability of the proteins are highly complex. 
+Furthermore, the network of interactions between protein surface residues and the overall stability of the proteins are highly complex.
 Xiao  \citep{Xiao:2013dq} demonstrated that while electrostatic surface interactions are important for stability, the impact of a single mutation on experimentally determined stability frequently cannot be explained by the impact on computed electrostatic energy.
 
 \subsection{Computationally designed proteins frequently aggregate unless "supercharged"}
@@ -109,31 +105,31 @@ Observation of the folding properties of supercharged proteins suggest that exce
 
 \subsection{Early attempts at hand-docking ligands using physical models}
 Attempts to model and predict protein-drug interactions date began shortly after the publication of the X-ray structure of hemoglobin, with Beddell et. al. Publishing a proof of concept method for structure based drug discovery in 1976 \citep{BEDDELL:1976go}.
-The method developed by Beddell relied on the manual placement of physical molecular models into a scale model of the hemoglobin electron density, which allowed the authors to identify novel compounds with millimolar activity. 
+The method developed by Beddell relied on the manual placement of physical molecular models into a scale model of the hemoglobin electron density, which allowed the authors to identify novel compounds with millimolar activity.
 While the identified compounds were relatively poor by modern standards, and the method of manual placement into physical models did not provide a means of postulating mechanism of action, the authors recognized the value of the new technique, saying:
 \begin{quote}
 It has been common practice to design new drugs by modifying the chemical structure of a known substance which has the desired biological properties, and this procedure has imposed severe restraints on the choice.
-However, it is not necessary for the novel compounds to be related to the original substance when the structure of the receptor site is already known. 
+However, it is not necessary for the novel compounds to be related to the original substance when the structure of the receptor site is already known.
 \end{quote}
-It is remarkable that this observation on the state of rational drug discovery continues to be relevant, nearly 40 years after it was originally made. 
+It is remarkable that this observation on the state of rational drug discovery continues to be relevant, nearly 40 years after it was originally made.
 
 \subsection{An overview of influential protein-ligand docking methods}
 After the advent of relatively inexpensive general purpose computers in the early 1980s, the promise of accurate and rapid computational design of novel small molecules has driven a wide array of research into improved methods for predicting protein-ligand interfaces.
 A successful protein-ligand docking tool must solve two basic problems: sampling and scoring.
 To effectively solve the sampling problem, the software must be able to efficiently explore both the rigid space of the protein binding site, as well as the conformational space of both 	the protein and the ligand.
 To effectively solve the scoring problem, a score function must be developed which can rapidly distinguish between energy favorable and unfavorable conformations.
-Solving both of these problems has proven highly challenging, although great progress has been made. 
+Solving both of these problems has proven highly challenging, although great progress has been made.
 
 \subsubsection{DOCK}
 In 1982, Kuntz et al. published DOCK, one of the earliest computational tools for modeling protein-ligand interactions \citep{Kuntz:1982wx}.  DOCK used a relatively simple energy function which modeled repulsive forces as hard spheres, and a rough approximation of hydrogen bonding which favored binding positions in which hydrogen bond donor groups on the ligand were within 3-5 \AA\ of acceptor nitrogens and oxygens on the protein backbone.
-In concept, the DOCK algorithm is similar to the manual placement method described by Beddell et al. above. 
+In concept, the DOCK algorithm is similar to the manual placement method described by Beddell et al. above.
 The program uses the van der Waals radii of the protein and ligand atoms to create "space filled" representations of both the receptor pocket and the ligand.
 Pairs of protein and ligand spheres are then considered systematically, and the set of pairings which minimizes sphere overlap is selected.
 This algorithm is driven almost entirely by shape complementarity, and effectively models the "lock and key" hypothesis of protein-ligand binding, in which a rigid protein is matched with a rigid ligand.
 
 \subsubsection{GRID}
 In 1984, Goodford et al published GRID, a computational method for predicting energetically favorable protein-ligand binding conformations \citep{Goodford:1985bf}.
-GRID differed from previous attempts structure based drug discovery in that it used chemical information rather than relying entirely on receptor fit. 
+GRID differed from previous attempts structure based drug discovery in that it used chemical information rather than relying entirely on receptor fit.
 Specifically, it assessed the protein-ligand interaction using an empirical energy function consisting of a Lennard-Jones term, electrostatic term, and hydrogen bonding term.
 This energy function was precomputed as a 3-dimensional grid overlaid on the ligand binding site.
 Thus, the total score of the ligand could be rapidly assessed as the sum of the grid squares the atoms are located in.
@@ -157,11 +153,11 @@ FlexX \citep{Rarey:1996hf} and \ac{GOLD} \citep{Jones:1997bl}, are two of the ea
 FlexX represents the ligand binding site using a set of interaction sites, which are defined as surfaces surrounding hydrogen bond donors and acceptors, metals and metal acceptors, aromatic rings, methyls and amides.
 An empirical scoring function is used to score ligand conformations based on the distance and angle between defined protein and ligand interaction sites.
 FlexX uses an incremental construction algorithm to model ligand flexibility.
-An initial central fragment of the ligand is placed in the binding site using an incremental construction algorithm, and the additional fragments necessary to build the entire ligand are then placed such that they can connect to the initial fragment and minimize the energy function score. 
+An initial central fragment of the ligand is placed in the binding site using an incremental construction algorithm, and the additional fragments necessary to build the entire ligand are then placed such that they can connect to the initial fragment and minimize the energy function score.
 \ac{GOLD}, on the other hand, relies on the user providing a reasonable initial position for the ligand inside the protein binding site.
-From that initial position, a genetic algorithm \citep{Jones:1995vw} was used to optimize the rotation angles of both the ligand and the interacting protein side-chains. 
+From that initial position, a genetic algorithm \citep{Jones:1995vw} was used to optimize the rotation angles of both the ligand and the interacting protein side-chains.
 The genetic algorithm makes it possible to rapidly find a high quality local minimum without the exhaustive sampling of bond angles that had made the problem previously intractable.
-As a result of this new sampling technique, \ac{GOLD} was able to successfully recover the correct binding conformation in 71 out of 100 X-ray crystal structures in a benchmarking study. 
+As a result of this new sampling technique, \ac{GOLD} was able to successfully recover the correct binding conformation in 71 out of 100 X-ray crystal structures in a benchmarking study.
 
 \subsubsection{Glide}
 In 2004, Glide \citep{Friesner:2004hm} was published as a novel method for protein-ligand docking aimed at the screening of large libraries of small molecules.
@@ -183,24 +179,24 @@ While RosettaLigand was frequently able to accurately predict the binding orient
 To rectify this situation, further extensions were made to RosettaLigand by Davis et al \citep{Davis:2009bf} which allowed RosettaLigand to fully consider the flexibility of all parts of both the protein and the ligand.
 A blind benchmarking study comparing the pose recovery performance of the 2009 version of RosettaLigand suggested that overall it performed similarly to other major ligand docking tools \citep{Davis:2009fx}.
 A notable conclusion of this study is that while most of the tools studied have a similar performance overall, the performance in predicting docking pose for individual protein targets varies wildly.
-This inconstant performance between protein targets and protein docking tools is seem in other studies as well. 
+This inconstant performance between protein targets and protein docking tools is seem in other studies as well.
 
 \subsection{RosettaLigand is capable of successfully predicting binding based on comparative models}
 One of the advantages of a knowledge based energy function is the ability to accurately model complex physical effects without a direct physical model.
-In principle, this, combined with the ability to model both backbone and side-chain flexibility would make RosettaLigand well suited to the docking of ligands into comparative models or other low resolution protein structures. 
+In principle, this, combined with the ability to model both backbone and side-chain flexibility would make RosettaLigand well suited to the docking of ligands into comparative models or other low resolution protein structures.
 To assess this, a benchmarking study was performed in which small molecules with known binding positions were docked into homology models generated in the \ac{CASP} experiment \citep{Kaufmann:2012ck}.
 The results of this benchmark demonstrated that in most of the tested cases, Rosetta was able to generate low energy binding positions within 2.0\AA\ of the crystallographic binding site.
 
 \subsection{Applications of RosettaLigand to drug discovery}
 In addition to benchmarking studies, Rosetta has been used to develop models of ligand binding in \ac{GPCR}s.
-A comparative model of hSERT was created based on the dSERT crystal structure. 
+A comparative model of hSERT was created based on the dSERT crystal structure.
 S- and R-citalopram were docked into this comparative model using RosettaLigand, and the resulting predicted binding poses were used to design mutational studies to identify residues critical for S-citalopram binding.
-Rosetta was able to correctly predict that Y95 and E444 formed protein-ligand interactions critical to binding \citep{Combs:2011db}.  
+Rosetta was able to correctly predict that Y95 and E444 formed protein-ligand interactions critical to binding \citep{Combs:2011db}.
 Similarly, RosettaLigand was used to model the binding of Positive Allosteric Modulators in a comparative model of mGlu$_{5}$ \citep{Turlington:2013et}.
 In this case, the predictions made by RosettaLigand were used to guide mutation and radioligand binding studies, the results of which were used to further refine models.
 These models made it possible to map out critical interactions between Positive Allosteric Modulators and the mGlu$_{5}$ binding site even in the absence of crystal structure information.
 
-\section{Computational ligand docking has inconsistent predictive power} 
+\section{Computational ligand docking has inconsistent predictive power}
 
 A common thread running through the ligand docking research described above is the difficulty of docking ligands into some proteins.
 For every protein-ligand method developed, some percentage of protein-ligand interfaces cannot be effectively predicted.
@@ -208,9 +204,9 @@ While the predictions generated by protein-ligand docking has made some major sc
 
 In 2006, a diverse set of 81 protein targets, each with a diverse set of known active and predicted inactive ligands was assembled as the DEKOIS 2.0 dataset \citep{Bauer:2013de}.
 Glide, \ac{GOLD} and Autodock Vina were used to screen this dataset, and the pROC AUC enrichment for each target and each screening method was computed.
-The results of this benchmark showed a wide range in the predictive ability of the three screening methods.  
+The results of this benchmark showed a wide range in the predictive ability of the three screening methods.
 While all three docking methods had strong predictive power against some protein targets (COX2, KIF11), there were several cases in which no method had predictive power (HSP90, QPCT), and more cases in which some methods were able to make accurate predictions while others were not (COX1, ROCK-1).
-Furthermore, it was not possible for the authors to identify straightforward patterns to predict which protein targets could be successfully screened against and which could not. 
+Furthermore, it was not possible for the authors to identify straightforward patterns to predict which protein targets could be successfully screened against and which could not.
 The phenomenon of structure based \ac{vHTS} methods having inconsistent performance depending on the protein target has been replicated in other studies.
 For example, the Directory of Useful Decoys: Enhanced (DUD-E) benchmark set was screened using DOCK, and the resulting predictions exhibited similar inconsistencies to those seen in the DEKOIS 2.0 study \citep{Mysinger:2012hu}.
 
@@ -233,9 +229,9 @@ cross-validation makes it possible to determine when over-fitting is occurring a
 
 \subsection{Deep networks and node dropout as novel methods for improving network generalizability}
 Very recently, new methods in network training have been developed to improve the generalizability of neural networks and prevent over-training.
-The development of inexpensive General Purpose \ac{GPU} hardware has made it possible for extremely large networks to be efficiently trained. 
+The development of inexpensive General Purpose \ac{GPU} hardware has made it possible for extremely large networks to be efficiently trained.
 Additionally, development of new training methodologies \citep{Hinton:2006dy} has made it possible to train networks with very large numbers of nodes, and more than 2 layers of hidden nodes.
-These so-called "deep networks" appear to be capable of learning abstract features and concepts in an un-supervised fashion \citep{Le:2013kz}, and appear to exhibit the kinds of learning behaviors that were originally envisioned by the developers of early perceptron methods. 
+These so-called "deep networks" appear to be capable of learning abstract features and concepts in an un-supervised fashion \citep{Le:2013kz}, and appear to exhibit the kinds of learning behaviors that were originally envisioned by the developers of early perceptron methods.
 Another promising and broadly applicable new method in the training of neural networks is the so-called "node dropout" method.
 In this method, every time a new training case is provided to the network, 50\% of the nodes in the network are excluded.
 This has the effect of preventing nodes from becoming dependent on each other, which leads to over-training.
@@ -243,7 +239,7 @@ By using node dropout, it has been possible to both conventional shallow network
 
 \section{Using \acs{ANN}s to make predictions regarding drug activity is a major area of current research}
 
-As a result of their properties to model complex interactions in natural systems, \ac{ANN} based methods are a popular choice for constructing models of drug activity and binding. 
+As a result of their properties to model complex interactions in natural systems, \ac{ANN} based methods are a popular choice for constructing models of drug activity and binding.
 In many ways, drug activity is a harder problem to solve than image recognition.
 Unlike images, The activity of a drug depends in large part on its conformation \citep{Nicklaus:1995tu}.
 A cat does not become a bobsled if it folds its legs, but active small molecules can become inactive in certain geometric conformations.
@@ -254,10 +250,10 @@ Additionally, \ac{RDF}s encode 3 dimensional protein data as a one dimensional f
 \ac{RDF} based descriptors, in conjunction with 2D descriptors, have been used to build a \ac{QSAR} model capable of predicting novel active compounds \citep{Mueller:2010dx}, demonstrating the value of the technique as a whole.
 
 While ligand-based \ac{QSAR} methods have proven valuable for predicting the activity of drugs against specific targets, these models have a fundamental limitation in that they can only be applied to the target they were trained against.
-Techniques exist to define and maximize the domain of applicability of these models \citep{Sahigara:2012kb}, but they are fundamentally tuned to a specific target or subset of targets. 
+Techniques exist to define and maximize the domain of applicability of these models \citep{Sahigara:2012kb}, but they are fundamentally tuned to a specific target or subset of targets.
 Furthermore, the training of a ligand based \ac{QSAR} model requires that a set of experimentally known active and inactive compounds exist, which limits the use of ligand based methods to targets which have already been experimentally evaluated.
 As a result of this limitation, some recent research has focused on using \ac{ANN} based models to score protein-ligand docking positions.
-Because of the ability of modern \ac{ANN} based methods to recognize very complex and noisy signals, the potential exists to develop an \ac{ANN} model which is capable of distinguishing between active and inactive small molecule poses even in cases where the scoring function of the docking system is unable to do so. 
-A number of methods have been developed to do this \citep{Durrant:2013db}, and while they have in general been successful \citep{Durrant:2011dx}, the dream of a \ac{vHTS} method that acts as a generally applicable model of protein-ligand binding affinity has not yet been realized, and research in the area continues. 
+Because of the ability of modern \ac{ANN} based methods to recognize very complex and noisy signals, the potential exists to develop an \ac{ANN} model which is capable of distinguishing between active and inactive small molecule poses even in cases where the scoring function of the docking system is unable to do so.
+A number of methods have been developed to do this \citep{Durrant:2013db}, and while they have in general been successful \citep{Durrant:2011dx}, the dream of a \ac{vHTS} method that acts as a generally applicable model of protein-ligand binding affinity has not yet been realized, and research in the area continues.
 
 

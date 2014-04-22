@@ -145,6 +145,7 @@ When new sequences are threaded, or rebuilt onto target protein structures, it i
 
 
 \subsection{Rosetta Design}
+\label{sec:design}
 Protein design, seeks to determine an amino acid sequence that folds into a given protein structure or performs a given function. The RosettaDesign algorithm is an iterative process that energetically optimizes both the structure and sequence of a protein \citep{Kuhlman:2003kp}. RosettaDesign alternates between rounds of fixed backbone sequence optimization and flexible backbone energy minimization. During the sequence optimization step, a Monte Carlo simulated annealing search is used to sample the sequence space. Every amino acid is considered at each position in the sequence, and rotamers are picked from to the Dunbrack library \citep{Dunbrack:1993jt}. After each round of Monte Carlo sequence optimization, the backbone is relaxed to accommodate the designed amino acids. The practical uses of RosettaDesign can be divided into five basic categories: design of novel folds. Redesign of existing proteins, design to enhance knowledge of structure, enzyme design, and design applied to translational medicine.
 
 \subsubsection{Design of Novel Folds}
@@ -182,7 +183,23 @@ Homology modeling appears to be the more suitable method for structure predictio
 
 Often, a handful of mutations are made to a known structure and it is the desired goal to model those mutations onto the existing structure and explain the effect at a molecular level. This is becoming easier to do as refinement stages of modeling progress. A few mutations often does not change the overall fold of protein molecules and their effects can be modeled accurately. This type of minimal mutational modeling is now a credible form of empirical science as it is appearing in more and more high-impact publications were a full crystal structure or solution NMR structure is not needed. We use this method here to explain observations to a traditional antibody known as PG9. This is detailed in chapter \ref{chap:chapter4}.
 
-\subsection{The inverse-folding problem}
-bladsjklgadjkls
+\subsection{The Inverse-Folding Problem}
+The folding problem, which tries to accurately determine a protein structure given an amino acid sequence must consider many poorly understood principles of folding kinetics and thermodynamics. The problem is trying to find an accurate globular fold in which the free energy of the folded structure is considerably more stable than the entropy cost of the fold. However, this problem has created many all-atom forcefields that are needed to evaluate such folds. The all-atom nature of these modeling trajectories created a new class of problems in the field that could be solved with these ``force fields.'' Rather than search for the lowest-energy structure for a given amino acid sequence, researchers are searching for the lowest-energy sequence for a given protein structure \citep{Baker:2014kn}. This is known as the ``inverse-folding problem'' and less formally known as protein design.
+
+The problems that are relevant to the inverse-folding problem are related to the folding-problem. They often both use the same scoring function or ``force-field'', so a rapid and accurate knowledge- or physics-based has been the focus of many research groups. It is also a matter of exponential conformations that need to be sampled. In the protein-folding problem, what is the conformations that fit a given sequence. If each the length of the amino acid sequence, $A$, were each amino acid can sample $N$ conformations, then $A^N$ conformations are available to a complete sampling strategy. As cited in ``Levinthal's Paradox'', this is clearly not how proteins fold, and complete computational sampling of large proteins can't be completed with current technology \citep{Levinthal:1969wc}.
+
+The sampling space needed for the inverse-protein is also similar. Instead of conformations, amino acid identities need to be sampled and scored. The same exponential sequence space formula is also applied, were a protein of length $A$, has $20^A$ sequence combinations to choose from the 20 canonical amino acids in mammalian system. The problem is compounded when several conformations or ``rotamers'' for each amino acid are considered, where $20^A$, no longer constant, but defined by the amount of ``rotamers'' considered $R$ as $R^N$. Regardless, protein-design has been far more successful at application driven research than the \textit{ab initio} methods. This is due to the reduced sequence space that needs to be sampled. For instance, we can define far fewer positions to be ``designed'' rather than the entire protein. We can also only consider certain amino acid identities (for instance, consider only hydrophobics in a core and hydrophilics in solvent-space). The success of protein-design is detailed in application driven research in section \ref{sec:design}.
+
+\begin{figure}%overview
+\centering
+\includegraphics[width=.9\textwidth]{images/intro/figure1_10.pdf}
+\caption[Questions answered through antibody design]{blahblahblah}
+\label{fig:overview}
+\end{figure}
+
+\subsection{Antibody Design Summary}
+The goal of this thesis exists in three main sections ranging from questions of basic science to application driven antibody design. However, it is not entirely clear how these concepts tie together. In figure \ref{fig:overview}, I show how antibody design can be used to scale up to vaccine applicability from answering basic immunologic questions. As the applicability progresses, one step informs the other.
+
+
 
 
