@@ -25,7 +25,9 @@
 
 \textbf{\textit{De novo}} - from the sequence; also called \textit{ab initio}, with no experimental guidance \\ \\
 
-\textbf{Directory} - synonymous with a folder, usually contains one or more files or other folders distance matrix - a matrix containing the pairwise distances for every point in a set of points \\ \\
+\textbf{Directory} - synonymous with a folder, usually contains one or more files or other folders \\ \\
+
+\textbf{distance matrix} - a matrix containing the pairwise distances for every point in a set of points \\ \\
 
 \textbf{Dunbrack rotamer library} - a set of likely side chain conformations for the twenty canonical amino acids based on protein structures in the Protein Data Bank (PDB) \\ \\
 
@@ -48,7 +50,7 @@ built during comparative modeling \\ \\
 
 \textbf{Homology model} - a more specific type of comparative model where the protein sequence of interest (target) is a homolog of the protein of known structure (template) \\ \\
 
-\textbf{Interface delta} - The interface delta score is defined as the contribution to the total score for which the presence of the ligand is responsible \\ \\
+\textbf{Interface delta} - the interface delta score is defined as the contribution to the total score for which the presence of the ligand is responsible \\ \\
 
 \textbf{Kinematic loop closure (KIC)} - robotics-inspired loop closure algorithm which analytically determines all mechanically accessible conformations for torsion angles of a peptide chain using polynomial resultants \\ \\
 

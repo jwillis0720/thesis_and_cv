@@ -1,9 +1,9 @@
 \chapter{Appendix}
 \label{chap:appendix}
 %appendix I
-\doublespacing
 \input{appendix/appendixI}
 \input{appendix/appendixII}
+\doublespacing
 \input{appendix/appendixIII}
 \input{appendix/appendixIV}
 
