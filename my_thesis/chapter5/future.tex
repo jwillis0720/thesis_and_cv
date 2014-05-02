@@ -32,8 +32,34 @@ In related work, structural viral homologs could also be used in multi-state des
 
 Finally, there is much use for this algorithms fitness function. While I describe antibody design in the context of \textit{designing for} a certain antigen, it may be beneficial to \textit{design against}. I can modify the scoring function in such a way where we select mutations that will \textit{design for} one antigen, and \textit{design against} others. This allows any fine tuning of specificity changes that are needed against antibodies while not compromising the structural integrity of the immunoglobulin fold. I can imagine this will be an invaluable tool for designing against antigens that are found to be related to autoimmunity.
 
-\section{Chapter \ref{chap:chapter3} - Broadly antibodies from HIV-\naive repertoires}
+\section{Chapter \ref{chap:chapter3} - Broadly neutralizing antibodies from HIV-\naive repertoires}
+In chapter \ref{chap:chapter3}, I used antibody design to interrogate the HIV-\naive repertoire to answer a simple question for the paradigms of HIV vaccinology. How close is the \naive repertoire to eliciting neutralizing antibodies. I used the principles guided by both reverse  and forward vaccinology\citep{Burton:2012bh}. Reverse vaccionology principles require that the broadly neutralizing antibodies are first characterized from chronically infected patients. I used the the V1/V2 binding antibody PG9 that was discovered in a chronically infected african donor \citep{McLellan:2011dg,Walker:2009cd}. This is were I introduced a new paradigm into vaccinology. Rather than used structure based immunogen desgin from the PG9 epitope which has been characterized, I instead investigated the healthy donor repertoire. In my early work here, I had helped discover long HCDR3s in healthy donors, and it was with this information I wanted to pursue this quesiton.
 
+I conclude that although there are some antibodies from the HIV-\naive repertoire that are able to mimic PG9 hammerhead like configuration, there are very few from our population pool. Even those that we did find needed some amounts of mutation that honed specificity to make these antibodies truely binding and neutralizing.
+
+There is an absolute limitation to this study, and that is the amount of long-HCDR3 sequences we started with. Out of one-half-billion sequences, we only were able to obtain ~26,000 unique 30-length sequences that were viable in our study. That is an incredibly low amount. Along with Andy Fire, Jessica Finn and myself, we have deviced new clever experiments that can potentially enrich for long HCDR3s. We have noticed that in this study and previous studies, that most antibodies with long HCDR3s contain a J\textsubscript{H}6 gene segment \citep{Briney:2012ib}, in addition, PG-type antibodies often use V\textsubscript{H}3-30 genes. This makes the initial PCR rounds for gene-specific targeting a simple task. Rather than use ambiguous primer-sets for all gene families, I plan to use just specific primers to J\textsubscript{H}6 and V\textsubscript{H}3-30 for amplification of B-cell mRNA transcripts. I can actually predict that this will enhance the mean HCDR3 length from 15.56 to 18.06 (figure \ref{fig:fig5_3}). In addition, new advances in high resolution gel electrophoresis allow single base pair resolution and purification. That would allow only very-long HCDR3 sequences to be purified and enriched from the canonical length background. Using this, I could truly use this population pool in my newly created bioinformatics pipeline to test the HIV-\naive donor sequences.
+
+\begin{figure}[!t]
+   \centering
+   \includegraphics[width=.9\textwidth]{images/chapter5/figure5_3.pdf}
+   \caption[HCDR3 of J\textsubscript{H}6 Gene Families]{HCDR3 of J\textsubscript{H}6 gene families. A distribution curve for HCDR3 sequences is shown for all VDJ familes (black). When only J\textsubscript{H}6 genes are considered, the mean length shifts from 15.56 to 18.06. If only J\textsubscript{H}6 and V\textsubscript{H}3 gene families are considered the mean shifts down to 17.92.}
+       \label{fig:fig5_3}
+\end{figure}
+
+One problem that is mentioned is the potential framework bias. Although it has been demonstrated that the HCDR3 loop is responsible for a majority of the contact and by extension the mechanism of neutralization \citep{Pejchal:2010fp,Pancera:2010hh}, it can't be ruled out that the framework provides some contribution to binding in the LHCDR3 and HCDR2 region \citep{McLellan:2011dg}. However, in recent studies, mutations all the way back to germline have shown that these mutations aren't absolutely necessary necessary to necessitate binding and by extension neutralization \citep{Klein:2013iz}. In chapter \ref{chap:chapter2}, we find at least fifty percent of the the germline framework may be necessary for binding, even those residues that lie extremely distal to the interface. This leads me to believe in an inherent framework bias in our study. I used PG9 framework as the complete sequence to the rest of the heavy chain and the light chain was unknown (the current technology is limited at the time of writing). But other studies show us that surrounding mutations of the HCDR3 loop allow it to form its native conformation \citep{Wong:2011ff}. I want to know the effects of other germline frameworks on HIV-\naive HCDR3 loops.
+
+I proposed a display technology solution to this problem. If I can isolate 30-length (or longer) HCDR3 sequences from the B cell repertoire, I can engineer cloning sites into them as I have done for the PG9 framework. However, each cloning site will be slightly upstream of the HCDR3 site. In this manner we can use any germline framework to test each HIV-\naive conformation. In this way, we can test inherit framework bias from each germline framework on the healthy HCDR3 sequence. For the amount of HCDR3 sequences we get (roughly estimate 100,000 using the technique described above), we can test this on each V\textsubscript{H} gene family, giving 5.2 million different combinations of antibodies we can test and remove framework bias. In addition, we can combine germline light chain repertoires to increase our combinations. I feel like this would be like an incredibly useful experiment to find antibodies from HIV-\naive donors with the absolute minimum amount of mutations. In this way I can get an absolute threshold to describe what a vaccine will need to elicit using a very inexpensive technology.
 
 \section{Chapter \ref{chap:chapter4} - Broadly neutralizing antibody redesign}
-\section{Other applications of antibody design - antigen escape}
+In figure \ref{fig:fig5_4}, an initial pilot study has been performed.
+
+\begin{figure}[!t]
+   \centering
+   \includegraphics[width=.9\textwidth]{images/chapter5/figure5_4.pdf}
+   \caption[Binding Profile of PG16 Variants]{An initial pilot study with PG16 HCDR3 variants on a PG9 backbone. All the variants have a PG9 backbone except for PG16\textit{wt} which may explain the strength in binding. Various negative and positive controls are shown for other viral species.}
+    \label{fig:fig5_4}
+\end{figure}
+
+
+
+%\section{Other applications of antibody design - antigen escape}
