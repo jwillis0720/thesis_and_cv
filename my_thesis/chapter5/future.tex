@@ -51,16 +51,20 @@ One problem that is mentioned is the potential framework bias. Although it has b
 I proposed a display technology solution to this problem. If I can isolate 30-length (or longer) HCDR3 sequences from the B cell repertoire, I can engineer cloning sites into them as I have done for the PG9 framework. However, each cloning site will be slightly upstream of the HCDR3 site. In this manner we can use any germline framework to test each HIV-\naive conformation. In this way, we can test inherit framework bias from each germline framework on the healthy HCDR3 sequence. For the amount of HCDR3 sequences we get (roughly estimate 100,000 using the technique described above), we can test this on each V\textsubscript{H} gene family, giving 5.2 million different combinations of antibodies we can test and remove framework bias. In addition, we can combine germline light chain repertoires to increase our combinations. I feel like this would be like an incredibly useful experiment to find antibodies from HIV-\naive donors with the absolute minimum amount of mutations. In this way I can get an absolute threshold to describe what a vaccine will need to elicit using a very inexpensive technology.
 
 \section{Chapter \ref{chap:chapter4} - Broadly neutralizing antibody redesign}
-I indicate some of the issues with redesign and highlighted them in the publication that accompanies chapter \ref{chap:chapter4}. For instance, \rosettadesign
+I indicate some of the issues with redesign and highlighted them in the publication that accompanies chapter \ref{chap:chapter4}. For instance, \rosettadesign, indicated that D115N would be the most beneficial mutation. When I characterized this mutation in experimentally, I found this mutation to actually decrease binding. This is due to some of the limitations of \rosetta which have been discussed at length, especially in chapter \ref{chap:chapter2} where I discuss the limits of the \rosetta scoring function. This is being addressed by a large number of \rosetta collaborators in the commons with more accurate representation of hydrogen bondings and explicit solvent models.
 
-In figure \ref{fig:fig5_4}, an initial pilot study has been performed.
+The excitement of future endeavors with the redesign of antibodies is the most exciting and probably one of the most straight forward future directions I have. For one, this type of design which we applied to PG9 can be applied to any antibody, whether it be broadly neutralizing or modestly potent. \rosetta allows us to tailor the scoring function to \textit{design for} stability or binding energy, which we have found to be a necessary component to increasing potency and breadth of contemporary antibodies.
+
+One step I have taken with future directions, is applying the same methodology to PG9s sister antibody PG16. In figure \ref{fig:fig5_4}, an initial pilot study using the same redesign methodology has been performed. As is evident, some of the PG16 variants are able to bind BaL gp120 monomers with greater affinity. There is a huge caveat at the current time of this study. These PG16 HCDR3 loops were put on the PG9 backbone with the exception of PG16\textit{wt}. The PG9 framework may be responsible for the antibody binding BaL gp120 monomer. I have begun taking these constructs and putting them on PG16 backgrounds to see if there is difference in PG9/PG16 backbone. If there is, that gives plausability to framework bias as discussed above.
 
 \begin{figure}[!t]
    \centering
-   \includegraphics[width=.9\textwidth]{images/chapter5/figure5_4.pdf}
+   \includegraphics[scale=.5]{images/chapter5/figure5_4.pdf}
    \caption[Binding Profile of PG16 Variants]{An initial pilot study with PG16 HCDR3 variants on a PG9 backbone. All the variants have a PG9 backbone except for PG16\textit{wt} which may explain the strength in binding. Various negative and positive controls are shown for other viral species.}
     \label{fig:fig5_4}
 \end{figure}
+
+
 
 
 
