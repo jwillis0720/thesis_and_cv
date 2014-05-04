@@ -15,7 +15,7 @@ To run multi-state design, I have to prepare several files.
 
 \textbf{Clean PDB} - First, I can download all three protein PDBs with the clean\_pdb.py script. Clean PDB supports the following syntax:
 
-\lstset{language=bash}
+
 \begin{lstlisting}
 clean_pdb.py <PDB_ID> <CHAINS>
 \end{lstlisting}
@@ -169,3 +169,203 @@ mpiexec -n 4 /my/rosetta/location/mpi_msd.mpi.myoperatingsystem \
 @options.txt
 \end{lstlisting}
 \textbf{Warning! \linebreak \rosetta may complain about some of the comments (anything starting with \#) not being recognized, if so, just remove it from the file}
+
+The output will be 300 files, 100 for each of the states. We only need to analyze 100 files considering that the designed enitities will be the same for all three files. For example, position 5 will be the same for 2B1A, 2XWT, and 3HMX.
+
+\subsubsection{Analysis of MSD Output}
+I wrote a design analysis script called deep\_analysis which encompasses many design analysis tools. I will only go into the functionality that is necessary to use, but you can read the options file for more use.
+
+\begin{lstlisting}
+deep\_analysis --help
+>>              Design Analysis
+___________________________________________________________
+
+This script is intented to encompass the entire functionality
+of design analysis. Everything you could want to do with design
+is called upon in this script. The most basic functionality is
+to pass a list of pdbs or get a position matrix of occurences
+count of just one line.
+
+The functionality extends from there by giving bitscores,
+changes in energy, giving position specific scoring matrices
+of your design,giving a customizable sequence logo. This is a
+combination of many scripts and classes.
+
+optional arguments:
+  -h, --help show this help message and exit
+
+Necessary:
+  PDB files have to be included
+  *.pdb  The PDB files to be analyzed
+
+Recommended Options:
+  Will give you a more complete analysis based on a res file,
+  and a native pdb to compare it to.
+
+  --native_pdb N_PDB, -p N_PDB
+        The native pdb file to compare against
+  --corr corr.corr, -c corr.corr
+        Get the results defined only in the corr file
+  --res resfile.resfile, -r resfile.resfile
+        Get the results defined only in the residue file
+
+Output Options: Please read carefully:
+  These arguments change file name, which file is printed,
+  which is output to a dictionary,and give verbose printing
+
+  --verbose, -v
+        everything printed to a file will also be shown
+        on the screen
+  --prefix PREFIX, -P PREFIX
+        The prefix for what all the output files will be
+  --score_files O_FILES [O_FILES ...], -s
+    What do you want output to a file?
+    Can list as a space seperated (eg -s n d nd):
+    a - full analysis dict
+    d - give analysis of just designed residues
+    n - just the native residues scores are shown
+    nd - just the native residues of the residues designed
+            Defaults to full analysis dictionary
+  -b Should the output be in bit score?
+        Defaults to occurences instead of bitscore
+  -S If you specify a native file and a design file,
+        it will give you an output of the stats of the design
+
+Rosetta Energy Analysis:
+  Options for outputing options about energy scores,
+  the dictionaries analyzed depend on what you asked
+  for using the -s output options flag
+
+  --rosetta, -t  This option will output a .csv file of the
+  model,chain,residue,residue number,and rosetta scores.
+
+Bit Score Options:
+  options for bitscore metric for each designed residue
+
+  -n    do you want the bit scores to be
+        normalized by the shannon entropy
+
+Sequence Logos Options:
+  These options handle the sequence logos that can be output
+  from the design analysis script, and uses the api of weblogo
+  to do so.
+
+  --seq, -l
+    Turn on Sequence Logos for all the dictionaries
+    you supply given in an .eps file
+  --path LOGO\_PATH, -lp LOGO\_PATH
+    What is the path to weblogo software?
+    Defaults to meilerlab enviroment
+  --format {eps,jpg,png,png_print,pdf,jpeg,svg,logodata}
+    What format do you want the sequence logo in?
+  --units {bits,nats,kt,kJ/mol,kcal/mol,probability}
+    What do you want the units of the sequence
+    logo to be in? Defaults to bits.
+  --stacks S_STACKS
+    How many sequences per line in the logo, default=after
+    forty letters it will go to a new line.
+  --stack_width S_STACK_WIDTH
+    How wide is each stack in the logo. Value of 25 is useful
+    for x-axis labels >3 characters and 30
+    for labels as 'sequence_numbers'.
+  --title S_TITLE
+    The title of your sequence logo
+  --x_label S_X_AXIS
+    What do you want the x axis titled?
+  --y_axis_height S_Y_HEIGHT
+    How high do you want the Y axis,
+    currently 4.32 which is the maximum
+    acheivable score in a unbiased design
+  --y_label S_Y_LABEL
+    Title of Y-Axis
+  --error_bars S_Y_ERROR
+    Do you want error bars turned on, YES/NO?
+  --fine_print S_FINE
+    Fine Print
+  --color_scheme
+    {auto,chemistry,charge,classic,
+    hydrophobicity,monochrome}
+    The color scheme of the sequence logo.
+    Defaults to Classic
+  --labels {sequence,numbers,sequence_numbers}
+    The x-axis labels can either take on the
+    native residues sequence given with a native
+    pdb file or the numbering of the pdb residue.
+  --debug
+    Get the full command line of what was put into weblo
+\end{lstlisting}
+
+It's obvious that this analysis can do a lot, but I will stick with the basics. First a new input that is completely germline. We can do this with the packer.
+There is a script called make\_res.py which will make a residue file from a FASTA file. I use this to take the germline sequence and thread it over one of my inputs. Then that input can be used as our template.
+
+\begin{verbatim}
+>IGHV5-51*01
+EVQLVQSGAEVKKPGESLKISCKGSGYSFTSYWIGWVRQMPGKGLEW
+MGIIYPGDSDTRYSPSFQGQVTISADKSISTAYLQWSSLKASDTAMY
+YCAR
+\end{verbatim}
+
+Then we can use the make\_res.py script.
+
+\begin{lstlisting}
+make_res.py IGHV5-51.fasta > IGHV5-51.res
+\end{lstlisting}
+
+This residue file can then be used to mutate one of our templates back to germline.
+\begin{lstlisting}
+/path/to/rosetta/bin/fixbb.default.<operating_system> \
+-s 2B1A_clean.pdb \
+-resfile IGHV5-51.res -database /path/to/database \
+-out:path:pdb 2B1A_germline.pdb
+\end{lstlisting}
+
+Now we can use the analysis script.
+\begin{lstlisting}
+deep_analysis -p ../input/2B1A_clean.pdb \
+-S -b -s nd -c ../input/all.corr msd_output_*A*.pdb
+
+>>
+#score vs mature
+Total Bit Score of Design ===> 28.4534
+Total Shannon Entropy of Design ===> 115.9577
+Normalized Bit Score for design ===> 0.2454
+\end{lstlisting}
+
+and
+
+\begin{lstlisting}
+deep_analysis -p ../input/2B1A_germline.pdb \
+-S -b -s nd -c ../input/all.corr msd_output_*A*.pdb
+
+>>
+#score vs mature
+Total Bit Score of Design ===> 41.0967
+Total Shannon Entropy of Design ===> 115.9577
+Normalized Bit Score for design ===> 0.3544
+\end{lstlisting}
+
+This gives a design score towards 0.35 for the germline sequence and 0.24 for the mature sequence. Everything can be repeated this exact way. For single state design you can keep the fitness file exactly the same, but remove the other states.
+
+\begin{lstlisting}
+#initialize the states and what the states file name is
+STATE_VECTOR A 2b1a.states
+STATE_VECTOR B 2xwt.states
+STATE_VECTOR C 3hmx.states
+
+
+#tell design to minimize energy for each state
+SCALAR_EXPRESSION best_A = vmin( A )
+SCALAR_EXPRESSION best_B = vmin( B )
+SCALAR_EXPRESSION best_C = vmin( C )
+
+#Fitness - design to minimize all energies simultaneously
+FITNESS best_A
+\end{lstlisting}
+
+And run the exact same procedures.
+
+\subsection{Chapter II - Database and Design}
+
+
+
+
