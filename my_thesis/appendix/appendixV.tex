@@ -15,52 +15,52 @@ To run multi-state design, I have to prepare several files.
 
 \textbf{Clean PDB} - First, I can download all three protein PDBs with the clean\_pdb.py script. Clean PDB supports the following syntax:
 
-\begin{verbatim}
+\lstset{language=bash}
+\begin{lstlisting}
 clean_pdb.py <PDB_ID> <CHAINS>
-\end{verbatim}
+\end{lstlisting}
 
 We only want the asymmetric unit in the crystal structure, so it helps to manually inspect the PDBs. We need one heavy chain, one light chain, and one antigen. I just go to www.pdb.org to find these chain codes.
-\begin{verbatim}
-clean_pdb.py 2B1A HLP
+\begin{lstlisting}
 clean_pdb.py 2XWT ABC
 clean_pdb.py 3HMX HLB
-\end{verbatim}
+\end{lstlisting}
 Although not absolutely necessary, it makes it easier to label the chain IDs the same. All heavy chains have H, light L, and antigen A. There is a change PDB id script which allows us to quickly rename chain IDs. The script takes the following syntax.
 
-\begin{verbatim}
+\begin{lstlisting}
 set_pdb_chain_id.py old_chain new_chain input output
-\end{verbatim}
+\end{lstlisting}
 I have looked through all the PDBs and figured out which names to change.
 
-\begin{verbatim}
+\begin{lstlisting}
 set_pdb_chain_id.py P A 2B1A_HLP.pdb 2B1A_HLA.pdb
 set_pdb_chain_id.py A H 2XWT_ABC.pdb 2XWT_HBC.pdb
 set_pdb_chain_id.py B L 2XWT_HBC.pdb 2XWT_HLC.pdb
 set_pdb_chain_id.py C L 2XWT_HLC.pdb 2XWT_HLA.pdb
 set_pdb_chain_id.py C A 2XWT_HLC.pdb 2XWT_HLA.pdb
 set_pdb_chain_id.py B A 3HMX_HLB.pdb 3HMX_HLA.pdb
-\end{verbatim}
+\end{lstlisting}
 For good measure some of the PDBs don't start numbering scheme correctly so to make it easier we should renumber each chain starting with 1.
 
-\begin{verbatim}
+\begin{lstlisting}
 renumber_pdb.py 2B1A_HLA.pdb 2B1A_clean.pdb
 renumber_pdb.py 2XWT_HLA.pdb 2XWT_clean.pdb
 renumber_pdb.py 3HMX_HLA.pdb 3HMX_clean.pdb
-\end{verbatim}
+\end{lstlisting}
 Now we can remove all temporary files, only *\_clean.pdb files should remain in the working directory. The next thing to do would be to find all positions with at least one difference. This requires manual inspection of the alignment. For the V\textsubscript{H} gene, there are 29 amino acid positions that will differ from germline in at least one position. These positions will be considered. Given that data, we can construct the entity residue file.
 
-\begin{verbatim}
+\begin{lstlisting}
 #The entity.resfile
 29 #The number of positions to design
 ALLAAxc EX 1 EX 2 EX ARO 2 #Allow all amino acids
 #except cystine and use rotamer libraries 1,2
 #and aromatic 2.
 start #beginning of residue file.
-\end{verbatim}
+\end{lstlisting}
 
 The correlation file maps how each residue in each file should map to the others. There will be three correlation files, one for each state. Since each amino acid lines up, i.e. design position 5 in 2B1A with position 5 in 3HMX, all the correlation files will be the same. Here is an example of one correlation file.
 
-\begin{verbatim}
+\begin{lstlisting}
 #all.corr
 #The first column is the entity,
 #the second is the residue number for that state,
@@ -94,20 +94,20 @@ The correlation file maps how each residue in each file should map to the others
 27 93 H
 28 97 H
 29 98 H
-\end{verbatim}
+\end{lstlisting}
 A secondary residue file is also needed in case any extra packing tasks are needed to be supplied to each state. For example, we could tell one PDB state to design around the interface in single state design mode while everything in the correlation file designs together. I do not require extra design tasks for this protocol so all secondary residue files will be the same. For example,
 
-\begin{verbatim}
+\begin{lstlisting}
 NATRO #tells the packer to use all natural side
 #chain configurations for everything
 #that is not being designed.
 use_input_sc #the input side chain is allowed
 start #start the residue file
-\end{verbatim}
+\end{lstlisting}
 
 We next to create a states file that has the PDB, correlation file and secondary resfile names in it. Name them 2B1A.states, 2XWT.states, and 3HMX.states. They should look like the following when opened.
 
-\begin{verbatim}
+\begin{lstlisting}
 #2B1A.states
 2B1A_clean.pdb all.corr all.2res
 
@@ -116,11 +116,11 @@ We next to create a states file that has the PDB, correlation file and secondary
 
 #3HMX.states
 3HMX_clean.pdb all.corr all.2res
-\end{verbatim}
+\end{lstlisting}
 
 Lastly, a fitness file needs to be constructed to tell multi-state how to design. I call this file fitness.daf and it points to the locations of the states files.
 
-\begin{verbatim}
+\begin{lstlisting}
 #initialize the states and what the states file name is
 STATE_VECTOR A 2b1a.states
 STATE_VECTOR B 2xwt.states
@@ -134,7 +134,7 @@ SCALAR_EXPRESSION best_C = vmin( C )
 
 #Fitness - design to minimize all energies simultaneously
 FITNESS best_A + best_B + best_C
-\end{verbatim}
+\end{lstlisting}
 
 \textbf{Running Rosetta Multi-State Design} \\
 The \rosetta executable is called mpi\_msd.mpi.<operatingsystem>. It must be compiled in MPI mode as each state is assigned to a processor. The command line takes the following options.
@@ -151,7 +151,7 @@ The \rosetta executable is called mpi\_msd.mpi.<operatingsystem>. It must be com
 
 I construct an options file with all those options (options.txt) that looks like this.
 
-\begin{verbatim}
+\begin{lstlisting}
 -entity_resfile entity.resfile
 -fitness_file fitness.daf
 -ms
@@ -160,12 +160,12 @@ I construct an options file with all those options (options.txt) that looks like
     -numresults 100
     -fraction_by_recombination .04
 -database my/rosetta/database/location/
-\end{verbatim}
+\end{lstlisting}
 
 Finally we can run \rosetta using the following command.
 
-\begin{verbatim}
+\begin{lstlisting}
 mpiexec -n 4 /my/rosetta/location/mpi_msd.mpi.myoperatingsystem \
 @options.txt
-\end{verbatim}
+\end{lstlisting}
 \textbf{Warning! \linebreak \rosetta may complain about some of the comments (anything starting with \#) not being recognized, if so, just remove it from the file}
