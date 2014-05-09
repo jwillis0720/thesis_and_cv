@@ -4,6 +4,14 @@
 		"selected_items":
 		[
 			[
+				"input",
+				"input_files"
+			],
+			[
+				"inp",
+				"input_files"
+			],
+			[
 				"2xwt_h",
 				"2xwt_h"
 			],
@@ -116,10 +124,6 @@
 				"v_part_of_cdr3_info	(attribute, instance)"
 			],
 			[
-				"input",
-				"input_file	(local, instance)"
-			],
-			[
 				"subkey",
 				"subkey_1	(local, instance)"
 			],
@@ -164,18 +168,47 @@
 	"buffers":
 	[
 		{
-			"file": "my_thesis/thesis.tex",
+			"file": "/Users/jordanwillis/protocol-captures/protocol_capture_pg9redesign.tex",
 			"settings":
 			{
-				"buffer_size": 6315,
+				"buffer_size": 6145,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "my_thesis/chapter5/future.tex",
+			"file": "/Users/jordanwillis/protocol-captures/input_files/normal_design.resfile",
 			"settings":
 			{
-				"buffer_size": 15963,
+				"buffer_size": 390,
+				"line_ending": "Unix",
+				"name": "USE_INPUT_SC"
+			}
+		},
+		{
+			"file": "/Users/jordanwillis/protocol-captures/input_files/threading.txt",
+			"settings":
+			{
+				"buffer_size": 333,
+				"line_ending": "Unix",
+				"name": "-docking"
+			}
+		},
+		{
+			"contents": "<dock_design>\n  <SCOREFXNS>\n    Redefine scoring function to take in constraints\n    <scorewts weights=talaris2013>\n      <Reweight scoretype=atom_pair_constraint weight=0.5/>\n    </scorewts>\n    <scoredockwts weights=talaris2013 patch=docking>\n      <Reweight scoretype=atom_pair_constraint weight=0.5/>\n    </scoredockwts>\n  </SCOREFXNS>\n    <FILTERS>\n      DDG filter for design - will design until this\n      is satisfied\n      <Ddg name=ddg chain_num=2,3 repack=1\n        scorefxn=talaris2013 threshold=-20/>\n      When docking or minimizing, won't violate atom-pairs defined\n      in glycan_constraints\n      <ScoreType name=atom_pair_constraint scorefxn=scoredockwts\n        score_type=atom_pair_constraint threshold=100/>\n    </FILTERS>\n  <TASKOPERATIONS>\n    <InitializeFromCommandline name=ifcl/>\n    <ReadResfile name=rrd filename=\"input_files/normal_design.resfile\"/>\n  </TASKOPERATIONS>\n  <MOVERS>\n    Gives bonuses for input residues\n    <FavorSequenceProfile name=fsp scaling=\"prob\"\n      weight=1.5 use_current=1\n      matrix=\"IDENTITY\" scorefxns=scorewts/>\n    Penalizes movements to far away from\n    glycan\n    <ConstraintSetMover name=pair_on\n      cst_file=\"input_files/glycan_constraints.cst\"/>\n    Design step that takes in residue file\n    <PackRotamersMover name=pr_design scorefxn=scorewts\n      task_operations=rrd,ifcl/>\n    Turns of penalization\n    <ConstraintSetMover name=pair_off cst_file=none/>\n    Docks protein around interface\n    <Docking name=dock score_high=scoredockwts fullatom=1\n      local_refine=1 jumps=1 task_operations=ifcl/>\n    Docks until MonteCarlo criterion is satisfied\n    <GenericMonteCarlo name=gmc_dock mover_name=dock\n      filter_name=atom_pair_constraint drift=0/>\n    Minimize energy of protein\n    <MinMover name=min scorefxn=scorewts chi=1 bb=1 jump=1/>\n    Design protocol\n    <ParsedProtocol name=design_pp>\n      <Add mover=pair_on/>\n      <Add mover=pr_design/>\n      <Add mover=gmc_dock/>\n      <Add mover=min/>\n      <Add mover=pair_off/>\n    </ParsedProtocol>\n    Run design until binding energy threshold is satisfied\n    <GenericMonteCarlo name=gmc_design\n      mover_name=design_pp filter_name=ddg drift=False/>\n    Relax protein\n    <FastRelax name=fr scorefxn=scorewts\n      task_operations=ifcl/>\n    Get DDG\n    <ddG name=per_ddg  chain_name=\"H,L\"\n      scorefxn=talaris2013 per_residue_ddg=1/>\n    </MOVERS>\n    <APPLY_TO_POSE>\n    </APPLY_TO_POSE>\n    <PROTOCOLS>\n      Ordered list of steps for the protocol\n      each defined in the mover or filter definitions\n       <Add mover_name=fsp/>\n       <Add mover_name=gmc_design/>\n       <Add mover_name=pair_on/>\n       <Add mover_name=fr/>\n       <Add mover_name=pair_off/>\n       <Add mover_name=per_ddg/>\n       <Add filter_name=ddg/>\n    </PROTOCOLS>\n</dock_design>\n\n",
+			"file": "/Users/jordanwillis/protocol-captures/input_files/threading_design.xml",
+			"file_size": 2799,
+			"file_write_time": 1399381175000000,
+			"settings":
+			{
+				"buffer_size": 2799,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "my_thesis/thesis.tex",
+			"settings":
+			{
+				"buffer_size": 6390,
 				"line_ending": "Unix"
 			}
 		}
@@ -183,7 +216,7 @@
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 167.0,
+		"height": 392.0,
 		"selected_items":
 		[
 			[
@@ -428,6 +461,10 @@
 	},
 	"file_history":
 	[
+		"/Users/jordanwillis/protocol-captures/nat_med_2014/[no file]",
+		"/Users/jordanwillis/git_thesis/my_thesis/appendix/appendixV.tex",
+		"/Users/jordanwillis/git_thesis/my_thesis/thesis.tex",
+		"/Users/jordanwillis/git_thesis/my_thesis/chapter5/future.tex",
 		"/Users/jordanwillis/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
 		"/Users/jordanwillis/git_thesis/my_thesis/sfsection.sty",
 		"/Users/jordanwillis/Library/Application Support/Sublime Text 3/Packages/Default/Default (OSX).sublime-keymap",
@@ -562,6 +599,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"_capture",
+			"bash",
 			"?",
 			"label",
 			"anon",
@@ -687,8 +726,6 @@
 			"FW3",
 			"fw3",
 			"FW3",
-			"FW2",
-			"fw2",
 			"FW2"
 		],
 		"highlight": true,
@@ -707,23 +744,23 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 3,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "my_thesis/thesis.tex",
+					"file": "/Users/jordanwillis/protocol-captures/protocol_capture_pg9redesign.tex",
 					"settings":
 					{
-						"buffer_size": 6315,
+						"buffer_size": 6145,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								6272,
-								6300
+								4578,
+								4578
 							]
 						],
 						"settings":
@@ -731,25 +768,105 @@
 							"syntax": "Packages/LaTeX/LaTeX.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 2585.0,
+						"translation.y": 1138.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "my_thesis/chapter5/future.tex",
+					"file": "/Users/jordanwillis/protocol-captures/input_files/normal_design.resfile",
 					"settings":
 					{
-						"buffer_size": 15963,
+						"buffer_size": 390,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								15529,
-								15529
+								12,
+								12
+							]
+						],
+						"settings":
+						{
+							"auto_name": "USE_INPUT_SC",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/Users/jordanwillis/protocol-captures/input_files/threading.txt",
+					"settings":
+					{
+						"buffer_size": 333,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								50,
+								50
+							]
+						],
+						"settings":
+						{
+							"auto_name": "-docking",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/Users/jordanwillis/protocol-captures/input_files/threading_design.xml",
+					"settings":
+					{
+						"buffer_size": 2799,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1463,
+								1463
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/XML/XML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 505.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "my_thesis/thesis.tex",
+					"settings":
+					{
+						"buffer_size": 6390,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
 							]
 						],
 						"settings":
@@ -757,7 +874,7 @@
 							"syntax": "Packages/LaTeX/LaTeX.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 1776.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -818,6 +935,18 @@
 		"height": 0.0,
 		"selected_items":
 		[
+			[
+				"thesis",
+				"my_thesis/thesis.tex"
+			],
+			[
+				"appen",
+				"my_thesis/appendix/appendixV.tex"
+			],
+			[
+				"pp",
+				"my_thesis/appendix/protocol_capture_pg9redesign.tex"
+			],
 			[
 				"table",
 				"my_thesis/tables/chapter3/table3_1.tex"
