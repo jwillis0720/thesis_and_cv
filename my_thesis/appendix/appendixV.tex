@@ -365,7 +365,288 @@ FITNESS best_A
 And run the exact same procedures.
 
 \subsection{Chapter II - Database and Design}
-\include{appendix/protocol_capture_pg9redesign}
+This section accompanies chapter \ref{chap:chapter2}. I will go over uploading the sequences to a database, selecting the correct sequences, threading, and finally design.
+
+\subsubsection{Sequence Analysis}
+The methods section detailed how I actually sequence the amplicons from 64 healthy donors, but processing them takes quite a bit of computational work. The VANTAGE core at Vanderbilt returns the sequencing runs as two paired end reads in FASTQ format. They must be ``stiched'' together to make one read. For example, for donor 10, there are ``2185-RC-10\_1.fastq'' for the forward read and ``2185-RC-10\_2.fastq'' for the reverse read. I use a stitching algorithm called ``pandaseq'' to process theses \citep{Bartram:2011cz}. These commands are incredibly simple to run.
+
+\begin{lstlisting}[breaklines=true]
+/usr/local/bin/pandaseq -f 2185-RC-10_1.fastq -r 2185-RC-10_2.fastq -T 23 > donor_10.fasta
+\end{lstlisting}
+
+Pandaseq will automatically output to the fasta format which is convenient for the next step. Here I use PyIg, my own sequence aligner against Ig mAbs that's based on IgBLAST \citep{Ye:2013bb}. I will probably publish this soon when it is more stable. For human IgG's it works incredibly simple to use.
+
+\begin{lstlisting}[breaklines=true]
+./PyIg
+usage: igblast [-h] -q query.fasta [-d DB_PATH] [-i INTERNAL_DATA]
+               [-a AUX_PATH] [-y {Ig,TCR,custom}] [-or {human,mouse}]
+               [-nV NUM_V] [-nD NUM_D] [-nJ NUM_J] [-dgm D_GENE_MATCHES]
+               [-s {imgt,kabat}] [-x EXECUTABLE] [-o OUT] [-t TMP]
+               [-e E_VALUE] [-w WORD_SIZE] [-pm PENALTY_MISMATCH]
+               [-nP NUM_PROCS] [-op OUTPUT_OPTIONS] [-z] [-c] [-j]
+
+optional arguments:
+  -h, --help            show this help message and exit
+
+Necessary:
+  These have to be included
+
+  -q query.fasta, --query query.fasta
+                        The fasta file to be input into igBlast
+
+Database Paths:
+  -d DB_PATH, --db_path DB_PATH
+                        The database path to the germline repertoire
+  -i INTERNAL_DATA, --internal_data INTERNAL_DATA
+                        The database path to internal data repertoire
+  -a AUX_PATH, --aux_path AUX_PATH
+                        The auxilariay path that contains the frame origins of the germline genes for each repertoire.
+                         Helps produce translation and other metrics
+
+IgBlast Sprecific:
+  IgBlast Specific Options with a Default
+
+  -y {Ig,TCR,custom}, --type {Ig,TCR,custom}
+                        Is this an IG or TCR recombination
+  -or {human,mouse}, --organism {human,mouse}
+                        The organism repeortire to blast against
+  -nV NUM_V, --num_v NUM_V
+                        How many V-genes to match?
+  -nD NUM_D, --num_d NUM_D
+                        How many D-genes to match?
+  -nJ NUM_J, --num_j NUM_J
+                        How many J-genes to match?
+  -dgm D_GENE_MATCHES, --d_gene_matches D_GENE_MATCHES
+                        How many nuclodtieds in the D-gene must match to call it a hit
+  -s {imgt,kabat}, --domain {imgt,kabat}
+                        Which classification system do you want
+
+General Settings:
+  -x EXECUTABLE, --executable EXECUTABLE
+                        The location of the executable, default is /usr/bin/igblastn
+  -o OUT, --out OUT     output file prefix
+  -t TMP, --tmp TMP     temporary directory to store files in.
+                        Defaults to ./tmp
+  -e E_VALUE, --e_value E_VALUE
+                        Real value for excpectation value threshold in blast.
+                        Put in scientific notation
+  -w WORD_SIZE, --word_size WORD_SIZE
+                        Word size for wordfinder algorithm
+  -pm PENALTY_MISMATCH, --penalty_mismatch PENALTY_MISMATCH
+                        Penalty for nucleotide mismatch
+  -nP NUM_PROCS, --num_procs NUM_PROCS
+                        How many do you want to split the job across, default is the number of processors
+
+Outputting Options:
+  -op OUTPUT_OPTIONS, --output_options OUTPUT_OPTIONS
+                        Open this file and comment out options you don't want in your final file.
+                        The first column is the name of the option.
+                        The second column is used by the parser and should not be changed.
+  -z, --zip             Zip up all output files
+  -c, --concatenate     Turn off automatic concatenation and deletion of temporary files.
+                        Files are split up at the beginning to run across multiple processors
+  -j, --json            Use the JSON output option that will format the text driven igblast output to a json document.
+                        Defaults to CSV
+\end{lstlisting}
+
+
+I'll keep it simple for the protocol capture, but want to show how robust PyIg can be. Assume you are in the PyIg directory under PyIg/src/
+
+\begin{lstlisting}[breaklines=true]
+python2.7 execution.py -q donor_10.fasta -d datafiles/database/ -i internal_data/ -a datafiles/optional_file/ -y Ig -or human -nV 1 -nD 1 -nJ 1 -s imgt -o donor_10 -nP 23 -z -j
+\end{lstlisting}
+
+Each option is listed in the help. Make sure you see which each one does. For instance -nP needs to be carefully considered since it is the number or processors it will be run on. The output to this command line is a \.json file that will be uploaded to a Mongo database. One entry looks like this.
+
+\begin{lstlisting}[breaklines=true]
+{
+    "Sequence ID": "donor_45654",
+    "Input Sequence": "CTTACCTGAGGAGACGG
+                       TGACCAGGGTTCCCTGGCCCCAGTAG
+                       TCAAAGTACCCCCGTACCAGCTGCTG
+                       CTATACTGGGCTCTCTCGCACAGTAA
+                       TACACGGCCGTGTCCTCGGCTCTCA
+                       GCTGTTCATTTGCAGA",
+    "Chain Type": "VH",
+    "Format Type": "imgt",
+    "Query Sequence": "CTTACCTGAGGAGACGGTGACCAGGG
+                       TTCCCTGGCCCCAGTAGTCAAAGTAC
+                       CCCCGTACCAGCTGCTGCTATACTGG
+                       GCTCTCTCGCACAGTAATACACACGG
+                       CCGTGTCCTCGGCTCTCAGGCTGTTC
+                       ATTTGCAGA",
+    "Query Translated": "LT*GDGDQGSLAPVVKYPRTSCCYTGLSRTVIHTAVSSALRLFICR",
+    "Top V Hit": "IGHV3-11*01",
+    "Top D Hit": "IGHD6-13*01",
+    "Top J Hit": "IGHJ4*02",
+    "Productive": "False",
+    "Productive CDR3": "True",
+    "Strand": "-",
+    "Framework 1 Nuc.": "",
+    "Framework 2 Nuc.": "",
+    "Framework 3 Nuc.": "CTTACCTGAGGAGACGGTGACCAGGGTTCCCTGGCCCCAGTAGTCAAAG",
+    "Framework 4 Nuc.": "ACGGCCGTGTCCTCGGCTCTCAGGCTGTTCATTTGCAGA",
+    "CDR1 Nuc.": "",
+    "CDR2 Nuc.": "",
+    "CDR3 Nuc.": "TACCCCCGTACCAGCTGCTGCTATACTGGGCTCTCTCGCACAGTAATACAC",
+    "Framework 1 AA": "",
+    "Framework 2 AA": "",
+    "Framework 3 AA": "LT*GDGDQGSLAPVVK",
+    "Framework 4 AA": "TAVSSALRLFICR",
+    "Framework 1 AA Length": 0,
+    "Framework 2 AA Length": 0,
+    "Framework 3 AA Length": 16,
+    "Framework 4 AA Length": 13,
+    "CDR1 AA": "",
+    "CDR2 AA": "",
+    "CDR3 AA": "YPRTSCCYTGLSRTVIH",
+    "CDR1 AA Length": 0,
+    "CDR2 AA Length": 0,
+    "CDR3 AA Length": 17,
+    "Total Alignment Matches": 57,
+    "Total Alignment Mismatches": 0,
+    "Total Alignment Length": 57,
+    "Total Alignment Gaps": 0,
+    "Total Alignment Percent Identity": 100
+}
+\end{lstlisting}
+
+To download and install mongo, consult the manual \\ (http://docs.mongodb.org/manual/installation/). This installation will also include all the tools that making uploading files very easy. The output of PyIg should be ``donor\_10.json.gz''. We can then upload this json file to mongodb using the ``mongoimport'' application. \\
+
+\textbf{Note:} \\
+I assume you have an instance of MongoDB running.
+
+\begin{lstlisting}[breaklines=true]
+gunzip donor_10.json.gz & mongoimport -d test_database -c protocol_capture --file donor_10.json
+\end{lstlisting}
+
+Here I have made a database called test\_database and a collection called protocol\_capture. First thing to do is remove redundancies within mongo. To do that, I can make a simple index on the ``Input Sequence'' key and drop duplicates.
+
+\begin{lstlisting}[breaklines=true]
+db.protocol_capture.ensureIndex({'Input Sequence':1},{unique:true, dropDups:true})
+\end{lstlisting}
+
+The next thing I want to do is remove non-productive sequences. PyIg outputs a productive field, using mongo, I can tell the database to drop any ``document'' that contains a stop codon in the HCDR3.
+
+\begin{lstlisting}[breaklines=true]
+db.protocol_capture.remove({"Productive CDR3":"False"})
+\end{lstlisting}
+
+For \rosetta, I want only the thirty length HCDR3s. I can use ``mongoexport'' for this query along with an `awk' statement to get out the 30 length fasta files.
+
+\begin{lstlisting}[breaklines=true]
+mongoexport -d test_database -c protocol_capture -q '{"CDR3 AA Length":30}' --csv -fields "Sequence ID","CDR3 AA" | awk -F "," '{gsub("\"","",$1);gsub("\"","", $2);print(">"$1"\n"$2)}' > 30_length.fasta
+\end{lstlisting}
+
+This fasta file will be used in the remainder of the protocol. I will not go over all the different types of analysis I can do with this database for the purpose of this protocol.
+
+\subsubsection{PSSM Heuristics}
+
+Using the fasta file ``30\_length.fasta'' generated in the previous section, a quick script written in python to get random 2000 sequences is shown below.
+
+\begin{lstlisting}[breaklines=true, language=python]
+from Bio import SeqIO
+import random
+handle = open('30_length.fasta')
+records = SeqIO.parse(handle, "fasta")
+dictionary = {}
+for seq in records:
+   dictionary[seq.id] = str(seq.seq)
+random_dict = random.sample(dictionary.items(),2000)
+
+with open('2000\_sequences.fasta') as f:
+    for seq in random_dict:
+        f.write(``>{0}\n{1}\n''.format(seq[0],seq[1]))
+\end{lstlisting}
+
+Using \rosettadesign, I will generate 2000 resfiles that tell the packer to mutate the HCDR3 into each of the entries in the fasta file. To do this, there is a script available from the Meiler lab called ``fasta\_to\_resfile.py'' which will generate the resfiles necessary.
+
+\begin{lstlisting}[breaklines=true]
+fasta_into_res.py random_2000.fasta 95 126 H 0
+\end{lstlisting}
+
+The rest of the protocol uses Rosetta Scripts to do the design. For Rosetta Scripts, you need an xml file, options file, and command line. The xml file is a scripting file that tells \rosetta~specific set of instructions (here I will name it threading.xml). The first step is relatively simple only doing a design and a full-atom minimization (called relax).
+
+\begin{lstlisting}[breaklines=true, language=xml]
+<dock_design>
+    <SCOREFXNS>
+    </SCOREFXNS>
+    <FILTERS>
+    </FILTERS>
+    <TASKOPERATIONS>
+     <InitializeFromCommandline name=ifcl/>
+     <ReadResfile name=rr filename=%%resfiles%% />
+    </TASKOPERATIONS>
+        <MOVERS>
+         <PackRotamersMover name=pr scorefxn=score12 task_operations=ifcl,rr/>
+         <FastRelax name=fr task_operations=ifcl/>
+        </MOVERS>
+        <APPLY_TO_POSE>
+        </APPLY_TO_POSE>
+        <PROTOCOLS>
+         <Add mover_name=pr/>
+         <Add mover_name=fr/>
+        </PROTOCOLS>
+</dock_design>
+\end{lstlisting}
+
+The only caveat here is that we specify the resfile as a variable so the protocol does not have to be hard-coded. The command line will specify each resfile to give to the job. First, an option file must be produced as a simple text file.
+
+
+\begin{lstlisting}[breaklines=true]
+-in
+    -path
+        -database /my/rosetta/database/path
+-out
+    -pdb_gz
+-parser
+    -protocol threading.xml
+-s input_pg9_no_antigen.pdb
+-nstruct 100
+\end{lstlisting}
+
+Lastly the command line which will include the resfile as an option (named run.csh).
+
+\begin{lstlisting}[breaklines=true]
+#!/bin/csh
+set res = $1
+set out = `basename $res .resfile`
+mpiexec -n 101 my/rosetta/pathrosetta_scripts.mpistatic.linuxgccrelease @flags.txt -out:prefix $out -parser:script_vars resfiles=${res} > out.log
+\end{lstlisting}
+
+And to run the command I simply use an awk script to generate all the commands.
+
+\begin{lstlisting}[breaklines=true]
+ls *resfile | awk '{system( "run.csh "$1 ) }'
+\end{lstlisting}
+
+\textbf{Note: This should be run on a computer cluster as 100 processors are needed in the above protocol}
+
+The next step is to run the output PDB files and generate a position-specific scoring matrix. This is easily accomplished with the ``create\_pssm\_from\_threading.py'' script that is also found in the Meiler lab scripts repository. A simple command to generate a PSSM.
+
+\begin{lstlisting}[breaklines=true]
+./create_pssm_from_threading.py -g -r resfiles/donor\_10\_991403.resfile -n 2000.p3sm *.pdbs
+\end{lstlisting}
+
+The output .p3sm can now be used to predict the top N sequences from the 30\_length.fasta generated earlier in the protocol.
+
+\begin{lstlisting}[breaklines=true]
+./create\_pssm\_from\_threading.py -r resfiles/donor\_10\_2832895.resfile -s -p 2000.p3sm 30\_length.fasta
+\end{lstlisting}
+
+This generates a file called ``scored\_fasta.output''. I use awk and some other gnu commands to get the top 1000 scored fasta files.
+
+\begin{lstlisting}[breaklines=true]
+sort -nk 3 scored\_fasta.output | head -n 1000 | awk '{print(">"$1"\n"$2)}' > top1000.fasta
+\end{lstlisting}
+
+Finally, I can make all the resfiles using the same command as before.
+
+\begin{lstlisting}[breaklines=true]
+fasta_into_res.py top1000.fasta 95 125 H 0
+\end{lstlisting}
+
+For the full design protocol using these sequences and resfiles. See the next section on PG9 redesign.
 
 
 
