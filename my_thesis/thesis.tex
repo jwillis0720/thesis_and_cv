@@ -88,6 +88,8 @@ Figure\hfill Page\endgraf} \addtocontents{lot}{\vspace{0.2in}
 	plainpages=false
 }%
 \usepackage[all]{hypcap}
+\usepackage{amsmath} % or simply amstext
+\newcommand{\angstrom}{\text{\normalfont\AA}}
 
 % Stats table label
 \newcommand{\statslabel}[2]{\multirowcell{#1}[-1.6mm][c]{#2}}
@@ -216,10 +218,10 @@ Approved: \hskip 2.9in Date:\\[1.2em]
 \setcounter{page}{1}
 \input{introduction/Introduction.tex}
 \input{chapter2/polyspecificity.tex}
-%\input{chapter3/healthydonors.tex}
-%\input{chapter4/pg9redesign.tex}
-%\input{chapter5/future.tex}
-%\input{appendix/appendix.tex}
+\input{chapter3/healthydonors.tex}
+\input{chapter4/pg9redesign.tex}
+\input{chapter5/future.tex}
+\input{appendix/appendix.tex}
 \singlespacing
 \bibliographystyle{apalike}
 \bibliography{full_library}
