@@ -52,7 +52,6 @@ Figure\hfill Page\endgraf} \addtocontents{lot}{\vspace{0.2in}
 \usepackage{sidecap}
 \usepackage{lipsum}
 %\usepackage[demo]{graphicx}
-\usepackage[CaptionAfterwards]{fltpage}
 \MakeOuterQuote{"}
 %%another algorithm package
 \usepackage{algorithm}
@@ -131,7 +130,7 @@ Figure\hfill Page\endgraf} \addtocontents{lot}{\vspace{0.2in}
 
 %%Put useful shortcuts here:
 \newcommand{\ki}{K$_{i}$}
-\newcommand{\ic}{IC$_{50}$}
+\newcommand{\ic}{IC$_{50}$ }
 \newcommand{\mcml}{$\mu$g/mL}
 \newcommand{\ec}{EC$_{50}$ }
 \newcommand{\naive}{na\"{i}ve}
@@ -223,6 +222,7 @@ Approved: \hskip 2.9in Date:\\[1.2em]
 \input{chapter5/future.tex}
 \input{appendix/appendix.tex}
 \singlespacing
+\renewcommand\bibname{References b}
 \bibliographystyle{apalike}
 \bibliography{full_library}
 \end{document}
