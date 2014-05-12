@@ -1,8 +1,8 @@
 \section{Appendix V - Computational Standard Operating Procedures}
 \label{sec:appenixV}
-Here I will detail the computational procedures including running \rosetta and analyzing data with scripts that are often available in the Meiler Lab Scripts repository or available on request. Also a lot of the procedures are detailed in IPython Notebooks and will also be available on request.
+Here I will detail the computational procedures including running \rosetta~and analyzing data with scripts that are often available in the Meiler Lab Scripts repository or available on request. Also a lot of the procedures are detailed in IPython Notebooks and will also be available on request.
 \subsection{Chapter I - Multi-State Design}
-Here I will detail how I ran \rosettadesign for multi-state design and how I analyzed the results. I will use the simplified example of IGH\textsubscript{V}5-51 which only contains three sets of molecular structures. There is a great protocol capture for complex procedures attached to the publication by Andrew Leaver-Fay showing how to \textit{design for} and \textit{design against} in multiple states \citep{LeaverFay:2011ji}.
+Here I will detail how I ran \rosettadesign~for multi-state design and how I analyzed the results. I will use the simplified example of IGH\textsubscript{V}5-51 which only contains three sets of molecular structures. There is a great protocol capture for complex procedures attached to the publication by Andrew Leaver-Fay showing how to \textit{design for} and \textit{design against} in multiple states \citep{LeaverFay:2011ji}.
 \subsubsection{Running Rosetta Multi-State Design}
 To run multi-state design, I have to prepare several files.
 
@@ -631,13 +631,13 @@ The next step is to run the output PDB files and generate a position-specific sc
 The output .p3sm can now be used to predict the top N sequences from the 30\_length.fasta generated earlier in the protocol.
 
 \begin{lstlisting}[breaklines=true]
-./create\_pssm\_from\_threading.py -r resfiles/donor\_10\_2832895.resfile -s -p 2000.p3sm 30\_length.fasta
+./create_pssm_from_threading.py -r resfiles/donor\_10\_2832895.resfile -s -p 2000.p3sm 30\_length.fasta
 \end{lstlisting}
 
 This generates a file called ``scored\_fasta.output''. I use awk and some other gnu commands to get the top 1000 scored fasta files.
 
 \begin{lstlisting}[breaklines=true]
-sort -nk 3 scored\_fasta.output | head -n 1000 | awk '{print(">"$1"\n"$2)}' > top1000.fasta
+sort -nk 3 scored_fasta.output | head -n 1000 | awk '{print(">"$1"\n"$2)}' > top1000.fasta
 \end{lstlisting}
 
 Finally, I can make all the resfiles using the same command as before.
@@ -670,7 +670,7 @@ The design protocol used runs through the following steps.
 For this redesign we need several input files. The XML script, options file, residue file, and constraint file. The most complex of which, the XML file, informs Rosettaof our protocol. Use the following .xml file which is found under:
 
 \begin{verbatim}
-/input\_files/threading\_design.xml
+/input_files/threading_design.xml
 \end{verbatim}
 
 \textit{XML-File}
@@ -694,7 +694,7 @@ The residue file tells the packer how to design the protein. The first line lets
 The constraint file ensures that the glycan's are involved in binding. The torsional angles of the glycan can cause major structural perturbations.
 \lstinputlisting[breaklines=true]{input_files/glycan_constraints.cst}
 
-The constrain file syntax is found in the documentation - (https://www.rosettacommons.org/docs/latest/constraint-file.html). Briefly, I define two atoms with the input crystal structure distances. If these are violated, then there is an energetic penalty. \\
+The constrain file syntax is found in the documentation - \\(https://www.rosettacommons.org/docs/latest/constraint-file.html). Briefly, I define two atoms with the input crystal structure distances. If these are violated, then there is an energetic penalty. \\
 
 \subsubsection{Running Rosetta}
 To run Rosetta, I use an application called RosettaScripts \citep{Fleishman:2011ji}. Since we have defined all the input files. Running the application only requires passing the options file.
@@ -709,11 +709,11 @@ This protocol generates 200 models each taking approximately 1 hour to complete.
 There are three scripts in the /analysis folder that are used to analyze the mutations. Score\_vs\_rmsd full.py will give all the models energies as well as how much they deviated from the original structure. Get\_per\_ddg.py will give all of the binding energies decomposed by residues. Scores\_decomposed\_by\_resfile.py will decompose the energies of HCDR3 loop. They are each run using the following.
 
 \begin{lstlisting}[breaklines=true]
-score\_vs\_rmsd\_full.py −m −n ../input\_files/pg9\_input.pdb −o s\_v\_rmsd −r ../input\_files/normal\_design.resfile ../output_files/∗.pdb
+score_vs_rmsd_full.py −m −n ../input_files/pg9_input.pdb −o s_v_rmsd −r ../input_files/normal_design.resfile ../output_files/∗.pdb
 
-get\_per\_ddg.py -m -o per\_ddg ../output\_files/∗.pdb
+get_per_ddg.py -m -o per_ddg ../output_files/∗.pdb
 
-scores\_decompose\_by\_resfile.py −m −o HCDR3 −r ../input\_files/normal\_design.res
+scores_decompose_by_resfile.py −m −o HCDR3 −r ../input_files/normal_design.res
 \end{lstlisting}
 
 These will yield a series of data files that can be uploaded to a database or in a spreadsheet viewer. The complex queries I used to check energies between wt and mutations are beyond the scope of a protocol capture. But you can contact jwillis0720@gmail.com if you need additional guidance.
