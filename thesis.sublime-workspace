@@ -171,7 +171,7 @@
 			"file": "my_thesis/thesis.tex",
 			"settings":
 			{
-				"buffer_size": 6558,
+				"buffer_size": 6556,
 				"line_ending": "Unix"
 			}
 		},
@@ -179,7 +179,7 @@
 			"file": "my_thesis/introduction/Introduction.tex",
 			"settings":
 			{
-				"buffer_size": 48869,
+				"buffer_size": 48852,
 				"line_ending": "Unix"
 			}
 		},
@@ -187,7 +187,7 @@
 			"file": "my_thesis/summary.tex",
 			"settings":
 			{
-				"buffer_size": 3992,
+				"buffer_size": 4167,
 				"line_ending": "Unix"
 			}
 		},
@@ -203,7 +203,7 @@
 			"file": "my_thesis/chapter2/polyspecificity.tex",
 			"settings":
 			{
-				"buffer_size": 52571,
+				"buffer_size": 51751,
 				"line_ending": "Unix"
 			}
 		},
@@ -211,7 +211,7 @@
 			"file": "my_thesis/chapter3/healthydonors.tex",
 			"settings":
 			{
-				"buffer_size": 69866,
+				"buffer_size": 69869,
 				"line_ending": "Unix"
 			}
 		},
@@ -219,7 +219,7 @@
 			"file": "my_thesis/chapter4/pg9redesign.tex",
 			"settings":
 			{
-				"buffer_size": 30604,
+				"buffer_size": 30627,
 				"line_ending": "Unix"
 			}
 		},
@@ -227,7 +227,7 @@
 			"file": "my_thesis/chapter5/future.tex",
 			"settings":
 			{
-				"buffer_size": 19354,
+				"buffer_size": 19358,
 				"line_ending": "Unix"
 			}
 		}
@@ -780,15 +780,15 @@
 					"file": "my_thesis/thesis.tex",
 					"settings":
 					{
-						"buffer_size": 6558,
+						"buffer_size": 6556,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3818,
-								3818
+								0,
+								0
 							]
 						],
 						"settings":
@@ -806,15 +806,15 @@
 					"file": "my_thesis/introduction/Introduction.tex",
 					"settings":
 					{
-						"buffer_size": 48869,
+						"buffer_size": 48852,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								44278,
-								44278
+								0,
+								0
 							]
 						],
 						"settings":
@@ -832,15 +832,15 @@
 					"file": "my_thesis/summary.tex",
 					"settings":
 					{
-						"buffer_size": 3992,
+						"buffer_size": 4167,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3852,
-								3852
+								0,
+								0
 							]
 						],
 						"settings":
@@ -884,15 +884,15 @@
 					"file": "my_thesis/chapter2/polyspecificity.tex",
 					"settings":
 					{
-						"buffer_size": 52571,
+						"buffer_size": 51751,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								32614,
-								32614
+								0,
+								0
 							]
 						],
 						"settings":
@@ -910,15 +910,15 @@
 					"file": "my_thesis/chapter3/healthydonors.tex",
 					"settings":
 					{
-						"buffer_size": 69866,
+						"buffer_size": 69869,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								69582,
-								69582
+								0,
+								0
 							]
 						],
 						"settings":
@@ -936,15 +936,15 @@
 					"file": "my_thesis/chapter4/pg9redesign.tex",
 					"settings":
 					{
-						"buffer_size": 30604,
+						"buffer_size": 30627,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								27230,
-								27230
+								0,
+								0
 							]
 						],
 						"settings":
@@ -962,7 +962,7 @@
 					"file": "my_thesis/chapter5/future.tex",
 					"settings":
 					{
-						"buffer_size": 19354,
+						"buffer_size": 19358,
 						"regions":
 						{
 						},
