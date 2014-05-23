@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"true",
+				"true"
+			],
+			[
 				"input",
 				"input_files"
 			],
@@ -168,66 +172,42 @@
 	"buffers":
 	[
 		{
-			"file": "my_thesis/thesis.tex",
-			"settings":
-			{
-				"buffer_size": 6556,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "my_thesis/introduction/Introduction.tex",
-			"settings":
-			{
-				"buffer_size": 48852,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "my_thesis/summary.tex",
-			"settings":
-			{
-				"buffer_size": 4167,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "my_thesis/full_library.bib",
-			"settings":
-			{
-				"buffer_size": 1861760,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "my_thesis/chapter2/polyspecificity.tex",
-			"settings":
-			{
-				"buffer_size": 51751,
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "my_thesis/chapter3/healthydonors.tex",
 			"settings":
 			{
-				"buffer_size": 69869,
+				"buffer_size": 69862,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "my_thesis/chapter4/pg9redesign.tex",
+			"file": "my_thesis/tables/chapter3/table3_5.tex",
 			"settings":
 			{
-				"buffer_size": 30627,
+				"buffer_size": 2842,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "my_thesis/chapter5/future.tex",
+			"file": "my_thesis/thesis.tex",
 			"settings":
 			{
-				"buffer_size": 19358,
+				"buffer_size": 6605,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "my_thesis/thesis.lot",
+			"settings":
+			{
+				"buffer_size": 649,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "my_thesis/tables/chapter3/table3_1.tex",
+			"settings":
+			{
+				"buffer_size": 4095,
 				"line_ending": "Unix"
 			}
 		}
@@ -239,6 +219,10 @@
 		"selected_items":
 		[
 			[
+				"user",
+				"Preferences: Settings - User"
+			],
+			[
 				"late",
 				"LaTexTools: Delete temporary files"
 			],
@@ -249,10 +233,6 @@
 			[
 				"key",
 				"Preferences: Key Bindings - Default"
-			],
-			[
-				"user",
-				"Preferences: Settings - User"
 			],
 			[
 				"google",
@@ -467,7 +447,7 @@
 				"Package Control: Install Package"
 			]
 		],
-		"width": 439.0
+		"width": 449.0
 	},
 	"console":
 	{
@@ -484,14 +464,26 @@
 	},
 	"file_history":
 	[
+		"/Users/jordanwillis/git_thesis/my_thesis/tables/chapter3/table3_3.tex",
+		"/Users/jordanwillis/git_thesis/my_thesis/chapter3/healthydonors.tex",
+		"/Users/jordanwillis/git_thesis/my_thesis/thesis.tex",
+		"/Users/jordanwillis/git_thesis/my_thesis/tables/chapter3/table3_1.tex",
+		"/Users/jordanwillis/git_thesis/my_thesis/chapter2/polyspecificity.tex",
+		"/Users/jordanwillis/git_thesis/my_thesis/tables/intro/listofmabs.tex",
+		"/Users/jordanwillis/git_thesis/my_thesis/introduction/Introduction.tex",
+		"/Users/jordanwillis/git_thesis/my_thesis/acknowledgements.tex",
+		"/Users/jordanwillis/git_thesis/my_thesis/chapter5/future.tex",
+		"/Users/jordanwillis/git_thesis/my_thesis/chapter4/pg9redesign.tex",
+		"/Users/jordanwillis/git_thesis/my_thesis/full_library.bib",
+		"/Users/jordanwillis/git_thesis/my_thesis/summary.tex",
+		"/Users/jordanwillis/git_thesis/sams_thesis/Introduction.tex",
+		"/Users/jordanwillis/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
 		"/Users/jordanwillis/protocol-captures/protocol_capture_pg9redesign.tex",
 		"/Users/jordanwillis/protocol-captures/input_files/normal_design.resfile",
 		"/Users/jordanwillis/protocol-captures/input_files/threading.txt",
 		"/Users/jordanwillis/protocol-captures/input_files/threading_design.xml",
 		"/Users/jordanwillis/protocol-captures/nat_med_2014/[no file]",
 		"/Users/jordanwillis/git_thesis/my_thesis/appendix/appendixV.tex",
-		"/Users/jordanwillis/git_thesis/my_thesis/thesis.tex",
-		"/Users/jordanwillis/git_thesis/my_thesis/chapter5/future.tex",
 		"/Users/jordanwillis/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
 		"/Users/jordanwillis/git_thesis/my_thesis/sfsection.sty",
 		"/Users/jordanwillis/Library/Application Support/Sublime Text 3/Packages/Default/Default (OSX).sublime-keymap",
@@ -599,16 +591,7 @@
 		"/Users/jordanwillis/utilities/pyigblast/output_parser.py",
 		"/Users/jordanwillis/utilities/pyigblast/output_tabs_checkboxes.py",
 		"/Users/jordanwillis/utilities/pyigblast/io_director.py",
-		"/Users/jordanwillis/utilities/pyigblast/scrolling_io_director.py",
-		"/Users/jordanwillis/utilities/pyigblast/vertical_scroll.py",
-		"/Users/jordanwillis/utilities/pyigblast/cdr_analyzer.py",
-		"/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/lib-tk/Tkinter.py",
-		"/Users/jordanwillis/utilities/pyigblast/execution.py",
-		"/Users/jordanwillis/Library/Application Support/Sublime Text 3/Packages/SublimePythonIDE/SublimePython.sublime-settings",
-		"/Users/jordanwillis/utilities/pyigblast/arg_parse.py",
-		"/Users/jordanwillis/Library/Application Support/Sublime Text 3/Packages/User/pep8_autoformat.sublime-settings",
-		"/Users/jordanwillis/Library/Application Support/Sublime Text 3/Packages/Python PEP8 Autoformat/pep8_autoformat.sublime-settings",
-		"/Users/jordanwillis/Library/Application Support/Sublime Text 3/Packages/SideBarEnhancements/CHANGELOG"
+		"/Users/jordanwillis/utilities/pyigblast/scrolling_io_director.py"
 	],
 	"find":
 	{
@@ -626,6 +609,11 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"i.e.",
+			"i.e.,",
+			"i.e.",
+			"i.e",
+			"i.e.",
 			"C",
 			"silico",
 			"rosetta",
@@ -748,12 +736,7 @@
 			"all_checkboxes",
 			"\\%",
 			"0",
-			"d_hits",
-			"D-Gene",
-			"v_hits",
-			"V-Gene",
-			"option_list",
-			"fr1_alignment_summary"
+			"d_hits"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -761,6 +744,8 @@
 		"regex": false,
 		"replace_history":
 		[
+			"\\\\textit{i.e.}",
+			"\\\\texit{i.e.}",
 			"rosetta~"
 		],
 		"reverse": false,
@@ -772,23 +757,23 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 3,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "my_thesis/thesis.tex",
+					"file": "my_thesis/chapter3/healthydonors.tex",
 					"settings":
 					{
-						"buffer_size": 6556,
+						"buffer_size": 69862,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								59974,
+								59974
 							]
 						],
 						"settings":
@@ -796,25 +781,25 @@
 							"syntax": "Packages/LaTeX/LaTeX.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 2040.0,
+						"translation.y": 9216.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "my_thesis/introduction/Introduction.tex",
+					"file": "my_thesis/tables/chapter3/table3_5.tex",
 					"settings":
 					{
-						"buffer_size": 48852,
+						"buffer_size": 2842,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								2250,
+								2250
 							]
 						],
 						"settings":
@@ -822,25 +807,25 @@
 							"syntax": "Packages/LaTeX/LaTeX.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 12657.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 2,
-					"file": "my_thesis/summary.tex",
+					"file": "my_thesis/thesis.tex",
 					"settings":
 					{
-						"buffer_size": 4167,
+						"buffer_size": 6605,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								521,
+								521
 							]
 						],
 						"settings":
@@ -848,129 +833,51 @@
 							"syntax": "Packages/LaTeX/LaTeX.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 430.0,
+						"translation.y": 2886.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 3,
-					"file": "my_thesis/full_library.bib",
+					"file": "my_thesis/thesis.lot",
 					"settings":
 					{
-						"buffer_size": 1861760,
+						"buffer_size": 649,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1419217,
-								1419217
+								81,
+								81
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/LaTeX/Bibtex.tmLanguage"
+							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 488870.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 4,
-					"file": "my_thesis/chapter2/polyspecificity.tex",
+					"file": "my_thesis/tables/chapter3/table3_1.tex",
 					"settings":
 					{
-						"buffer_size": 51751,
+						"buffer_size": 4095,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/LaTeX/LaTeX.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 9025.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "my_thesis/chapter3/healthydonors.tex",
-					"settings":
-					{
-						"buffer_size": 69869,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/LaTeX/LaTeX.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 20136.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "my_thesis/chapter4/pg9redesign.tex",
-					"settings":
-					{
-						"buffer_size": 30627,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/LaTeX/LaTeX.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 8417.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "my_thesis/chapter5/future.tex",
-					"settings":
-					{
-						"buffer_size": 19358,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
+								98,
+								98
 							]
 						],
 						"settings":
@@ -1039,6 +946,30 @@
 		"height": 0.0,
 		"selected_items":
 		[
+			[
+				"th",
+				"my_thesis/thesis.tex"
+			],
+			[
+				"chapter3",
+				"my_thesis/chapter3/healthydonors.tex"
+			],
+			[
+				"po",
+				"my_thesis/chapter2/polyspecificity.tex"
+			],
+			[
+				"in",
+				"my_thesis/introduction/Introduction.tex"
+			],
+			[
+				"int",
+				"sams_thesis/Introduction.tex"
+			],
+			[
+				"ack",
+				"my_thesis/acknowledgements.tex"
+			],
 			[
 				"future",
 				"my_thesis/chapter5/future.tex"
