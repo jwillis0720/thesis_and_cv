@@ -3,7 +3,7 @@
 Here I will detail the computational procedures including running \rosetta~and analyzing data with scripts that are often available in the Meiler Lab Scripts repository or available on request. Also a lot of the procedures are detailed in IPython Notebooks and will also be available on request.
 \subsection{Chapter I - Multi-State Design}
 Here I will detail how I ran \rosettadesign~for multi-state design and how I analyzed the results. I will use the simplified example of IGH\textsubscript{V}5-51 which only contains three sets of molecular structures. There is a great protocol capture for complex procedures attached to the publication by Andrew Leaver-Fay showing how to \textit{design for} and \textit{design against} in multiple states \citep{LeaverFay:2011ji}.
-\subsubsection{Running Rosetta Multi-State Design}
+\subsubsection{Running \rosetta~Multi-State Design}
 To run multi-state design, I have to prepare several files.
 
 \begin{itemize}
@@ -162,15 +162,15 @@ I construct an options file with all those options (options.txt) that looks like
 -database my/rosetta/database/location/
 \end{lstlisting}
 
-Finally we can run \rosetta using the following command.
+Finally we can run \rosetta~using the following command.
 
 \begin{lstlisting}
 mpiexec -n 4 /my/rosetta/location/mpi_msd.mpi.myoperatingsystem \
 @options.txt
 \end{lstlisting}
-\textbf{Warning! \linebreak \rosetta may complain about some of the comments (anything starting with \#) not being recognized, if so, just remove it from the file}
+\textbf{Warning! \linebreak \rosetta~may complain about some of the comments (anything starting with \#) not being recognized, if so, just remove it from the file}
 
-The output will be 300 files, 100 for each of the states. We only need to analyze 100 files considering that the designed enitities will be the same for all three files. For example, position 5 will be the same for 2B1A, 2XWT, and 3HMX.
+The output will be 300 files, 100 for each of the states. We only need to analyze 100 files considering that the designed entities will be the same for all three files. For example, position 5 will be the same for 2B1A, 2XWT, and 3HMX.
 
 \subsubsection{Analysis of MSD Output}
 I wrote a design analysis script called deep\_analysis which encompasses many design analysis tools. I will only go into the functionality that is necessary to use, but you can read the options file for more use.
@@ -542,7 +542,7 @@ This fasta file will be used in the remainder of the protocol. I will not go ove
 
 \subsubsection{PSSM Heuristics}
 
-Using the fasta file ``30\_length.fasta'' generated in the previous section, a quick script written in python to get random 2000 sequences is shown below.
+Using the fasta file ``30\_length.fasta'' generated in the previous section, a quick script written in python to get random 2,000 sequences is shown below.
 
 \begin{lstlisting}[breaklines=true, language=python]
 from Bio import SeqIO
@@ -559,13 +559,13 @@ with open('2000\_sequences.fasta') as f:
         f.write(``>{0}\n{1}\n''.format(seq[0],seq[1]))
 \end{lstlisting}
 
-Using \rosettadesign, I will generate 2000 resfiles that tell the packer to mutate the HCDR3 into each of the entries in the fasta file. To do this, there is a script available from the Meiler lab called ``fasta\_to\_resfile.py'' which will generate the resfiles necessary.
+Using \rosettadesign, I will generate 2,000 resfiles that tell the packer to mutate the HCDR3 into each of the entries in the fasta file. To do this, there is a script available from the Meiler lab called ``fasta\_to\_resfile.py'' which will generate the resfiles necessary.
 
 \begin{lstlisting}[breaklines=true]
 fasta_into_res.py random_2000.fasta 95 126 H 0
 \end{lstlisting}
 
-The rest of the protocol uses Rosetta Scripts to do the design. For Rosetta Scripts, you need an xml file, options file, and command line. The xml file is a scripting file that tells \rosetta~specific set of instructions (here I will name it threading.xml). The first step is relatively simple only doing a design and a full-atom minimization (called relax).
+The rest of the protocol uses \scripts~to do the design. For \scripts, you need an xml file, options file, and command line. The xml file is a scripting file that tells \rosetta~specific set of instructions (here I will name it threading.xml). The first step is relatively simple only doing a design and a full-atom minimization (called relax).
 
 \begin{lstlisting}[breaklines=true, language=xml]
 <dock_design>
@@ -651,10 +651,10 @@ For the full design protocol using these sequences and resfiles. See the next se
 \subsection{Chapter III - PG9 Design}
 \label{subsec:pg9redesign}
 \setlength{\parindent}{0cm}
-This protocol capture will detail the how to use \rosettadesign~to predict mutations that enhance specificity. This accompanies the manuscript Willis \textit{et al.} \textbf{\textit{Nature Med. Letters}} (submitted). It assumes that you have a \rosetta~license from www.rosettacommons.org. \\
+This protocol capture will detail the how to use \rosettadesign~to predict mutations that enhance specificity. This accompanies the manuscript Willis \textit{et al.} \textbf{\textit{Nature Med.}} (submitted). It assumes that you have a \rosetta~license from www.rosettacommons.org. \\
 
 \subsubsection{Preparing the input files}
-Using PG9/CAP45 complex, I have prepared a \rosetta compatible file called PG9\_input.pdb. This has spcecial identifiers for the glycans that \rosetta 's database can understand. To create your own glycan input, an excellent protocol capture is provided in an accompanying manuscript by Doug Renfrew \citep{Renfrew:2012ci}. \\
+Using PG9/CAP45 complex, I have prepared a \rosetta~compatible file called PG9\_input.pdb. This has spcecial identifiers for the glycans that \rosetta 's database can understand. To create your own glycan input, an excellent protocol capture is provided in an accompanying manuscript by Doug Renfrew \citep{Renfrew:2012ci}. \\
 
 The design protocol used runs through the following steps.
 
@@ -696,8 +696,8 @@ The constraint file ensures that the glycan's are involved in binding. The torsi
 
 The constrain file syntax is found in the documentation - \\(https://www.rosettacommons.org/docs/latest/constraint-file.html). Briefly, I define two atoms with the input crystal structure distances. If these are violated, then there is an energetic penalty. \\
 
-\subsubsection{Running Rosetta}
-To run Rosetta, I use an application called RosettaScripts \citep{Fleishman:2011ji}. Since we have defined all the input files. Running the application only requires passing the options file.
+\subsubsection{Running \rosetta}
+To run \rosetta, I use an application called \scripts~\citep{Fleishman:2011ji}. Since we have defined all the input files. Running the application only requires passing the options file.
 
 \begin{lstlisting}[breaklines=true]
 my/path/to/rosetta/source/bin/rosetta_scripts.myoperatingsystem @input_files/threading.txt -database my/path/to/rosetta/database/
@@ -716,7 +716,7 @@ get_per_ddg.py -m -o per_ddg ../output_files/∗.pdb
 scores_decompose_by_resfile.py −m −o HCDR3 −r ../input_files/normal_design.res
 \end{lstlisting}
 
-These will yield a series of data files that can be uploaded to a database or in a spreadsheet viewer. The complex queries I used to check energies between wt and mutations are beyond the scope of a protocol capture. But you can contact jwillis0720@gmail.com if you need additional guidance.
+These will yield a series of data files that can be uploaded to a database or in a spreadsheet viewer. The complex queries I used to check energies between \text{wt} and mutations are beyond the scope of a protocol capture. But you can contact jwillis0720@gmail.com if you need additional guidance.
 
 
 

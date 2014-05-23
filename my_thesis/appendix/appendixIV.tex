@@ -25,7 +25,7 @@ Using PG9 Heavy Chain as a working example.
     DYRNGYNYYDFYDGYYNYHYMDVWGKGTTVTVSS
     \end{verbatim}
   \item[Reverse translate] \hfill \\
-  Use a reverse translator to get nucleotide sequences. They will be optimized so it does not matter.
+  Use a reverse translator to get nucleotide sequences.
     \begin{verbatim}
     >PG9_variable_nucleotide
     CAGCGCCTGGTGGAAAGCGGCGGCGGCGTGGTGCAGCCGGGCAGCAGCCT
@@ -38,7 +38,7 @@ Using PG9 Heavy Chain as a working example.
     TTATAACTATCATTATATGGATGTGTGGGGCAAAGGCACCACCGTGACCG
     TGAGCAGC
     \end{verbatim}
-  \item[Prepend 5' region] \hfill \\
+  \item[Prepend 5$'$ region] \hfill \\
   I will prepend a 5' smaI site (CCCGGG) and a portion of the leader sequence to keep it in frame (TCTGGCT). The leader sequence will be kept in frame and cleaved.
     \begin{verbatim}
     >PG9_with_smaI
@@ -52,7 +52,7 @@ Using PG9 Heavy Chain as a working example.
     GATTTTTATGATGGCTATTATAACTATCATTATATGGATGTGTGGGGCAA
     AGGCACCACCGTGACCGTGAGCAGC
     \end{verbatim}
-   \item[Append 3' region] \hfill \\
+   \item[Append 3$'$ region] \hfill \\
    I then add on an ApaI restriction site (GGGCCC) along with additional nucleotides (GCCGGTACCAA) to keep it in frame.
     \begin{verbatim}
     >PG9_with_smaI/ApaI
@@ -67,7 +67,7 @@ Using PG9 Heavy Chain as a working example.
     GTGAGCAGCGCCGGTACCAA(GGGCCC)
     \end{verbatim}
    \item[Order Product] \hfill \\
-   This will be the final product ordered. It is very important that you optimize for \textbf{mamallian} systems. You also do not want to avoid the following sites. HindIII, EcoRI, SmaI, ApaI. In addition, do not remove the SmaI or ApaI sites that I just added.
+   This will be the final product ordered. It is very important that you optimize for \textbf{mammalian} systems. You also do not introduce the following sites: HindIII, EcoRI, SmaI, ApaI. In addition, do not remove the SmaI or ApaI sites that I just added.
 \end{description}
 
 \subsubsection{Full Lambda Chain Variable}
@@ -103,10 +103,10 @@ Using PG9 Lambda Chain as a working example.
     ATGAAGGCGATTATTATTGCAAAAGCCTGACCAGCACCCGCCGCCGCGTG
     TTTGGCACCGGCACCAAACTGACCGTGCTGGGCCAGCCG
     \end{verbatim}
-  \item[Prepend 5' region] \hfill \\
-  I will prepend a 5' SaLI site (GTCGAC) and a nucleotide (T) to keep it in frame.
+  \item[Prepend 5$'$ region] \hfill \\
+  I will prepend a 5$'$ SalI site (GTCGAC) and a nucleotide (T) to keep it in frame.
     \begin{verbatim}
-    >PG9_with_SaLI
+    >PG9_with_SalI
     (GTCGAC)TCAGAGCGCGCTGACCCAGCCGGCGAGCGTGAGCGGCAGCCCGG
     GCCAGAGCATTACCATTAGCTGCCAGGGCACCAGCAACGATGTGGGCGGCTA
     TGAAAGCGTGAGCTGGTATCAGCAGCATCCGGGCAAAGCGCCGAAAGTGGTG
@@ -115,10 +115,10 @@ Using PG9 Lambda Chain as a working example.
     TGAAGGCGATTATTATTGCAAAAGCCTGACCAGCACCCGCCGCCGCGTGTTT
     GGCACCGGCACCAAACTGACCGTGCTGGGCCAGCCG
     \end{verbatim}
-   \item[Append 3' region] \hfill \\
+   \item[Append 3$'$ region] \hfill \\
    I then add on an NotI restriction site (GCGGCCGC) with no additional nucleotides.
     \begin{verbatim}
-    >PG9_with_SaLI/NotI
+    >PG9_with_SalI/NotI
     (GTCGAC)TCAGAGCGCGCTGACCCAGCCGGCGAGCGTGAGCGGCAGCCCGG
     GCCAGAGCATTACCATTAGCTGCCAGGGCACCAGCAACGATGTGGGCGGCTA
     TGAAAGCGTGAGCTGGTATCAGCAGCATCCGGGCAAAGCGCCGAAAGTGGTG
@@ -128,14 +128,14 @@ Using PG9 Lambda Chain as a working example.
     GGCACCGGCACCAAACTGACCGTGCTGGGCCAGCCG(GCGGCCGC)
     \end{verbatim}
    \item[Order Product] \hfill \\
-   This will be the final product ordered. It is very important that you optimize for \textbf{mamallian} systems. You also do not want to avoid the following sites. HindIII, EcoRI, SaLI and NotI. In addition, do not remove the SaLI or NotI sites that I just added.
+   This will be the final product ordered. It is very important that you optimize for \textbf{mammalian} systems. You also do not want to avoid the following sites. HindIII, EcoRI, SalI and NotI. In addition, do not remove the SalI or NotI sites that I just added.
 \end{description}
 
 \subsubsection{Designing a swappable vector}
 This was how I made a PG9 vector with a swappable HCDR3 sequence. This particular protocol will work for any HCDR3 sequence that uses J\textsubscript{H}6, but can be extended to any family based on the constant FR4 sequences that are needed.
 \begin{description}
   \item[Get HCDR3 and FR4 Sequence] \hfill \\
-  First thing I need is the HCDR3 sequence. Considering that I'm only adding restriction sites (RE) to the HCDR3 region, I will only consider that in the example. Make sure this sequence contains CVR (the begining of the HCDR3) and TVSS (the end of FR4). Those two regions will contain the restriction sites when we are done. Then we can back translate.
+  First thing I need is the HCDR3 sequence. Considering that I'm only adding restriction sites (RE) to the HCDR3 region, I will only consider that in the example. Make sure this sequence contains CVR (the beginning of the HCDR3) and TVSS (the end of FR4). Those two regions will contain the restriction sites when we are done. Then we can back translate.
     \begin{verbatim}
     TTTTGcgtacgCGAAGCGGGCGGCCCGGATTATCGCAAC
     --F--C--V--R--E--A--G--G--P--D--Y--R--N
@@ -149,7 +149,7 @@ This was how I made a PG9 vector with a swappable HCDR3 sequence. This particula
     ACCGTctcgagC
     --T--V--S--S
     \end{verbatim}
- The restriction sites are shown in lower case in the HCDR3 region. BsIWI(cgtacg) and XhoI(ctcgag). It is just a matter of swapping that sequence into the Lonza vector.
+ The restriction sites are shown in lower case in the HCDR3 region. BsIWI (cgtacg) and XhoI (ctcgag). It is just a matter of swapping that sequence into the Lonza vector.
  \item[Order Construct] \hfill \\
     \begin{verbatim}
     cccgggTCTTGGGCTCAGCGCCTGGTGGAAAGCGGCGGCGG
@@ -164,7 +164,7 @@ This was how I made a PG9 vector with a swappable HCDR3 sequence. This particula
     TATTATTATGGCATGGATGTGTGGGGCAAAGGCACCACCGT
     GACCGTctcgagCGCCGGTACCAAgggccc
     \end{verbatim}
- This construct can be ordered now with the two restriction sites flanking the HCDR3 sequence. When you order the construct, keep the restriction sites BsiWI, XhoI,ApaI, HindIII, EcoRI, and SmaI. You can clone this full vector with SmaI and ApaI.
+ This construct can be ordered now with the two restriction sites flanking the HCDR3 sequence. When you order the construct, keep the restriction sites BsiWI, XhoI, ApaI, HindIII, EcoRI, and SmaI. You can clone this full vector with SmaI and ApaI.
 \end{description}
 
 
@@ -189,7 +189,7 @@ If the swappable construct with BsiWI and ApaI sites was made, you can simply or
     GAAGGCGGCGATTATGATTTTTGGAGCGGCTATTATCGCGGCTAT
     AGCGGCTATGGCGAAGAACATTATTATTATATGGATGTGTGG
     \end{verbatim}
- \item[Add 5' Sequence] \hfill \\
+ \item[Add 5$'$ Sequence] \hfill \\
  Adding the BsiWI sequence (CGTACG) along with a nucleotide (C) to keep it in frame.
     \begin{verbatim}
      >2383:160514_nucleotide
@@ -197,7 +197,7 @@ If the swappable construct with BsiWI and ApaI sites was made, you can simply or
     CGGCTATAGCGGCTATGGCGAAGAACATTATTATTATATGGATGT
     GTGGGGCAAA
     \end{verbatim}
-\item[Add 3' Sequence] \hfill \\
+\item[Add 3$'$ Sequence] \hfill \\
 Have to add a lot of the constant region (GGCAAAGGCACCACCGTGACCGT) since it takes a several nucleotides to get to the 5' XhoI site (CTCGAG).
     \begin{verbatim}
     >2383:160514_BsiWI_XhoI
@@ -206,7 +206,7 @@ Have to add a lot of the constant region (GGCAAAGGCACCACCGTGACCGT) since it take
     GTGGGGCAAAGGCACCACCGTGACCGTCTCGAG
     \end{verbatim}
 \item[Order Sequence] \hfill \\
- When you order the construct, keep the restriction sites BsiWI, XhoI,ApaI, HindIII, EcoRI, and SmaI. You can clone this into the HCDR3 swap vector with BsiWI and XhoI.
+ When you order the construct, keep the restriction sites BsiWI, XhoI, ApaI, HindIII, EcoRI, and SmaI. You can clone this into the HCDR3 swap vector with BsiWI and XhoI.
 \end{description}
 
 \subsubsection{Restriction Map - All Constructs}
@@ -223,8 +223,8 @@ For reference figure \ref{fig:figa_1}.
 
 \subsection{HIV Neutralization Assay}
 \textbf{Pre-Neutralization Assay} -
--Make growth media (GM) also called TZMbl media. (DMEM high glucose 1X + 110 mg/mL NaPy + 1X Pen-Strep +  10\% Heat Inactivated FBS)
--If you are testing serum, make sure to heat inactivate.
+-Make growth media (GM) also called TZMbl media. (DMEM high glucose 1X + 110 mg/mL NaPy + 1X Pen-Strep +  10\% heat inactivated FBS)
+-If you are testing serum, make sure to heat inactivate. \\
 
 \textbf{Neutralization Assay}
 Using the plate setup found in figure \ref{fig:figa_2}.
@@ -249,7 +249,7 @@ Using the plate setup found in figure \ref{fig:figa_2}.
 While the virus and antibodies are incubating. Prepare the cells to be added at the end of the incubation.
 
 \begin{enumerate}
-  \item TZMBl cells should be confluent. Decant cell culture and wash with sterile PBS.
+  \item TZMbl cells should be confluent. Decant cell culture and wash with sterile PBS.
   \item Add 5 mL of tryspin (to T150 flask) and incubate for 1 minute.
   \item Aspirate trypsin and incubate cells at $37\,^{\circ}\mathrm{C}$ for five minutes.
   \item Add 10 mL of growth media and count cells.
