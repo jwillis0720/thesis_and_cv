@@ -1,6 +1,7 @@
 \section{Appendix V - Computational Standard Operating Procedures}
 \label{sec:appenixV}
 Here I will detail the computational procedures including running \rosetta~and analyzing data with scripts that are often available in the Meiler Lab Scripts repository or available on request. Also a lot of the procedures are detailed in IPython Notebooks and will also be available on request.
+
 \subsection{Chapter I - Multi-State Design}
 Here I will detail how I ran \rosettadesign~for multi-state design and how I analyzed the results. I will use the simplified example of IGH\textsubscript{V}5-51 which only contains three sets of molecular structures. There is a great protocol capture for complex procedures attached to the publication by Andrew Leaver-Fay showing how to \textit{design for} and \textit{design against} in multiple states \citep{LeaverFay:2011ji}.
 \subsubsection{Running \rosetta~Multi-State Design}
@@ -16,18 +17,19 @@ To run multi-state design, I have to prepare several files.
 \textbf{Clean PDB} - First, I can download all three protein PDBs with the clean\_pdb.py script. Clean PDB supports the following syntax:
 
 
-\begin{lstlisting}
+\begin{lstlisting}[breaklines=true]
 clean_pdb.py <PDB_ID> <CHAINS>
 \end{lstlisting}
 
 We only want the asymmetric unit in the crystal structure, so it helps to manually inspect the PDBs. We need one heavy chain, one light chain, and one antigen. I just go to www.pdb.org to find these chain codes.
 \begin{lstlisting}
+clean_pdb.py 2B1A HLP
 clean_pdb.py 2XWT ABC
 clean_pdb.py 3HMX HLB
 \end{lstlisting}
 Although not absolutely necessary, it makes it easier to label the chain IDs the same. All heavy chains have H, light L, and antigen A. There is a change PDB id script which allows us to quickly rename chain IDs. The script takes the following syntax.
 
-\begin{lstlisting}
+\begin{lstlisting}[breaklines=true]
 set_pdb_chain_id.py old_chain new_chain input output
 \end{lstlisting}
 I have looked through all the PDBs and figured out which names to change.
@@ -36,31 +38,33 @@ I have looked through all the PDBs and figured out which names to change.
 set_pdb_chain_id.py P A 2B1A_HLP.pdb 2B1A_HLA.pdb
 set_pdb_chain_id.py A H 2XWT_ABC.pdb 2XWT_HBC.pdb
 set_pdb_chain_id.py B L 2XWT_HBC.pdb 2XWT_HLC.pdb
-set_pdb_chain_id.py C L 2XWT_HLC.pdb 2XWT_HLA.pdb
 set_pdb_chain_id.py C A 2XWT_HLC.pdb 2XWT_HLA.pdb
 set_pdb_chain_id.py B A 3HMX_HLB.pdb 3HMX_HLA.pdb
 \end{lstlisting}
-For good measure some of the PDBs don't start numbering scheme correctly so to make it easier we should renumber each chain starting with 1.
+To ensure the starting structures use the correct numbering scheme, we should renumber each chain starting with 1.
 
-\begin{lstlisting}
+\begin{lstlisting}[breaklines=true]
 renumber_pdb.py 2B1A_HLA.pdb 2B1A_clean.pdb
 renumber_pdb.py 2XWT_HLA.pdb 2XWT_clean.pdb
 renumber_pdb.py 3HMX_HLA.pdb 3HMX_clean.pdb
 \end{lstlisting}
-Now we can remove all temporary files, only *\_clean.pdb files should remain in the working directory. The next thing to do would be to find all positions with at least one difference. This requires manual inspection of the alignment. For the V\textsubscript{H} gene, there are 29 amino acid positions that will differ from germline in at least one position. These positions will be considered. Given that data, we can construct the entity residue file.
+Now we can remove all temporary files. Only *\_clean.pdb files should remain in the working directory. The next thing to do would be to find all positions with at least one difference. This requires manual inspection of the alignment. For the V\textsubscript{H} gene, there are 29 amino acid positions that will differ from germline in at least one position. These positions will be considered. Given that data, we can construct the entity residue file.
 
 \begin{lstlisting}
 #The entity.resfile
-29 #The number of positions to design
-ALLAAxc EX 1 EX 2 EX ARO 2 #Allow all amino acids
+#The number of positions to design
+29
+#Allow all amino acids
 #except cystine and use rotamer libraries 1,2
 #and aromatic 2.
-start #beginning of residue file.
+ALLAAxc EX 1 EX 2 EX ARO 2
+#beginning of residue file
+start
 \end{lstlisting}
 
 The correlation file maps how each residue in each file should map to the others. There will be three correlation files, one for each state. Since each amino acid lines up, i.e. design position 5 in 2B1A with position 5 in 3HMX, all the correlation files will be the same. Here is an example of one correlation file.
 
-\begin{lstlisting}
+\begin{lstlisting}[breaklines=true]
 #all.corr
 #The first column is the entity,
 #the second is the residue number for that state,
@@ -97,30 +101,33 @@ The correlation file maps how each residue in each file should map to the others
 \end{lstlisting}
 A secondary residue file is also needed in case any extra packing tasks are needed to be supplied to each state. For example, we could tell one PDB state to design around the interface in single state design mode while everything in the correlation file designs together. I do not require extra design tasks for this protocol so all secondary residue files will be the same. For example,
 
-\begin{lstlisting}
-NATRO #tells the packer to use all natural side
+\begin{lstlisting}[breaklines=true]
+#tells the packer to use all natural side
 #chain configurations for everything
 #that is not being designed.
-use_input_sc #the input side chain is allowed
-start #start the residue file
+NATRO
+#the input side chain is allowed
+use_input_sc
+#start the residue file
+start
 \end{lstlisting}
 
 We next to create a states file that has the PDB, correlation file and secondary resfile names in it. Name them 2B1A.states, 2XWT.states, and 3HMX.states. They should look like the following when opened.
 
 \begin{lstlisting}
 #2B1A.states
-2B1A_clean.pdb all.corr all.2res
+input_files/2B1A_clean.pdb input_files/all.corr input_files/all.2res
 
 #2XWT.states
-2XWT_clean.pdb all.corr all.2res
+input_files/2XWT_clean.pdb input_files/all.corr input_files/all.2res
 
 #3HMX.states
-3HMX_clean.pdb all.corr all.2res
+input_files/3HMX.pdb input_files/all.corr input_files/all.2res
 \end{lstlisting}
 
 Lastly, a fitness file needs to be constructed to tell multi-state how to design. I call this file fitness.daf and it points to the locations of the states files.
 
-\begin{lstlisting}
+\begin{lstlisting}[breaklines=true]
 #initialize the states and what the states file name is
 STATE_VECTOR A 2b1a.states
 STATE_VECTOR B 2xwt.states
@@ -151,7 +158,7 @@ The \rosetta executable is called mpi\_msd.mpi.<operatingsystem>. It must be com
 
 I construct an options file with all those options (options.txt) that looks like this.
 
-\begin{lstlisting}
+\begin{lstlisting}[breaklines=true]
 -entity_resfile entity.resfile
 -fitness_file fitness.daf
 -ms
@@ -162,11 +169,11 @@ I construct an options file with all those options (options.txt) that looks like
 -database my/rosetta/database/location/
 \end{lstlisting}
 
-Finally we can run \rosetta~using the following command.
+Finally we can run \rosetta~using the following command after starting MPD.
 
-\begin{lstlisting}
-mpiexec -n 4 /my/rosetta/location/mpi_msd.mpi.myoperatingsystem \
-@options.txt
+\begin{lstlisting}[breaklines=true]
+mpd && mpiexec -n 4 /my/rosetta/location/mpi_msd.mpi.myoperatingsystem \
+@input_files/options.txt
 \end{lstlisting}
 \textbf{Warning! \linebreak \rosetta~may complain about some of the comments (anything starting with \#) not being recognized, if so, just remove it from the file}
 
@@ -175,7 +182,7 @@ The output will be 300 files, 100 for each of the states. We only need to analyz
 \subsubsection{Analysis of MSD Output}
 I wrote a design analysis script called deep\_analysis which encompasses many design analysis tools. I will only go into the functionality that is necessary to use, but you can read the options file for more use.
 
-\begin{lstlisting}
+\begin{lstlisting}[breaklines=true]
 deep\_analysis --help
 >>              Design Analysis
 ___________________________________________________________
@@ -307,12 +314,12 @@ YCAR
 
 Then we can use the make\_res.py script.
 
-\begin{lstlisting}
+\begin{lstlisting}[breaklines=true]
 make_res.py IGHV5-51.fasta > IGHV5-51.res
 \end{lstlisting}
 
 This residue file can then be used to mutate one of our templates back to germline.
-\begin{lstlisting}
+\begin{lstlisting}[breaklines=true]
 /path/to/rosetta/bin/fixbb.default.<operating_system> \
 -s 2B1A_clean.pdb \
 -resfile IGHV5-51.res -database /path/to/database \
@@ -320,7 +327,7 @@ This residue file can then be used to mutate one of our templates back to germli
 \end{lstlisting}
 
 Now we can use the analysis script.
-\begin{lstlisting}
+\begin{lstlisting}[breaklines=true]
 deep_analysis -p ../input/2B1A_clean.pdb \
 -S -b -s nd -c ../input/all.corr msd_output_*A*.pdb
 
@@ -333,7 +340,7 @@ Normalized Bit Score for design ===> 0.2454
 
 and
 
-\begin{lstlisting}
+\begin{lstlisting}[breaklines=true]
 deep_analysis -p ../input/2B1A_germline.pdb \
 -S -b -s nd -c ../input/all.corr msd_output_*A*.pdb
 
@@ -346,7 +353,7 @@ Normalized Bit Score for design ===> 0.3544
 
 This gives a design score towards 0.35 for the germline sequence and 0.24 for the mature sequence. Everything can be repeated this exact way. For single state design you can keep the fitness file exactly the same, but remove the other states.
 
-\begin{lstlisting}
+\begin{lstlisting}[breaklines=true]
 #initialize the states and what the states file name is
 STATE_VECTOR A 2b1a.states
 STATE_VECTOR B 2xwt.states
@@ -456,58 +463,39 @@ I'll keep it simple for the protocol capture, but want to show how robust PyIg c
 python2.7 execution.py -q donor_10.fasta -d datafiles/database/ -i internal_data/ -a datafiles/optional_file/ -y Ig -or human -nV 1 -nD 1 -nJ 1 -s imgt -o donor_10 -nP 23 -z -j
 \end{lstlisting}
 
-Each option is listed in the help. Make sure you see which each one does. For instance -nP needs to be carefully considered since it is the number or processors it will be run on. The output to this command line is a \.json file that will be uploaded to a Mongo database. One entry looks like this.
+Each option is listed in the help. Make sure you see which each one does. For instance -nP needs to be carefully considered since it is the number or processors it will be run on. The output to this command line is a \.json file that will be uploaded to a Mongo database. One entry (with default output settings) looks like this.
 
 \begin{lstlisting}[breaklines=true]
 {
-    "Sequence ID": "donor_45654",
-    "Input Sequence": "CTTACCTGAGGAGACGG
-                       TGACCAGGGTTCCCTGGCCCCAGTAG
-                       TCAAAGTACCCCCGTACCAGCTGCTG
-                       CTATACTGGGCTCTCTCGCACAGTAA
-                       TACACGGCCGTGTCCTCGGCTCTCA
-                       GCTGTTCATTTGCAGA",
-    "Chain Type": "VH",
-    "Format Type": "imgt",
-    "Query Sequence": "CTTACCTGAGGAGACGGTGACCAGGG
-                       TTCCCTGGCCCCAGTAGTCAAAGTAC
-                       CCCCGTACCAGCTGCTGCTATACTGG
-                       GCTCTCTCGCACAGTAATACACACGG
-                       CCGTGTCCTCGGCTCTCAGGCTGTTC
-                       ATTTGCAGA",
-    "Query Translated": "LT*GDGDQGSLAPVVKYPRTSCCYTGLSRTVIHTAVSSALRLFICR",
-    "Top V Hit": "IGHV3-11*01",
-    "Top D Hit": "IGHD6-13*01",
-    "Top J Hit": "IGHJ4*02",
-    "Productive": "False",
-    "Productive CDR3": "True",
-    "Strand": "-",
-    "Framework 1 Nuc.": "",
-    "Framework 2 Nuc.": "",
-    "Framework 3 Nuc.": "CTTACCTGAGGAGACGGTGACCAGGGTTCCCTGGCCCCAGTAGTCAAAG",
-    "Framework 4 Nuc.": "ACGGCCGTGTCCTCGGCTCTCAGGCTGTTCATTTGCAGA",
-    "CDR1 Nuc.": "",
-    "CDR2 Nuc.": "",
-    "CDR3 Nuc.": "TACCCCCGTACCAGCTGCTGCTATACTGGGCTCTCTCGCACAGTAATACAC",
-    "Framework 1 AA": "",
-    "Framework 2 AA": "",
-    "Framework 3 AA": "LT*GDGDQGSLAPVVK",
-    "Framework 4 AA": "TAVSSALRLFICR",
-    "Framework 1 AA Length": 0,
-    "Framework 2 AA Length": 0,
-    "Framework 3 AA Length": 16,
-    "Framework 4 AA Length": 13,
-    "CDR1 AA": "",
-    "CDR2 AA": "",
-    "CDR3 AA": "YPRTSCCYTGLSRTVIH",
-    "CDR1 AA Length": 0,
-    "CDR2 AA Length": 0,
-    "CDR3 AA Length": 17,
-    "Total Alignment Matches": 57,
-    "Total Alignment Mismatches": 0,
-    "Total Alignment Length": 57,
-    "Total Alignment Gaps": 0,
-    "Total Alignment Percent Identity": 100
+    "_id" : "donor_10_1000",
+    "raw_seq" : "TGGAGCTGAGCAGCCTGAGATCTGAGGACACGGCCGTATATTACTGTGCGAAAGAACTATATGATAGTAGTGGTTATTACTACTTCCTGCCTTCTTACTACTACTACGGTATGGACGTCTGGGGCCAAGGGACCACGGTCACCGTCTCCTCAGGTAAG",
+    "d_region" : "TATGATAGTAGTGGTTATTACTAC",
+    "cdr3_aa" : "AKELYDSSGYYYFLPSYYYYGMDV",
+    "fw4_aa" : "WGQGTTVTVSSGK",
+    "full_seq_aa" : "AKELYDSSGYYYFLPSYYYYGMDVWGQGTTVTVSSGK",
+    "cdr3" : "GCGAAAGAACTATATGATAGTAGTGGTTATTACTACTTCCTGCCTTCTTACTACTACTACGGTATGGACGTCTG",
+    "top_d" : "IGHD3-22*01",
+    "v_d_junction" : "ACTA",
+    "top_j" : "IGHJ6*02",
+    "cdr3_aa_length" : 24,
+    "fw4" : "TGGGGCCAAGGGACCACGGTCACCGTCTCCTCAGGTAAG",
+    "d_j_junction" : "TTCCTGCCTTCT",
+    "d_or_j_junction" : "",
+    "top_v" : "IGHV1-69*06",
+    "full_seq" : "GCGAAAGAACTATATGATAGTAGTGGTTATTACTACTTCCTGCCTTCTTACTACTACTACGGTATGGACGTCTGTGGGGCCAAGGGACCACGGTCACCGTCTCCTCAGGTAAG",
+    "full_seq_aa" : "AKELYDSSGYYYFLPSYYYYGMDVWGQGTTVTVSSGK",
+    "d_bit_score" : 48.3,
+    "d_evalue" : "3e-10.0",
+    "d_alignment_length" : 24,
+    "d_query_seq" : "TATGATAGTAGTGGTTATTACTAC",
+    "d_subject_seq" : "TATGATAGTAGTGGTTATTACTAC",
+    "d_percent_identity" : 100,
+    "d_percent_positives" : 100,
+    "d_mismatches" : 0,
+    "d_positives" : 24,
+    "d_identical" : 24,
+    "d_subject_length" : 31,
+    "d_score" : 24,
 }
 \end{lstlisting}
 
