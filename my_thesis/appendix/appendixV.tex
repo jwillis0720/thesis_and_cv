@@ -114,7 +114,7 @@ start
 
 We next to create a states file that has the PDB, correlation file and secondary resfile names in it. Name them 2B1A.states, 2XWT.states, and 3HMX.states. They should look like the following when opened.
 
-\begin{lstlisting}
+\begin{lstlisting}[brealines=true]
 #2B1A.states
 input_files/2B1A_clean.pdb input_files/all.corr input_files/all.2res
 
@@ -468,12 +468,16 @@ Each option is listed in the help. Make sure you see which each one does. For in
 \begin{lstlisting}[breaklines=true]
 {
     "_id" : "donor_10_1000",
-    "raw_seq" : "TGGAGCTGAGCAGCCTGAGATCTGAGGACACGGCCGTATATTACTGTGCGAAAGAACTATATGATAGTAGTGGTTATTACTACTTCCTGCCTTCTTACTACTACTACGGTATGGACGTCTGGGGCCAAGGGACCACGGTCACCGTCTCCTCAGGTAAG",
+    "raw_seq" : "TGGAGCTGAGCAGCCTGAGATCTGAGGACACGGCCGT
+    ATATTACTGTGCGAAAGAACTATATGATAGTAGTGGTTATTACTACTTCC
+    TGCCTTCTTACTACTACTACGGTATGGACGTCTGGGGCCAAGGGACCACG
+    GTCACCGTCTCCTCAGGTAAG",
     "d_region" : "TATGATAGTAGTGGTTATTACTAC",
     "cdr3_aa" : "AKELYDSSGYYYFLPSYYYYGMDV",
     "fw4_aa" : "WGQGTTVTVSSGK",
     "full_seq_aa" : "AKELYDSSGYYYFLPSYYYYGMDVWGQGTTVTVSSGK",
-    "cdr3" : "GCGAAAGAACTATATGATAGTAGTGGTTATTACTACTTCCTGCCTTCTTACTACTACTACGGTATGGACGTCTG",
+    "cdr3" : "GCGAAAGAACTATATGATAGTAGTGGTTATTACTACTTCCTGCCTT
+    CTTACTACTACTACGGTATGGACGTCTG",
     "top_d" : "IGHD3-22*01",
     "v_d_junction" : "ACTA",
     "top_j" : "IGHJ6*02",
@@ -482,7 +486,9 @@ Each option is listed in the help. Make sure you see which each one does. For in
     "d_j_junction" : "TTCCTGCCTTCT",
     "d_or_j_junction" : "",
     "top_v" : "IGHV1-69*06",
-    "full_seq" : "GCGAAAGAACTATATGATAGTAGTGGTTATTACTACTTCCTGCCTTCTTACTACTACTACGGTATGGACGTCTGTGGGGCCAAGGGACCACGGTCACCGTCTCCTCAGGTAAG",
+    "full_seq" : "GCGAAAGAACTATATGATAGTAGTGGTTATTACTACTTCCT
+    GCCTTCTTACTACTACTACGGTATGGACGTCTGTGGGGCCAAGGGACCACGGTCA
+    CCGTCTCCTCAGGTAAG",
     "full_seq_aa" : "AKELYDSSGYYYFLPSYYYYGMDVWGQGTTVTVSSGK",
     "d_bit_score" : 48.3,
     "d_evalue" : "3e-10.0",
