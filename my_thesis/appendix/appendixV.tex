@@ -321,7 +321,7 @@ make_res.py IGHV5-51.fasta > IGHV5-51.res
 This residue file can then be used to mutate one of our templates back to germline.
 \begin{lstlisting}[breaklines=true]
 /path/to/rosetta/bin/fixbb.default.<operating_system> \
--s 2B1A_clean.pdb \
+-s 2B1A_clean.pdb
 -resfile IGHV5-51.res -database /path/to/database \
 -o 2B1A_germline.pdb
 \end{lstlisting}
