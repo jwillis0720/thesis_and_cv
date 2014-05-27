@@ -1,6 +1,6 @@
 \section{Appendix V - Computational Standard Operating Procedures}
 \label{sec:appenixV}
-Here I will detail the computational procedures including running \rosetta~and analyzing data with scripts that are often available in the Meiler Lab Scripts repository or available on request. Also a lot of the procedures are detailed in IPython Notebooks and will also be available on request.
+Here I will detail the computational procedures including running \rosetta~and analyzing data with scripts that are often available in the Meiler Lab Scripts repository or available on request. Also a lot of the procedures are detailed in IPython Notebooks and will also be available on request. \textbf{Using \rosetta~version 80616601370}
 
 \subsection{Chapter I - Multi-State Design}
 Here I will detail how I ran \rosettadesign~for multi-state design and how I analyzed the results. I will use the simplified example of IGH\textsubscript{V}5-51 which only contains three sets of molecular structures. There is a great protocol capture for complex procedures attached to the publication by Andrew Leaver-Fay showing how to \textit{design for} and \textit{design against} in multiple states \citep{LeaverFay:2011ji}.
@@ -114,7 +114,7 @@ start
 
 We next to create a states file that has the PDB, correlation file and secondary resfile names in it. Name them 2B1A.states, 2XWT.states, and 3HMX.states. They should look like the following when opened.
 
-\begin{lstlisting}[brealines=true]
+\begin{lstlisting}[breaklines=true]
 #2B1A.states
 input_files/2B1A_clean.pdb input_files/all.corr input_files/all.2res
 
@@ -129,9 +129,9 @@ Lastly, a fitness file needs to be constructed to tell multi-state how to design
 
 \begin{lstlisting}[breaklines=true]
 #initialize the states and what the states file name is
-STATE_VECTOR A 2b1a.states
-STATE_VECTOR B 2xwt.states
-STATE_VECTOR C 3hmx.states
+STATE_VECTOR A input_files/2B1A.states
+STATE_VECTOR B input_files/2XWT.states
+STATE_VECTOR C input_files/3HMX.states
 
 
 #tell design to minimize energy for each state
@@ -180,10 +180,10 @@ mpd && mpiexec -n 4 /my/rosetta/location/mpi_msd.mpi.myoperatingsystem \
 The output will be 300 files, 100 for each of the states. We only need to analyze 100 files considering that the designed entities will be the same for all three files. For example, position 5 will be the same for 2B1A, 2XWT, and 3HMX.
 
 \subsubsection{Analysis of MSD Output}
-I wrote a design analysis script called deep\_analysis which encompasses many design analysis tools. I will only go into the functionality that is necessary to use, but you can read the options file for more use.
+I wrote a design analysis script called design\_analysis.py which encompasses many design analysis tools. I will only go into the functionality that is necessary to use, but you can read the options file for more use.
 
 \begin{lstlisting}[breaklines=true]
-deep\_analysis --help
+design_analysis.py --help
 >>              Design Analysis
 ___________________________________________________________
 
@@ -323,13 +323,14 @@ This residue file can then be used to mutate one of our templates back to germli
 /path/to/rosetta/bin/fixbb.default.<operating_system> \
 -s 2B1A_clean.pdb \
 -resfile IGHV5-51.res -database /path/to/database \
--out:path:pdb 2B1A_germline.pdb
+-o 2B1A_germline.pdb
 \end{lstlisting}
 
-Now we can use the analysis script.
+Now we can use the analysis script from the analysis directory
 \begin{lstlisting}[breaklines=true]
-deep_analysis -p ../input/2B1A_clean.pdb \
--S -b -s nd -c ../input/all.corr msd_output_*A*.pdb
+../analysis/design_analysis -p ../input_files/2B1A_clean.pdb \
+-S -b -s nd -c ../input_files/all.corr
+../output_files/msd_output_*A*.pdb
 
 >>
 #score vs mature
@@ -341,14 +342,15 @@ Normalized Bit Score for design ===> 0.2454
 and
 
 \begin{lstlisting}[breaklines=true]
-deep_analysis -p ../input/2B1A_germline.pdb \
--S -b -s nd -c ../input/all.corr msd_output_*A*.pdb
+../scripts/design_analysis -p analysis/2B1A_germline.pdb \
+-S -b -s nd -c ../input_files/all.corr
+../output_files/msd_output_*A*.pdb
 
 >>
 #score vs mature
-Total Bit Score of Design ===> 41.0967
+Total Bit Score of Design ===> 50.2318
 Total Shannon Entropy of Design ===> 115.9577
-Normalized Bit Score for design ===> 0.3544
+Normalized Bit Score for design ===> 0.4337
 \end{lstlisting}
 
 This gives a design score towards 0.35 for the germline sequence and 0.24 for the mature sequence. Everything can be repeated this exact way. For single state design you can keep the fitness file exactly the same, but remove the other states.
