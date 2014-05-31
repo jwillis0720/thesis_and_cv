@@ -3,11 +3,11 @@
 	[
 		{
 			"follow_symlinks": true,
-			"path": "my_thesis"
+			"path": "cv"
 		},
 		{
 			"follow_symlinks": true,
-			"path": "sams_thesis"
+			"path": "thesis"
 		}
 	]
 }
