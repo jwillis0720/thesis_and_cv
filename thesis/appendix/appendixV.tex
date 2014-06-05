@@ -1,0 +1,728 @@
+\section{Appendix V - Computational Standard Operating Procedures}
+\label{sec:appenixV}
+Here I will detail the computational procedures including running \rosetta~and analyzing data with scripts that are often available in the Meiler Lab Scripts repository or available on request. Also a lot of the procedures are detailed in IPython Notebooks and will also be available on request. \textbf{Using \rosetta~version 80616601370}
+
+\subsection{Chapter I - Multi-State Design}
+Here I will detail how I ran \rosettadesign~for multi-state design and how I analyzed the results. I will use the simplified example of IGH\textsubscript{V}5-51 which only contains three sets of molecular structures. There is a great protocol capture for complex procedures attached to the publication by Andrew Leaver-Fay showing how to \textit{design for} and \textit{design against} in multiple states \citep{LeaverFay:2011ji}.
+\subsubsection{Running \rosetta~Multi-State Design}
+To run multi-state design, I have to prepare several files.
+
+\begin{itemize}
+\item Entity File - A file containing the amount of residue positions to design as well as instructions for the packer to behave on all proteins. For example, we could want the packer only to use certain rotamers around the interface. This could be handled with the entity file.
+\item Correlation File - Tells how residues correlate to each other. For example, residue 1 on protein A should be designed with residue 2 on protein B etc.
+\item Secondary Residue File - This is a residue file as defined in the documentation, but will only instruct the packer to operate on each protein individually. Every state must have it's own secondary residue file.
+\item Fitness File - A master file containing all other files as well as instructions for the fitness function.
+\end{itemize}
+
+\textbf{Clean PDB} - First, I can download all three protein PDBs with the clean\_pdb.py script. Clean PDB supports the following syntax:
+
+
+\begin{lstlisting}[breaklines=true]
+clean_pdb.py <PDB_ID> <CHAINS>
+\end{lstlisting}
+
+We only want the asymmetric unit in the crystal structure, so it helps to manually inspect the PDBs. We need one heavy chain, one light chain, and one antigen. I just go to www.pdb.org to find these chain codes.
+\begin{lstlisting}
+clean_pdb.py 2B1A HLP
+clean_pdb.py 2XWT ABC
+clean_pdb.py 3HMX HLB
+\end{lstlisting}
+Although not absolutely necessary, it makes it easier to label the chain IDs the same. All heavy chains have H, light L, and antigen A. There is a change PDB id script which allows us to quickly rename chain IDs. The script takes the following syntax.
+
+\begin{lstlisting}[breaklines=true]
+set_pdb_chain_id.py old_chain new_chain input output
+\end{lstlisting}
+I have looked through all the PDBs and figured out which names to change.
+
+\begin{lstlisting}
+set_pdb_chain_id.py P A 2B1A_HLP.pdb 2B1A_HLA.pdb
+set_pdb_chain_id.py A H 2XWT_ABC.pdb 2XWT_HBC.pdb
+set_pdb_chain_id.py B L 2XWT_HBC.pdb 2XWT_HLC.pdb
+set_pdb_chain_id.py C A 2XWT_HLC.pdb 2XWT_HLA.pdb
+set_pdb_chain_id.py B A 3HMX_HLB.pdb 3HMX_HLA.pdb
+\end{lstlisting}
+To ensure the starting structures use the correct numbering scheme, we should renumber each chain starting with 1.
+
+\begin{lstlisting}[breaklines=true]
+renumber_pdb.py 2B1A_HLA.pdb 2B1A_clean.pdb
+renumber_pdb.py 2XWT_HLA.pdb 2XWT_clean.pdb
+renumber_pdb.py 3HMX_HLA.pdb 3HMX_clean.pdb
+\end{lstlisting}
+Now we can remove all temporary files. Only *\_clean.pdb files should remain in the working directory. The next thing to do would be to find all positions with at least one difference. This requires manual inspection of the alignment. For the V\textsubscript{H} gene, there are 29 amino acid positions that will differ from germline in at least one position. These positions will be considered. Given that data, we can construct the entity residue file.
+
+\begin{lstlisting}
+#The entity.resfile
+#The number of positions to design
+29
+#Allow all amino acids
+#except cystine and use rotamer libraries 1,2
+#and aromatic 2.
+ALLAAxc EX 1 EX 2 EX ARO 2
+#beginning of residue file
+start
+\end{lstlisting}
+
+The correlation file maps how each residue in each file should map to the others. There will be three correlation files, one for each state. Since each amino acid lines up, i.e. design position 5 in 2B1A with position 5 in 3HMX, all the correlation files will be the same. Here is an example of one correlation file.
+
+\begin{lstlisting}[breaklines=true]
+#all.corr
+#The first column is the entity,
+#the second is the residue number for that state,
+#the last is the chain.
+1 5 H
+2 14 H
+3 16 H
+4 23 H
+5 24 H
+6 29 H
+7 30 H
+8 31 H
+9 32 H
+10 34 H
+11 40 H
+12 46 H
+13 48 H
+14 51 H
+15 52 H
+16 54 H
+17 58 H
+18 65 H
+19 70 H
+20 72 H
+21 74 H
+22 76 H
+23 77 H
+24 80 H
+25 84 H
+26 88 H
+27 93 H
+28 97 H
+29 98 H
+\end{lstlisting}
+A secondary residue file is also needed in case any extra packing tasks are needed to be supplied to each state. For example, we could tell one PDB state to design around the interface in single state design mode while everything in the correlation file designs together. I do not require extra design tasks for this protocol so all secondary residue files will be the same. For example,
+
+\begin{lstlisting}[breaklines=true]
+#tells the packer to use all natural side
+#chain configurations for everything
+#that is not being designed.
+NATRO
+#the input side chain is allowed
+use_input_sc
+#start the residue file
+start
+\end{lstlisting}
+
+We next to create a states file that has the PDB, correlation file and secondary resfile names in it. Name them 2B1A.states, 2XWT.states, and 3HMX.states. They should look like the following when opened.
+
+\begin{lstlisting}[breaklines=true]
+#2B1A.states
+input_files/2B1A_clean.pdb input_files/all.corr input_files/all.2res
+
+#2XWT.states
+input_files/2XWT_clean.pdb input_files/all.corr input_files/all.2res
+
+#3HMX.states
+input_files/3HMX.pdb input_files/all.corr input_files/all.2res
+\end{lstlisting}
+
+Lastly, a fitness file needs to be constructed to tell multi-state how to design. I call this file fitness.daf and it points to the locations of the states files.
+
+\begin{lstlisting}[breaklines=true]
+#initialize the states and what the states file name is
+STATE_VECTOR A input_files/2B1A.states
+STATE_VECTOR B input_files/2XWT.states
+STATE_VECTOR C input_files/3HMX.states
+
+
+#tell design to minimize energy for each state
+SCALAR_EXPRESSION best_A = vmin( A )
+SCALAR_EXPRESSION best_B = vmin( B )
+SCALAR_EXPRESSION best_C = vmin( C )
+
+#Fitness - design to minimize all energies simultaneously
+FITNESS best_A + best_B + best_C
+\end{lstlisting}
+
+\textbf{Running Rosetta Multi-State Design} \\
+The \rosetta executable is called mpi\_msd.mpi.<operatingsystem>. It must be compiled in MPI mode as each state is assigned to a processor. The command line takes the following options.
+
+\begin{itemize}
+\item entity\_resfile - The resfile that we created in the input portion
+\item fitness\_file - The fitness file we created in the input portion
+\item ms::pop\_size - How many sequences to keep in memory at once (100 is a good number)
+\item ms::generation - How many sequence generations should MSD go through see \citep{LeaverFay:2011ji} to find see how the genetic algorithm selects sequences.
+\item ms::numresults - How many results to output. Will output top N sequences.
+\item ms:fraction\_by\_recombination - How often should a cross-over even take place between sequences in the population. Read \citep{LeaverFay:2011ji} for details on the genetic algorithm.
+\item database - The location of the database.
+\end{itemize}
+
+I construct an options file with all those options (options.txt) that looks like this.
+
+\begin{lstlisting}[breaklines=true]
+-entity_resfile entity.resfile
+-fitness_file fitness.daf
+-ms
+    -pop_size 100
+    -generations 435
+    -numresults 100
+    -fraction_by_recombination .04
+-database my/rosetta/database/location/
+\end{lstlisting}
+
+Finally we can run \rosetta~using the following command after starting MPD.
+
+\begin{lstlisting}[breaklines=true]
+mpd && mpiexec -n 4 /my/rosetta/location/mpi_msd.mpi.myoperatingsystem \
+@input_files/options.txt
+\end{lstlisting}
+\textbf{Warning! \linebreak \rosetta~may complain about some of the comments (anything starting with \#) not being recognized, if so, just remove it from the file}
+
+The output will be 300 files, 100 for each of the states. We only need to analyze 100 files considering that the designed entities will be the same for all three files. For example, position 5 will be the same for 2B1A, 2XWT, and 3HMX.
+
+\subsubsection{Analysis of MSD Output}
+I wrote a design analysis script called design\_analysis.py which encompasses many design analysis tools. I will only go into the functionality that is necessary to use, but you can read the options file for more use.
+
+\begin{lstlisting}[breaklines=true]
+design_analysis.py --help
+>>              Design Analysis
+___________________________________________________________
+
+This script is intented to encompass the entire functionality
+of design analysis. Everything you could want to do with design
+is called upon in this script. The most basic functionality is
+to pass a list of pdbs or get a position matrix of occurences
+count of just one line.
+
+The functionality extends from there by giving bitscores,
+changes in energy, giving position specific scoring matrices
+of your design,giving a customizable sequence logo. This is a
+combination of many scripts and classes.
+
+optional arguments:
+  -h, --help show this help message and exit
+
+Necessary:
+  PDB files have to be included
+  *.pdb  The PDB files to be analyzed
+
+Recommended Options:
+  Will give you a more complete analysis based on a res file,
+  and a native pdb to compare it to.
+
+  --native_pdb N_PDB, -p N_PDB
+        The native pdb file to compare against
+  --corr corr.corr, -c corr.corr
+        Get the results defined only in the corr file
+  --res resfile.resfile, -r resfile.resfile
+        Get the results defined only in the residue file
+
+Output Options: Please read carefully:
+  These arguments change file name, which file is printed,
+  which is output to a dictionary,and give verbose printing
+
+  --verbose, -v
+        everything printed to a file will also be shown
+        on the screen
+  --prefix PREFIX, -P PREFIX
+        The prefix for what all the output files will be
+  --score_files O_FILES [O_FILES ...], -s
+    What do you want output to a file?
+    Can list as a space seperated (eg -s n d nd):
+    a - full analysis dict
+    d - give analysis of just designed residues
+    n - just the native residues scores are shown
+    nd - just the native residues of the residues designed
+            Defaults to full analysis dictionary
+  -b Should the output be in bit score?
+        Defaults to occurences instead of bitscore
+  -S If you specify a native file and a design file,
+        it will give you an output of the stats of the design
+
+Rosetta Energy Analysis:
+  Options for outputing options about energy scores,
+  the dictionaries analyzed depend on what you asked
+  for using the -s output options flag
+
+  --rosetta, -t  This option will output a .csv file of the
+  model,chain,residue,residue number,and rosetta scores.
+
+Bit Score Options:
+  options for bitscore metric for each designed residue
+
+  -n    do you want the bit scores to be
+        normalized by the shannon entropy
+
+Sequence Logos Options:
+  These options handle the sequence logos that can be output
+  from the design analysis script, and uses the api of weblogo
+  to do so.
+
+  --seq, -l
+    Turn on Sequence Logos for all the dictionaries
+    you supply given in an .eps file
+  --path LOGO\_PATH, -lp LOGO\_PATH
+    What is the path to weblogo software?
+    Defaults to meilerlab enviroment
+  --format {eps,jpg,png,png_print,pdf,jpeg,svg,logodata}
+    What format do you want the sequence logo in?
+  --units {bits,nats,kt,kJ/mol,kcal/mol,probability}
+    What do you want the units of the sequence
+    logo to be in? Defaults to bits.
+  --stacks S_STACKS
+    How many sequences per line in the logo, default=after
+    forty letters it will go to a new line.
+  --stack_width S_STACK_WIDTH
+    How wide is each stack in the logo. Value of 25 is useful
+    for x-axis labels >3 characters and 30
+    for labels as 'sequence_numbers'.
+  --title S_TITLE
+    The title of your sequence logo
+  --x_label S_X_AXIS
+    What do you want the x axis titled?
+  --y_axis_height S_Y_HEIGHT
+    How high do you want the Y axis,
+    currently 4.32 which is the maximum
+    acheivable score in a unbiased design
+  --y_label S_Y_LABEL
+    Title of Y-Axis
+  --error_bars S_Y_ERROR
+    Do you want error bars turned on, YES/NO?
+  --fine_print S_FINE
+    Fine Print
+  --color_scheme
+    {auto,chemistry,charge,classic,
+    hydrophobicity,monochrome}
+    The color scheme of the sequence logo.
+    Defaults to Classic
+  --labels {sequence,numbers,sequence_numbers}
+    The x-axis labels can either take on the
+    native residues sequence given with a native
+    pdb file or the numbering of the pdb residue.
+  --debug
+    Get the full command line of what was put into weblo
+\end{lstlisting}
+
+It's obvious that this analysis can do a lot, but I will stick with the basics. First a new input that is completely germline. We can do this with the packer.
+There is a script called make\_res.py which will make a residue file from a FASTA file. I use this to take the germline sequence and thread it over one of my inputs. Then that input can be used as our template.
+
+\begin{verbatim}
+>IGHV5-51*01
+EVQLVQSGAEVKKPGESLKISCKGSGYSFTSYWIGWVRQMPGKGLEW
+MGIIYPGDSDTRYSPSFQGQVTISADKSISTAYLQWSSLKASDTAMY
+YCAR
+\end{verbatim}
+
+Then we can use the make\_res.py script.
+
+\begin{lstlisting}[breaklines=true]
+make_res.py IGHV5-51.fasta > IGHV5-51.res
+\end{lstlisting}
+
+This residue file can then be used to mutate one of our templates back to germline.
+\begin{lstlisting}[breaklines=true]
+/path/to/rosetta/bin/fixbb.default.<operating_system> \
+-s 2B1A_clean.pdb
+-resfile IGHV5-51.res -database /path/to/database \
+-o 2B1A_germline.pdb
+\end{lstlisting}
+
+Now we can use the analysis script from the analysis directory
+\begin{lstlisting}[breaklines=true]
+../analysis/design_analysis -p ../input_files/2B1A_clean.pdb \
+-S -b -s nd -c ../input_files/all.corr
+../output_files/msd_output_*A*.pdb
+
+>>
+#score vs mature
+Total Bit Score of Design ===> 28.4534
+Total Shannon Entropy of Design ===> 115.9577
+Normalized Bit Score for design ===> 0.2454
+\end{lstlisting}
+
+and
+
+\begin{lstlisting}[breaklines=true]
+../scripts/design_analysis -p analysis/2B1A_germline.pdb \
+-S -b -s nd -c ../input_files/all.corr
+../output_files/msd_output_*A*.pdb
+
+>>
+#score vs mature
+Total Bit Score of Design ===> 50.2318
+Total Shannon Entropy of Design ===> 115.9577
+Normalized Bit Score for design ===> 0.4337
+\end{lstlisting}
+
+This gives a design score towards 0.35 for the germline sequence and 0.24 for the mature sequence. Everything can be repeated this exact way. For single state design you can keep the fitness file exactly the same, but remove the other states.
+
+\begin{lstlisting}[breaklines=true]
+#initialize the states and what the states file name is
+STATE_VECTOR A 2b1a.states
+STATE_VECTOR B 2xwt.states
+STATE_VECTOR C 3hmx.states
+
+
+#tell design to minimize energy for each state
+SCALAR_EXPRESSION best_A = vmin( A )
+SCALAR_EXPRESSION best_B = vmin( B )
+SCALAR_EXPRESSION best_C = vmin( C )
+
+#Fitness - design to minimize all energies simultaneously
+FITNESS best_A
+\end{lstlisting}
+
+And run the exact same procedures.
+
+\subsection{Chapter II - Database and Design}
+This section accompanies chapter \ref{chap:chapter2}. I will go over uploading the sequences to a database, selecting the correct sequences, threading, and finally design.
+
+\subsubsection{Sequence Analysis}
+The methods section detailed how I actually sequence the amplicons from 64 healthy donors, but processing them takes quite a bit of computational work. The VANTAGE core at Vanderbilt returns the sequencing runs as two paired end reads in FASTQ format. They must be ``stiched'' together to make one read. For example, I have provided 100,000 sequences from the forward and reverse reads to be stiched togher from donor 54. I use a stitching algorithm called ``pandaseq'' to process theses \citep{Bartram:2011cz}. These commands are incredibly simple to run but do require that you first download and install ``pandaseq'' (https://github.com/neufeld/pandaseq).
+
+\begin{lstlisting}[breaklines=true]
+/usr/local/bin/pandaseq -f input_files/unstiched/unstiched_forward.fastq -r input_files/unstiched_reverse.fastq -T 23 > stiched/stiched.fasta
+\end{lstlisting}
+
+Pandaseq will automatically output to the fasta format which is convenient for the next step. Please note, that although I have put 100,000 sequences to be stitched together, pandaseq will only find about a quarter of them. That is because I have not provided the entire file. However, I have provided 100,000 sequences in the directory ``input\_files/stiched/stiched.fasta'' to be used in subsequent steps. To analyze the sequences I use PyIg, my own sequence aligner against Ig mAbs that's based on IgBLAST \citep{Ye:2013bb}. I will probably publish this soon when it is more stable. For human IgG's it works incredibly simple to use. For the full source code email jwillis0720@gmail.com, as it's currently unpublished at the moment.
+
+\begin{lstlisting}[breaklines=true]
+./PyIg
+usage: igblast [-h] -q query.fasta [-d DB_PATH] [-i INTERNAL_DATA]
+               [-a AUX_PATH] [-y {Ig,TCR,custom}] [-or {human,mouse}]
+               [-nV NUM_V] [-nD NUM_D] [-nJ NUM_J] [-dgm D_GENE_MATCHES]
+               [-s {imgt,kabat}] [-x EXECUTABLE] [-o OUT] [-t TMP]
+               [-e E_VALUE] [-w WORD_SIZE] [-pm PENALTY_MISMATCH]
+               [-nP NUM_PROCS] [-op OUTPUT_OPTIONS] [-z] [-c] [-j]
+
+optional arguments:
+  -h, --help            show this help message and exit
+
+Necessary:
+  These have to be included
+
+  -q query.fasta, --query query.fasta
+                        The fasta file to be input into igBlast
+
+Database Paths:
+  -d DB_PATH, --db_path DB_PATH
+                        The database path to the germline repertoire
+  -i INTERNAL_DATA, --internal_data INTERNAL_DATA
+                        The database path to internal data repertoire
+  -a AUX_PATH, --aux_path AUX_PATH
+                        The auxilariay path that contains the frame origins of the germline genes for each repertoire.
+                         Helps produce translation and other metrics
+
+IgBlast Sprecific:
+  IgBlast Specific Options with a Default
+
+  -y {Ig,TCR,custom}, --type {Ig,TCR,custom}
+                        Is this an IG or TCR recombination
+  -or {human,mouse}, --organism {human,mouse}
+                        The organism repeortire to blast against
+  -nV NUM_V, --num_v NUM_V
+                        How many V-genes to match?
+  -nD NUM_D, --num_d NUM_D
+                        How many D-genes to match?
+  -nJ NUM_J, --num_j NUM_J
+                        How many J-genes to match?
+  -dgm D_GENE_MATCHES, --d_gene_matches D_GENE_MATCHES
+                        How many nuclodtieds in the D-gene must match to call it a hit
+  -s {imgt,kabat}, --domain {imgt,kabat}
+                        Which classification system do you want
+
+General Settings:
+  -x EXECUTABLE, --executable EXECUTABLE
+                        The location of the executable, default is /usr/bin/igblastn
+  -o OUT, --out OUT     output file prefix
+  -t TMP, --tmp TMP     temporary directory to store files in.
+                        Defaults to ./tmp
+  -e E_VALUE, --e_value E_VALUE
+                        Real value for excpectation value threshold in blast.
+                        Put in scientific notation
+  -w WORD_SIZE, --word_size WORD_SIZE
+                        Word size for wordfinder algorithm
+  -pm PENALTY_MISMATCH, --penalty_mismatch PENALTY_MISMATCH
+                        Penalty for nucleotide mismatch
+  -nP NUM_PROCS, --num_procs NUM_PROCS
+                        How many do you want to split the job across, default is the number of processors
+
+Outputting Options:
+  -op OUTPUT_OPTIONS, --output_options OUTPUT_OPTIONS
+                        Open this file and comment out options you don't want in your final file.
+                        The first column is the name of the option.
+                        The second column is used by the parser and should not be changed.
+  -z, --zip             Zip up all output files
+  -c, --concatenate     Turn off automatic concatenation and deletion of temporary files.
+                        Files are split up at the beginning to run across multiple processors
+  -j, --json            Use the JSON output option that will format the text driven igblast output to a json document.
+                        Defaults to CSV
+\end{lstlisting}
+
+
+I'll keep it simple for the protocol capture, but want to show how robust PyIg can be. Assume you are in the PyIg directory under PyIg/src/
+
+\begin{lstlisting}[breaklines=true]
+python2.7 execution.py -q input_files/stiched/stiched.fasta -d datafiles/database/ -i internal_data/ -a datafiles/optional_file/ -y Ig -or human -nV 1 -nD 1 -nJ 1 -s imgt -o protocol_capture -nP 23 -z -j
+\end{lstlisting}
+
+Each option is listed in the help. Make sure you see which each one does. For instance -nP needs to be carefully considered since it is the number or processors it will be run on. The output to this command line is a protocol\_capture.json.gz file that will be uploaded to a Mongo database. One entry (with default output settings) looks like this.
+
+\begin{lstlisting}[breaklines=true]
+{
+    "_id" : "donor_10_1000",
+    "raw_seq" : "TGGAGCTGAGCAGCCTGAGATCTGAGGACACGGCCGT
+    ATATTACTGTGCGAAAGAACTATATGATAGTAGTGGTTATTACTACTTCC
+    TGCCTTCTTACTACTACTACGGTATGGACGTCTGGGGCCAAGGGACCACG
+    GTCACCGTCTCCTCAGGTAAG",
+    "d_region" : "TATGATAGTAGTGGTTATTACTAC",
+    "cdr3_aa" : "AKELYDSSGYYYFLPSYYYYGMDV",
+    "fw4_aa" : "WGQGTTVTVSSGK",
+    "full_seq_aa" : "AKELYDSSGYYYFLPSYYYYGMDVWGQGTTVTVSSGK",
+    "cdr3" : "GCGAAAGAACTATATGATAGTAGTGGTTATTACTACTTCCTGCCTT
+    CTTACTACTACTACGGTATGGACGTCTG",
+    "top_d" : "IGHD3-22*01",
+    "v_d_junction" : "ACTA",
+    "top_j" : "IGHJ6*02",
+    "cdr3_aa_length" : 24,
+    "fw4" : "TGGGGCCAAGGGACCACGGTCACCGTCTCCTCAGGTAAG",
+    "d_j_junction" : "TTCCTGCCTTCT",
+    "d_or_j_junction" : "",
+    "top_v" : "IGHV1-69*06",
+    "full_seq" : "GCGAAAGAACTATATGATAGTAGTGGTTATTACTACTTCCT
+    GCCTTCTTACTACTACTACGGTATGGACGTCTGTGGGGCCAAGGGACCACGGTCA
+    CCGTCTCCTCAGGTAAG",
+    "full_seq_aa" : "AKELYDSSGYYYFLPSYYYYGMDVWGQGTTVTVSSGK",
+    "d_bit_score" : 48.3,
+    "d_evalue" : "3e-10.0",
+    "d_alignment_length" : 24,
+    "d_query_seq" : "TATGATAGTAGTGGTTATTACTAC",
+    "d_subject_seq" : "TATGATAGTAGTGGTTATTACTAC",
+    "d_percent_identity" : 100,
+    "d_percent_positives" : 100,
+    "d_mismatches" : 0,
+    "d_positives" : 24,
+    "d_identical" : 24,
+    "d_subject_length" : 31,
+    "d_score" : 24,
+}
+\end{lstlisting}
+
+To download and install mongo, consult the manual \\ (http://docs.mongodb.org/manual/installation/). This installation will also include all the tools that making uploading files very easy. The output of PyIg should be ``protocol\_capture.json.gz''. We can then upload this json file to mongodb using the ``mongoimport'' application. \\
+
+\textbf{Note:} \\
+I assume you have an instance of MongoDB running. Please consult the documentation to run an instance of MongoDB. For example,
+
+\begin{lstlisting}[breaklines=true]
+mongod --dbpath mongo_db_data/ &
+\end{lstlisting}
+
+\begin{lstlisting}[breaklines=true]
+gunzip analyzed_files/protocol_capture.json.gz && mongoimport -d test_database -c protocol_capture --file analyzed_files/protocol_capture.json
+\end{lstlisting}
+
+Here I have made a database called test\_database and a collection called protocol\_capture. First thing to do is remove redundancies within mongo. To do that, I can make a simple index on the ``Input Sequence'' key and drop duplicates.
+
+\begin{lstlisting}[breaklines=true]
+mongo test_database
+>db.protocol_capture.ensureIndex({'cdr3_aa':1},{unique:true, dropDups:true})
+\end{lstlisting}
+
+The next thing I want to do is remove non-productive sequences. PyIg outputs a productive field, using mongo, I can tell the database to drop any ``document'' that contains a stop codon in the HCDR3.
+
+\begin{lstlisting}[breaklines=true]
+>db.protocol_capture.remove({"productive_cdr3":"False"})
+\end{lstlisting}
+
+For \rosetta, I want only the thirty length HCDR3s. I can use ``mongoexport'' for this query along with an `awk' statement to get out the 30 length fasta files.
+
+\begin{lstlisting}[breaklines=true]
+mongoexport -d test_database -c protocol_capture -q '{"cdr3_aa_length":30}' --csv -fields "_id","cdr3_aa" | awk -F "," '{gsub("\"","",$1);gsub("\"","", $2);print(">"$1"\n"$2)}' > 30_length.fasta
+\end{lstlisting}
+
+This fasta file will be used in the remainder of the protocol. I will not go over all the different types of analysis I can do with this database for the purpose of this protocol.
+
+\subsubsection{PSSM Heuristics}
+
+Using the fasta file ``analysed\_files/30\_length.fasta'' generated in the previous section, a quick script written in python to get random 2,000 sequences is shown below.
+
+\begin{lstlisting}[breaklines=true, language=python]
+#!/usr/bin/env python
+from Bio import SeqIO
+import random
+import sys
+handle = open(sys.argv[1])
+records = SeqIO.parse(handle, "fasta")
+dictionary = {}
+for seq in records:
+   dictionary[seq.id] = str(seq.seq)
+random_dict = random.sample(dictionary.items(),2000)
+
+with open(sys.argv[2],'w') as f:
+    for seq in random_dict:
+        f.write(``>{0}\n{1}\n''.format(seq[0],seq[1]))
+\end{lstlisting}
+
+And use it to get 2000 random sequences:\\
+
+\begin{lstlisting}[breaklines=true]
+./get_2000_random.py ../analyzed_sequences/30_length.fasta 2000_random.fasta
+\end{lstlisting}
+
+Using \rosettadesign, I will generate 2,000 resfiles that tell the packer to mutate the HCDR3 into each of the entries in the fasta file. To do this, there is a script available from the Meiler lab called ``fasta\_to\_resfile.py'' which will generate the resfiles necessary.
+
+\begin{lstlisting}[breaklines=true]
+fasta_into_res.py 2000_random.fasta 95 126 H 0
+\end{lstlisting}
+
+The rest of the protocol uses \scripts~to do the design. For \scripts, you need an xml file, options file, and command line. The xml file is a scripting file that tells \rosetta~specific set of instructions (here I will name it threading.xml). The first step is relatively simple only doing a design and a full-atom minimization (called relax).
+
+\begin{lstlisting}[breaklines=true, language=xml]
+<dock_design>
+    <SCOREFXNS>
+    </SCOREFXNS>
+    <FILTERS>
+    </FILTERS>
+    <TASKOPERATIONS>
+     <InitializeFromCommandline name=ifcl/>
+     <ReadResfile name=rr filename=%%resfiles%% />
+    </TASKOPERATIONS>
+        <MOVERS>
+         <PackRotamersMover name=pr task_operations=ifcl,rr/>
+         <FastRelax name=fr task_operations=ifcl/>
+        </MOVERS>
+        <APPLY_TO_POSE>
+        </APPLY_TO_POSE>
+        <PROTOCOLS>
+         <Add mover_name=pr/>
+         <Add mover_name=fr/>
+        </PROTOCOLS>
+</dock_design>
+\end{lstlisting}
+
+The only caveat here is that we specify the resfile as a variable so the protocol does not have to be hard-coded. The command line will specify each resfile to give to the job. First, an option file must be produced as a simple text file.
+
+
+\begin{lstlisting}[breaklines=true]
+-out
+    -pdb_gz
+-parser
+    -protocol input_file/threading.xml
+-s input_files/input_pg9_no_antigen.pdb
+-nstruct 100
+\end{lstlisting}
+
+Lastly the command line which will include the resfile as an option (named run.csh).
+
+\begin{lstlisting}[breaklines=true]
+#!/bin/csh
+set res = $1
+set out = `basename $res .resfile`
+mpiexec -n 101 my/rosetta/pathrosetta_scripts.mpistatic.linuxgccrelease @options.txt -out:prefix $out -parser:script_vars resfiles=${res} > out.log
+\end{lstlisting}
+
+And to run the command I simply use an awk script to generate all the commands.
+
+\begin{lstlisting}[breaklines=true]
+ls *resfile | awk '{system( "run.csh "$1 ) }'
+\end{lstlisting}
+
+\textbf{Note: This should be run on a computer cluster as 100 processors are needed in the above protocol}
+
+The next step is to run the output PDB files and generate a position-specific scoring matrix. This is easily accomplished with the ``create\_pssm\_from\_threading.py'' script that is also found in the Meiler lab scripts repository. A simple command to generate a PSSM.
+
+\begin{lstlisting}[breaklines=true]
+./create_pssm_from_threading.py -g -r resfiles PG9.resfile -n 2000.p3sm *.pdbs
+\end{lstlisting}
+
+The output .p3sm can now be used to predict the top N sequences from the 30\_length.fasta generated earlier in the protocol.
+
+\begin{lstlisting}[breaklines=true]
+./create_pssm_from_threading.py -r resfiles/PG9.resfile -s -p 2000.p3sm analysis_files/30_length.fasta
+\end{lstlisting}
+
+This generates a file called ``scored\_fasta.output''. I use awk and some other gnu commands to get the top 1000 scored fasta files.
+
+\begin{lstlisting}[breaklines=true]
+sort -nk 3 scored_fasta.output | head -n 1000 | awk '{print(">"$1"\n"$2)}' > top1000.fasta
+\end{lstlisting}
+
+Finally, I can make all the resfiles using the same command as before.
+
+\begin{lstlisting}[breaklines=true]
+fasta_into_res.py top1000.fasta 95 125 H 0
+\end{lstlisting}
+
+For the full design protocol using these sequences and resfiles. See the next section on PG9 redesign (subsection \ref{subsec:pg9redesign}).
+
+\subsection{Chapter III - PG9 Design}
+\label{subsec:pg9redesign}
+\setlength{\parindent}{0cm}
+This protocol capture will detail the how to use \rosettadesign~to predict mutations that enhance specificity. This accompanies the manuscript Willis \textit{et al.} \textbf{\textit{Nature Med.}} (submitted). It assumes that you have a \rosetta~license from www.rosettacommons.org. \\
+
+\subsubsection{Preparing the input files}
+Using PG9/CAP45 complex, I have prepared a \rosetta~compatible file called PG9\_input.pdb. This has spcecial identifiers for the glycans that \rosetta 's database can understand. To create your own glycan input, an excellent protocol capture is provided in an accompanying manuscript by Doug Renfrew \citep{Renfrew:2012ci}. \\
+
+The design protocol used runs through the following steps.
+
+\begin{itemize}
+\item Favor native residue - gives bonuses to sequences which match PG9\textit{wt}
+\item Design/minimize/dock iteratively
+\item Constrain movements so glycans retain input position
+\item Relax the energy of the structure
+\item Re-dock
+\item Score binding energy and structure energy
+\end{itemize}
+
+For this redesign we need several input files. The XML script, options file, residue file, and constraint file. The most complex of which, the XML file, informs Rosettaof our protocol. Use the following .xml file which is found under:
+
+\begin{verbatim}
+/input_files/threading_design.xml
+\end{verbatim}
+
+\textit{XML-File}
+\lstinputlisting[breaklines=true]{input_files/threading_design.xml}
+
+
+The behavior of the these instructions is described fully in \citep{Fleishman:2011ji}. They are divided up into a set of movers, filters and task of operations. All of the movers and filters along with their options are explained at the Rosetta Commons users guide (https://www.rosettacommons.org/docs/latest/RosettaScripts.html). \\
+
+\textit{Options-File}\\
+The options file are passed to the application. Defines output and input options as well as other options which can't be defined in the XML file.
+
+\lstinputlisting[breaklines=true]{input_files/threading.txt}
+Each option is explained with a \# comment.\\
+
+\textit{Residue File}\\
+The residue file tells the packer how to design the protein. The first line lets the packer use the side chains of the input PDB even if they are not in the rotamer libraries. The ``NATAA'' lines tells the packer to use input amino acid for everything not defined under start. In other words it will only design everything under start. The first column is the residue number, the second is the chain, and ``ALLAA'' tells the packer to use all amino acid identities at this position. For complete documentation of the resfile, visit https://www.rosettacommons.org/docs/latest/resfiles.html
+
+\lstinputlisting[breaklines=true]{input_files/normal_design.resfile}
+
+\textit{Constraint File} \\
+The constraint file ensures that the glycan's are involved in binding. The torsional angles of the glycan can cause major structural perturbations.
+\lstinputlisting[breaklines=true]{input_files/glycan_constraints.cst}
+
+The constrain file syntax is found in the documentation - \\(https://www.rosettacommons.org/docs/latest/constraint-file.html). Briefly, I define two atoms with the input crystal structure distances. If these are violated, then there is an energetic penalty. \\
+
+\subsubsection{Running \rosetta}
+To run \rosetta, I use an application called \scripts~\citep{Fleishman:2011ji}. Since we have defined all the input files. Running the application only requires passing the options file.
+
+\begin{lstlisting}[breaklines=true]
+my/path/to/rosetta/source/bin/rosetta_scripts.myoperatingsystem @input_files/threading.txt -database my/path/to/rosetta/database/
+\end{lstlisting}
+
+This protocol generates 200 models each taking approximately 1 hour to complete. It is best to run this protocol on a computational cluster with each node producing a separate model (-nstruct 1). All files are output into a directory output models/. There are 200 pre-generated models for analysis. \\
+
+\subsubsection{Analyzing Models}
+There are three scripts in the /analysis folder that are used to analyze the mutations. Score\_vs\_rmsd full.py will give all the models energies as well as how much they deviated from the original structure. Get\_per\_ddg.py will give all of the binding energies decomposed by residues. Scores\_decomposed\_by\_resfile.py will decompose the energies of HCDR3 loop. They are each run using the following.
+
+\begin{lstlisting}[breaklines=true]
+score_vs_rmsd_full.py −m −n ../input_files/pg9_input.pdb −o s_v_rmsd −r ../input_files/normal_design.resfile ../output_files/∗.pdb
+
+get_per_ddg.py -m -o per_ddg ../output_files/∗.pdb
+
+scores_decompose_by_resfile.py −m −o HCDR3 −r ../input_files/normal_design.res
+\end{lstlisting}
+
+These will yield a series of data files that can be uploaded to a database or in a spreadsheet viewer. The complex queries I used to check energies between \text{wt} and mutations are beyond the scope of a protocol capture. But you can contact jwillis0720@gmail.com if you need additional guidance.
+
+
+

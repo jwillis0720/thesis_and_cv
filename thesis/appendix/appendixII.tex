@@ -1,0 +1,24 @@
+\section{Appendix II - \rosetta~Scoring Terms}
+%appendix II
+\renewcommand{\arraystretch}{1.8}
+\begin{table}[ht!]
+\begin{tabular}{lp{11cm}}
+\textbf{Scoring Term}      & \textbf{Explanation of Scoring Term}                                                                                         \\ \hline
+Attraction                 & The Van de Walles scoring term to indicate how much attraction residues have on each other                                   \\
+Dunbrack                   & A statistical probability score indicating how often a side-chain configuration has been seen in the protein data bank (PDB) \\
+Repulsion                  & The Van De Walles scoring term to indicate how much repulsion residues have on each other                                    \\
+Solvation                  & How well are hydrophobics packed away from solvent and hydrophillic groups are facing solvent                                \\
+Ramachandran               & A statistical probability of how well $\phi$-$\psi$ angles fit into the Ramachandran plot as a function of secondary-structure     \\
+Total                      & A summation of all individual scoring terms to get a total score                                                             \\
+\ddg                       & The change in total energy score when residues are moved out of complex                                                      \\
+$\phi$-$\psi$ Prob         & A statistical probability score of how well a side-chain configuration has been seen given a $\phi$-$\psi$ angle in the PDB  \\
+Cation-$\pi$               & A score encompassing how the configuration of positive cation at the end of a charged residues interact with pi orbitals    \\
+$\pi$-$\pi$                & A score encompassing how two $\pi$ orbitals interact                                                                            \\
+HCDR3 Stabilization        & The total score of residues only found in the HCDR3                                                                          \\
+Full Complex Stabilization & The total score of all residues representing a free energy of the model                                                      \\
+HCDR3 Binding              & The contribution to \ddg~by residues found in the HCDR3                                                                       \\
+Full Complex Binding       & The \ddg~for the entire complex
+\end{tabular}
+\caption[\rosetta~Scoring Terms]{}
+\end{table}
+\clearpage
