@@ -1,17 +1,12 @@
-\documentclass[11pt,a4paper]{moderncv}
-
-% moderncv themes
-%\moderncvtheme[blue]{casual}                 % optional argument are 'blue' (default), 'orange', 'red', 'green', 'grey' and 'roman' (for roman fonts, instead of sans serif fonts)
-
+\documentclass[10pt,a4paper]{moderncv}
 \renewcommand*{\listitemsymbol}{\hspace{1em}\labelitemi~}
-\moderncvtheme[gold]{casual}                % idem
+\moderncvtheme[blue]{casual}                % idem
 \usepackage{enumitem}
 \usepackage[T1]{fontenc}
 % character encoding
 \usepackage[utf8x]{inputenc}                   % replace by the encoding you are using
 \usepackage[italian]{babel}
 \usepackage[normalem]{ulem}
-
 % adjust the page margins
 \usepackage[scale=0.85]{geometry}
 \recomputelengths                             % required when changes are made to page layout lengths
@@ -20,12 +15,7 @@
 \fancyfoot[LE,RO]{\thepage}           % page number in "outer" position of footer line
 \fancyfoot[RE,LO]{\footnotesize } % other info in "inner" position of footer line
 
-% usage: \cvreference{name}{address line 1}{address line 2}{address line 3}{address line 4}{e-mail address}{phone number}
-% Everything but the name is optional
-% If \addresssymbol, \emailsymbol or \phonesymbol are specified, they will be used.
-% (Per default, \addresssymbol isn't specified, the other two are specified.)
-% If you don't like the symbols, remove them from the following code, including the tilde ~ (space).
-
+%Funtion that writes REferences
 \newcommand{\cvreference}[8]{%
 \cvline{}{%
     \textbf{#1}\newline% Name
@@ -40,42 +30,43 @@
 
 
 
-% personal data - goes to title
+% Goes to Footer and Header
 \firstname{Jordan}
 \familyname{R. Willis}
-\title{Ph.D.}               % optional, remove the line if not wanted
-\address{9022 NW 86\textsuperscript{th} Terrace}{Kansas City, Missouri 64153}    % optional, remove the line if not wanted
-\mobile{+1 816 674 5340}                    % optional, remove the line if not wanted
-%\phone{+385 92 2201317}                      % optional, remove the line if not wanted
-%\fax{312 996 1491}                          % optional, remove the line if not wanted
-\email{JWillis0720@Gmail.Com}                      % optional, remove the line if not wanted
-%\extrainfo{additional information (optional)} % optional, remove the line if not wanted
-\photo[50pt]{mypicture.jpg}          % '64pt' is the height the picture must be resized to and 'picture' is the name of the picture file; optional, remove the line if not wanted
-\homepage{www.vvcenter.org}
+\title{Ph.D.} 
+\address{4586 32\textsuperscript{nd} St.}{San Diego, California 92116}    
+\mobile{+1 816 674 5340}                    
+\email{jwillis0720@gmail.com}  
+\homepage{www.schieflab.com}
 
-\quote{"Somewhere, something incredible is waiting to be known." -- Carl Sagan}                 % optional, remove the line if not
+%Photo goes to top
+\photo[50pt]{mypicture.jpg}   
+
+%\quote{"Somewhere, something incredible is waiting to be known." -- Carl Sagan}                 % optional, remove the line if not
+
+
+
 %----------------------------------------------------------------------------------
 %            content
 %----------------------------------------------------------------------------------
 \begin{document}
 \maketitle
 
-\vspace{-10mm}
-
 %Section
 \section{Info}
-\cvcomputer{Born}{\small July 20\textsuperscript{th}, 1985 at Norfolk VA (USA)\normalsize}{Citizenship}{\small USA\normalsize}
-\cvcomputer{Additional Address}{11476 Medical Research Building IV \\ 2213 Garland Avenue \\ Nashville TN 37232-0417}{Email}{Jordan.R.Willis@Vanderbilt.Edu \\ JWillis0720@Gmail.Com}
+\cvcomputer{Born}{\small July 20\textsuperscript{th}, 1985  Norfolk VA (USA)\normalsize}{Citizenship}{\small USA\normalsize}
+\cvcomputer{Address}{ 4586 32\textsuperscript{nd} St. \\ San Diego CA 92116}{Email}{jwillis0720@gmail.com \\ jwillis@scripps.edu}
 %\cvcomputer{LinkedIn}{\small \url{http://it.linkedin.com/in/goivan}\normalsize}{Elance}{\small \url{http://ntrp.elance.com}\normalsize}
 %\cvcomputer{Blog}{\small \url{http://ntrpivan.blogspot.com}\normalsize}{Skype}{\small ivan.ntrp}
 
 %Section
 \section{Profile}
-\cvline{Objective}{Computational and molecular biologist working in the area of human antibodies and vaccines}
-\cvlistitem{8 years experience with molecular biology}
-\cvlistitem{5 years experience with molecular modeling}
-\cvlistitem{5 years experience with cell culture and protein production}
-\cvlistitem{4 years experience with high-throughput sequencing and analysis}
+\cvline{Objective}{Computational and molecular biologist working in the area of human antibodies and immunogens}
+\cvlistitem{11 years experience with molecular biology}
+\cvlistitem{8 years experience with molecular modeling}
+\cvlistitem{8 years experience with computation and big data }
+\cvlistitem{7 years experience with cell culture and protein production}
+\cvlistitem{7 years experience with high-throughput sequencing and analysis}
 
 %education
 \section{Education}
@@ -86,40 +77,28 @@
 
 %Section
 \section{Specialized Computational Skills}
-\cvline{Languages}{\small PYTHON, JAVA, C++, SQL, \LaTeX, CSH, BASH}
-\cvline{Platforms}{Unix, Linux, Apple}
-\cvline{Database}{MySQL, MongoDB, SQLlite}
-\cvline{Tools}{TeXShop, Eclipse IDE, Netbeans IDE, SCONS, Git, SVN, Illustrator, Genious, Microsoft Office, IPython Notebook, Sublime Text}
+\cvline{Languages}{\small PYTHON, Java, C++, SQL, \LaTeX, BASH, HTML, Javascript}
+\cvline{Database}{Spark, Hadoop, MySQL, MongoDB, SQLite}
+\cvline{Tools}{VIM, Jupyter Notebook, Git, Illustrator, Geneious, Microsoft Office, oh-my-zsh}
 
 %Section
 \section{Specialized Experimental Skills}
-\cvline{Dry-Lab}{Molecular modeling}
+\cvline{Dry-Lab}{Molecular modeling and Big Data Processing}
 \cvlistitem{Development and application of the software suite Rosetta}
-\cvlistitem{Molecular mechanisms with software suite MOE and AMBER}
-\cvlistitem{Molecular viewing and scripting, PyMOL, Chimera, and RasMol}
-\cvlistitem{Bioinformatics resources and tools}
-\cvline{Dry-Lab}{Proteomics}
+\cvlistitem{GUI and Web development with Python}
+\cvlistitem{Big data analytics with Python}
 \cvlistitem{Protein structure prediction}
-\cvlistitem{Molecular mechanisms with software suite MOE and AMBER}
 \cvlistitem{Post-translational modifications}
 \cvlistitem{Similarity search and alignments}
 \cvlistitem{Phylogeny and evolution}
 
-
-\cvline{Wet-Lab}{Influenza and human immunodeficiency virus (HIV) applications}
+\cvline{Wet-Lab}{Protein production and analysis}
 \cvlistitem{HIV neutralization assays}
 \cvlistitem{Virus-like particles and pseudovirion production}
-\cvlistitem{Viral isolation and purification}
-
-\cvline{Wet-Lab}{Protein expression and purification}
-\cvlistitem{Novel cloning strategies}
-\cvlistitem{Novel pufication strategies}
-\cvlistitem{Cell culture and maintenance}
-
-\cvline{Wet-Lab}{Biophysical characterization}
-\cvlistitem{Biolayer interferometry}
-\cvlistitem{ELISA}
-\cvlistitem{Isothermal titration calorimetry}
+\cvlistitem{Mammalian library display and preparation}
+\cvlistitem{Cell sorting}
+\cvlistitem{Biopysical characterization of protein-protein interactions - ELISA, SPR, and Octet}
+\cvlistitem{Amplicon library preparation for High-throughput sequencing}
 
 
 %Research Experience
@@ -143,6 +122,7 @@
 
 \section{Honors and Awards}
 \cvline{}{\textbf{Research and Scholarly Awards}}
+\cvline{2014-}{Ragon Institute Fellow}
 \cvline{2007-2008}{NIH 5 T23 AI060571 HIV/AIDS Research Training Program}
 \cvline{2010-2011}{Steven's Research Scholarship,  University of  Missouri}
 \cvline{2007-2008}{Mary Marie Smith Chemistry Scholarship, Northwest Missouri State University}
@@ -155,21 +135,20 @@
 \cvline{2012}{Chemical and Physical Biology Travel Award}
 \cvline{2011}{IBC Antibody Engineering Symposium Scholarship}
 
-\section{Recent Assigned Trainees}
-\cvline{2013}{Alex Sevy \newline Graduate student - Crowe laboratory}
-\cvline{2013}{Albert Cisneros \newline Graduate student - Crowe laboratory}
-\cvline{2012}{Martha Wall \newline Graduate student - Young laboratory}
-\cvline{2012}{Katherine Bradley \newline MPH student - University of California Berkeley}
-\cvline{2011}{Jessica Finn \newline Graduate student - Crowe laboratory}
-\cvline{2011}{Mason Sanders \newline Summer undergraduate research intern}
-\cvline{2010}{Katherine Nichols \newline Graduate student - Kalams laboratory}
-
+%\section{Recent Assigned Trainees}
+%\cvline{2013}{Alex Sevy \newline Graduate student - Crowe laboratory}
+%\cvline{2013}{Albert Cisneros \newline Graduate student - Crowe laboratory}
+%\cvline{2012}{Martha Wall \newline Graduate student - Young laboratory}
+%\cvline{2012}{Katherine Bradley \newline MPH student - University of California Berkeley}
+%\cvline{2011}{Jessica Finn \newline Graduate student - Crowe laboratory}
+%\cvline{2011}{Mason Sanders \newline Summer undergraduate research intern}
+%\cvline{2010}{Katherine Nichols \newline Graduate student - Kalams laboratory}
 
 %Memberships
-\section{Memberships}
-\cvitem{2004-2008}{American Society of Collegiate Scholars}
-\cvitem{2006-2010}{American Chemical Society}
-\cvitem{2008}{Tri-Beta biology honor society}
+%\section{Memberships}
+%\cvitem{2004-2008}{American Society of Collegiate Scholars}
+%\cvitem{2006-2010}{American Chemical Society}
+%\cvitem{2008}{Tri-Beta biology honor society}
 
 %Abstracts
 \section{Abstracts and Presentations}
