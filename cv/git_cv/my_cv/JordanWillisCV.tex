@@ -1,31 +1,34 @@
 \documentclass[10pt,a4paper]{moderncv}
+
+
 \renewcommand*{\listitemsymbol}{\hspace{1em}\labelitemi~}
 \moderncvtheme[blue]{casual}                % idem
+
+
 \usepackage{enumitem}
 \usepackage[T1]{fontenc}
+
 % character encoding
 \usepackage[utf8x]{inputenc}                   % replace by the encoding you are using
 \usepackage[italian]{babel}
 \usepackage[normalem]{ulem}
+
 % adjust the page margins
 \usepackage[scale=0.85]{geometry}
 \recomputelengths                             % required when changes are made to page layout lengths
-
 \fancyfoot{} % clear all footer fields
-\fancyfoot[LE,RO]{\thepage}           % page number in "outer" position of footer line
-\fancyfoot[RE,LO]{\footnotesize } % other info in "inner" position of footer line
+\fancyfoot[L,RO]{\thepage}           % page number in "outer" position of footer line
+\fancyfoot[R,LO]{\footnotesize } % other info in "inner" position of footer line
 
-%Funtion that writes REferences
-\newcommand{\cvreference}[8]{%
+%Funtion that writes References
+\newcommand{\cvreference}[6]{%
 \cvline{}{%
     \textbf{#1}\newline% Name
     \ifthenelse{\equal{#2}{}}{}{\addresssymbol~#2\newline}%
     \ifthenelse{\equal{#3}{}}{}{#3\newline}%
     \ifthenelse{\equal{#4}{}}{}{#4\newline}%
-    \ifthenelse{\equal{#5}{}}{}{#5\newline}%
-    \ifthenelse{\equal{#6}{}}{}{#6\newline}%
-    \ifthenelse{\equal{#7}{}}{}{\phonesymbol~#7}\newline%
-    \ifthenelse{\equal{#8}{}}{}{\emailsymbol~\texttt{#8}}}}
+    \ifthenelse{\equal{#5}{}}{}{\phonesymbol~#5}\newline%
+    \ifthenelse{\equal{#6}{}}{}{\emailsymbol~\texttt{#6}}}}
 
 
 % Goes to Footer and Header
@@ -35,159 +38,47 @@
 \address{4586 32\textsuperscript{nd} St.}{San Diego, California 92116}    
 \mobile{+1 816 674 5340}                    
 \email{jwillis0720@gmail.com}  
-\homepage{www.schieflab.com}
+%\homepage{www.schieflab.com}
 
 %Photo goes to top
 \photo[50pt]{mypicture.jpg}   
 
-%            content
 %----------------------------------------------------------------------------------
 \begin{document}
 \maketitle
 
-%Section
-\section{Info}
-\cvcomputer{Born}{\small July 20\textsuperscript{th}, 1985  Norfolk VA (USA)\normalsize}{Citizenship}{\small USA\normalsize}
-\cvcomputer{Address}{ 4586 32\textsuperscript{nd} St. \\ San Diego CA 92116}{Email}{jwillis0720@gmail.com \\ jwillis@scripps.edu}
-\cvcomputer{LinkedIn}{\small \url{www.linkedin.com/in/jwillis0720}}{}{}{}
-%\cvcomputer{Blog}{\small \url{http://ntrpivan.blogspot.com}\normalsize}{Skype}{\small ivan.ntrp}
+%Section - Info
+\input{jordan/info.tex}
 
-%Section
-\section{Profile}
-\cvline{Objective}{Computational and molecular biologist working in the area of human antibodies and immunogens}
-\cvlistitem{11 years experience with molecular biology}
-\cvlistitem{8 years experience with molecular modeling}
-\cvlistitem{8 years experience with computation and big data }
-\cvlistitem{7 years experience with cell culture and protein production}
-\cvlistitem{7 years experience with high-throughput sequencing and analysis}
+%Section - Profile
+\input{jordan/profile.tex}
 
-%education
-\section{Education}
-\cventry{2008-2014}{Ph.D. Chemical and Physical Biology}{Vanderbilt University Medical Center}{Nashville}{TN}{Rational Antibody Design: From Mechanisms of Specificity, to Novel Vaccine Strategies \newline Advisors: James E. Crowe, Jr., M.D., Jens Meiler, Ph.D.}
-\vspace{2mm}
-\cventry{2004-2008}{B.S. Chemistry}{Northwest Missouri State University}{Maryville}{MO}{\textit{GPA} 3.9/4.0}
-\cventry{2004-2008}{B.A. Molecular Biology}{Northwest Missouri State University}{Maryville}{MO}{\textit{GPA} 3.9/4.0}
+%Section - Education
+\input{jordan/education.tex}
 
-%Section
-\section{Specialized Computational Skills}
-\cvline{Languages}{\small PYTHON, Java, C++, SQL, \LaTeX, BASH, HTML, Javascript}
-\cvline{Database}{Spark, Hadoop, MySQL, MongoDB, SQLite}
-\cvline{Tools}{VIM, Jupyter Notebook, Git, Illustrator, Geneious, Microsoft Office, oh-my-zsh}
+%Section - Skills
+\input{jordan/skills}
 
-%Section
-\section{Specialized Experimental Skills}
-\cvline{xry-Lab}{Molecular modeling and Big Data Analysis}
-\cvlistitem{Development and application of the software suite Rosetta}
-\cvlistitem{GUI and Web development with Python}
-\cvlistitem{Big data analytics with Python}
-\cvlistitem{Protein structure prediction}
-\cvlistitem{Post-translational modifications}
-\cvlistitem{Similarity search and alignments}
-\cvlistitem{Phylogeny and evolution}
-\cvlistitem{Supercomputer cluster designer and administrator}
+%Section - Research Experience
+\input{jordan/researchexperience}
 
-\cvline{Wet-Lab}{Protein production and analysis}
-\cvlistitem{HIV neutralization assays}
-\cvlistitem{Virus-like particles and pseudovirion production}
-\cvlistitem{Mammalian library display and preparation}
-\cvlistitem{Cell sorting}
-\cvlistitem{Biopysical characterization of protein-protein interactions - ELISA, SPR, and Octet}
-\cvlistitem{Amplicon library preparation for High-throughput sequencing}
+%Section - Honors and Awards
+\input{jordan/honors}
+
+%Section - Traineeds
+%\input{jordan/trainees}
+
+%Section - Memberships
+%\input{jordan/membership}
+
+%Section - Abstracts
+\input{jordan/abstracts}
+
+%Section - Research Publications
+\input{jordan/publications}
+
+%Section - References
+\input{jordan/references}
 
 
-%Research Experience
-\section{Research Experience}
-\cventry{2014-}{Research Associate}{The Scripps Research Institute}{La Jolla}{CA}{My research focuses on fusing computation modeling, high-throughput sequencing, and library display technologies in order to design immunogen to drive a protetive response against HIV. These immunogens work by priming very rare B cells that have antibodies which contain a long anionic HCDR3. I have used bioinformatic analysis to recognize patterns in long HCDR3s that may be potentially targetbale by a tailored immunogen.}
-\cventry{2009-2014}{Graduate Research Assistant}{Vanderbilt University Medical Center}{Nashville}{TN}{My thesis involves using computational design to answer specific questions in viral HIV immunology, with a focus on antibody design. The computational work was accomplished in the Meiler laboratory while the experimental laboratory work was conducted in the Crowe laboratory. My thesis work can be divided into four parts:%
-\begin{enumerate}[itemsep=1mm,topsep=1mm,leftmargin=.25in,parsep=1mm]
-\item Multi-state antibody design to interrogate mechanisms for antibody polyspecificity. How do antibodies use a limited sequence repertoire to bind many antigens?
-\item Molecular mechanisms of CD4-binding site escape for HIV-1 gp120. How does gp120 escape neutralization by two CD4-binding site-specific, broadly neutralizing antibodies, VRC01 and b12? We used computational characterization, homology modeling, and biophysical characterization to test our hypothesis.
-\item Determine how closely antibody sequences from HIV-na\"{i}ve individuals are to broadly neutralizing antibodies against HIV. Using computational modeling, high-throughput sequencing, and bioinformatics tools, I designed antibodies from HIV-na\"{i}ve donor sequence pools that mimic broadly neutralizing antibodies with exceptionally long HCDR3s.
-\item Computational design of antibodies with increased neutralization breadth against diverse natural variants of the influenza hemagglutinin stem.
-\end{enumerate}}
-\vspace{1mm}
-\cventry{2007-2008}{Undergraduate Research Fellow}{University of Missouri, Department of Chemistry}{Columbia}{MO}{Lead optimization drug discovery of hypoxic-cell targeting molecules that treat tumors. Using the pharmacaphore Tirapazamine as a scaffold, I used combinatorial synthesis techniques to add organic groups and evaluate structural activity relationships.} 
-%Teaching Experience
-\section{Teaching Experience}
-\cventry{2012}{Instructor - Rosetta teaching worksop}{Vanderbilt University}{Nashville}{TN}{Developed protocol, taught background and gave hands-on demonstration for design for Rosetta teaching workshop 2012}
-\cventry{2011}{Instructor - Rosetta teaching worksop}{Vanderbilt University}{Nashville}{TN}{Developed protocol, taught background and gave hands-on demonstration for protein docking for Rosetta teaching workshop 2011}
-\cventry{2007-2008}{Laboratory teaching assistant}{Northwest Missouri State University}{Maryville}{MO}{General Chemistry 1 and 2}
-\cventry{2005-2007}{Tutor - Talent Development Center}{Northwest Missouri State University}{Maryville}{MO}{Tutored in the following subjects: Physics I and II, general chemistry, organic chemistry, analytical chemistry, physical chemistry, statistics, algebra, and calculus.}
-
-\section{Honors and Awards}
-\cvline{}{\textbf{Research and Scholarly Awards}}
-\cvline{2014-}{Ragon Institute Fellow}
-\cvline{2007-2008}{NIH 5 T23 AI060571 HIV/AIDS Research Training Program}
-\cvline{2010-2011}{Steven's Research Scholarship,  University of  Missouri}
-\cvline{2007-2008}{Mary Marie Smith Chemistry Scholarship, Northwest Missouri State University}
-\cvline{2006-2007}{J. Gordon Strong Chemistry Scholarship, Northwest Missouri State University}
-\cvline{2004-2008}{Tower Scholar, Northwest Missouri State University}
-
-\vspace{2mm}
-\cvline{}{\textbf{Travel Awards}}
-\cvline{2012}{Keystone HIV Vaccine Symposium Scholarship}
-\cvline{2012}{Chemical and Physical Biology Travel Award}
-\cvline{2011}{IBC Antibody Engineering Symposium Scholarship}
-
-%\section{Recent Assigned Trainees}
-%\cvline{2013}{Alex Sevy \newline Graduate student - Crowe laboratory}
-%\cvline{2013}{Albert Cisneros \newline Graduate student - Crowe laboratory}
-%\cvline{2012}{Martha Wall \newline Graduate student - Young laboratory}
-%\cvline{2012}{Katherine Bradley \newline MPH student - University of California Berkeley}
-%\cvline{2011}{Jessica Finn \newline Graduate student - Crowe laboratory}
-%\cvline{2011}{Mason Sanders \newline Summer undergraduate research intern}
-%\cvline{2010}{Katherine Nichols \newline Graduate student - Kalams laboratory}
-
-%Memberships
-%\section{Memberships}
-%\cvitem{2004-2008}{American Society of Collegiate Scholars}
-%\cvitem{2006-2010}{American Chemical Society}
-%\cvitem{2008}{Tri-Beta biology honor society}
-
-%Abstracts
-\section{Abstracts and Presentations}
-\cvitem{2013}{\uline{\textbf{Willis JR}}, Crowe JE, Meiler J. Broadly neutralizing antibodies to HIV in HIV-na\"{i}ve donor populations. The broadly neutralizing antibody problem. Chemical and Physical Biology Symposium, Vanderbilt University}
-\cvitem{2013}{\uline{Finn JA}, Nannemann, DP, \textbf{Willis JR}, Crowe JE, Meiler J. \textit{De novo} modeling of antibody CDRH3 loops with constraints. RosettaCon}
-\cvitem{2012}{\uline{\textbf{Willis JR}}, Briney BS, Meiler J, Crowe JE. Potential paradigm shifts in HIV vaccine design using ultra high-throughput sequencing and antibody modeling. Chemical and Physical Biology Symposium}
-\cvitem{2012}{\uline{Briney BS}, \textbf{Willis JR}, Crowe JE. Somatic hypermutation-associated insertions and deletions reveal regions of antibody structural plasticity. Keystone symposium on HIV Vaccines}
-\cvitem{2012}{\uline{Finn JA}, \textbf{Willis JR}, Briney, BS, Crowe JE, Meiler J. Structural prediction of long complementarity determining region 3 loops. RosettaCon}
-\cvitem{2012}{\uline{\textbf{Willis JR}}, Briney BS, Meiler J, Crowe JE. Structure analysis of healthy donor repertoire confers sequences that match long complementarity determining regions of broadly neutralizing antibodies. Keystone Symposium on HIV Vaccines}
-\cvitem{2011}{\uline{Briney BS}, \textbf{Willis JR}, Crowe JE. Genetic and functional analysis of the human anti-HIV antibody repertoire. Keystone Symposium on HIV Vaccines}
-\cvitem{2011}{\uline{\textbf{Willis JR}}, Crowe, JE, Meiler J. Multi-state design of antibody-antigen interactions confers conformational flexibility. RosettaCon}
-\cvitem{2011}{\uline{Briney BS}, \textbf{Willis JR}, Crowe JE. Genetic origin of long HCDR3s in the circulating antibody repertoire. IBC Life Sciences - Antibody Engineering \& Therapeutics}
-\cvitem{2011}{\uline{\textbf{Willis JR}}, Crowe, JE, Meiler J. Structural basis for development of broadly neutralizing antibodies to HIV using computational predictions. Chemical and Physical Biology Symposium.}
-\cvitem{2011}{\uline{\textbf{Willis JR}}, Briney, BS, Crowe, JE, Meiler J. Antibody design infers optimal sequences for binding breadth and affinity maturation. IBC Life Sciences - Antibody Engineering \& Therapeutics}
-\cvitem{2010}{\uline{\textbf{Willis JR}}, Crowe, JE, Meiler J. Constrained design of broadly neutralizing HIV antibody-antigen interactions. RosettaCon}
-\cvitem{2009}{\uline{\textbf{Willis JR}}, Meiler, J, Crowe JE. HIV gp160 targeted broadly neutralizing antibodies - modeling and design. RosettaCon}
-
-%Research Publications
-\section{Research Publications}
-\cvitem{2017}{Kulp DW, Steichen JM, Pauthner M, Hu X, Schiffner T, Liguori A, Cottrell CA, Havenar-Daughton C, Ozorowski G, Georgeson E, Kalyuzhniy O, \textbf{Willis JR}, Kubitz M, Adachi Y, Reiss SM, Shin M, de Val N, Ward AB, Crotty S, Burton DR, Schief WR, Structure-based design of native-like HIV-1 envelope trimers to silence non-neutralizing epitopes and eliminate CD4 binding. \textit{Nat Commun} \textbf{8}: 1655}
-\cvitem{2017}{Sarkar U, Hillebrand R, Johnson KM, Cummings AH, Phung NL, Rajapakse A, Zhou H, \textbf{Willis JR}, Barnes CL, Gates KS, Application of Suzuki-Miyaura and Buchwald-Hartwig Cross-coupling Reactions to the Preparation of Substituted 1,2,4-Benzotriazine 1-Oxides Related to the Antitumor Agent Tirapazamine. \textit{J Heterocycl Chem} \textbf{54}: 155-160}
-\cvitem{2016}{Hicar MD, Chen X, Sulli C, Barnes T, Goodman J, Sojar H, Briney B, \textbf{Willis J}, Chukwuma VU, Kalams SA, Doranz BJ, Spearman P, Crowe JE Jr, Human Antibodies that Recognize Novel Immunodominant Quaternary Epitopes on the HIV-1 Env Protein. \textit{PLoS One} \textbf{11}: e0158861}
-\cvitem{2016}{Boehme KW, Ikizler M, Iskarpatyoti JA, Wetzel JD, \textbf{Willis J}, Crowe JE Jr, LaBranche CC, Montefiori DC, Wilson GJ, Dermody TS, Engineering Recombinant Reoviruses To Display gp41 Membrane-Proximal External-Region Epitopes from HIV-1. \textit{mSphere} \textbf{1}: None}
-\cvitem{2016}{Finn JA, Koehler Leman J, \textbf{Willis JR}, Cisneros A 3rd, Crowe JE Jr, Meiler J, Improving Loop Modeling of the Antibody Complementarity-Determining Region 3 Using Knowledge-Based Restraints. \textit{PLoS One} \textbf{11}: e0154811}
-\cvitem{2016}{\textbf{Willis JR}, Finn JA, Briney B, Sapparapu G, Singh V, King H, LaBranche CC, Montefiori DC, Meiler J, Crowe JE Jr, Long antibody HCDR3s from HIV-naive donors presented on a PG9 neutralizing antibody background mediate HIV neutralization. \textit{Proc Natl Acad Sci U S A} \textbf{113}: 4446-51}
-\cvitem{2015}{\textbf{Willis JR}, Sapparapu G, Murrell S, Julien JP, Singh V, King HG, Xia Y, Pickens JA, LaBranche CC, Slaughter JC, Montefiori DC, Wilson IA, Meiler J, Crowe JE Jr, Redesigned HIV antibodies exhibit enhanced neutralizing potency and breadth. \textit{J Clin Invest} \textbf{125}: 2523-31}
-\cvitem{2013}{Combs SA, Deluca SL, Deluca SH, Lemmon GH, Nannemann DP, Nguyen ED, \textbf{Willis JR}, Sheehan JH, Meiler J, Small-molecule ligand docking into comparative models with Rosetta. \textit{Nat Protoc} \textbf{8}: 1277-98}
-\cvitem{2013}{\textbf{Willis JR}, Briney BS, DeLuca SL, Crowe JE Jr, Meiler J, Human germline antibody gene segments encode polyspecific antibodies. \textit{PLoS Comput Biol} \textbf{9}: e1003045}
-\cvitem{2012}{Briney BS, \textbf{Willis JR}, Hicar MD, Thomas JW 2nd, Crowe JE Jr, Frequency and genetic characterization of V(DD)J recombinants in the human peripheral blood antibody repertoire. \textit{Immunology} \textbf{137}: 56-64}
-\cvitem{2012}{Briney BS, \textbf{Willis JR}, Crowe JE Jr, Human peripheral blood antibodies with long HCDR3s are established primarily at original recombination using a limited subset of germline genes. \textit{PLoS One} \textbf{7}: e36750}
-\cvitem{2011}{Joyner AS, \textbf{Willis JR}, Crowe JE Jr, Aiken C, Maturation-induced cloaking of neutralization epitopes on HIV-1 particles. \textit{PLoS Pathog} \textbf{7}: e1002234}
-\vspace{0.2cm}
-\cvitem{In Progress}{\textbf{Willis JR}, Briney, BS, Schief WR, Precursor frequency focused immunogen design for V1V2-apex bNAbs}
-
-%References
-\section{References}
-\cvreference{William R. Schie}{Professor of Immunology and Microbiology}{}{The Scripps Research Institute}{Immunoglogy Building}{10550 North Torrey Pines Road, La Jolla, CA 92037}{858-784-7725}{schief@scripps.edu}
-\vspace{0.2cm}
-\cvreference{James E. Crowe Jr., M.D.}{Ann Scott Carell Chair Professor Pediatrics and Microbiology and Immunology}{Director Vanderbilt Vaccine Center}{Vanderbilt University Medical Center}{2213 Garland Ave.}{11475 MRB IV Nashville, TN 37232-0417}{615-343-8064}{James.Crowe@Vanderbilt.Edu}
-\vspace{0.2cm}
-\cvreference{Jens Meiler, Ph.D.}{Associate Professor Chemistry, Pharmacology and Bioinformatics}{Center for Structural Biology}{Vanderbilt University}{465 21st Ave South}{BIOSCI/MRBIII, Room 5144B, Nashville, TN 37232-0417}{615 -936-5332}{Jens.Meiler@Vanderbilt.Edu}
-\vspace{0.2cm}
-\cvreference{Benjamin  Spiller, Ph.D.}{Assistant Professor Pharmacology, Pathology, Microbiology and Immunology}{Vanderbilt University Medical Center}{1161 21st Ave A-4116 \newline Medical Center North}{Nashville, TN 37232-0417}{}{615-322-6766}{Benjamin.Spiller@Vanderbilt.Edu}
-\vspace{0.2cm}
-\cvreference{Kent S. Gates, Ph.D.}{Herman G. Schlundt Distinguished Professor of Chemistry}{University of Missouri}{325.1 Chemistry}{601 S. College Avenue}{Columbia, MO 65211-7600}{573-882-8374}{GatesK@Missouri.Edu}
-\vspace{0.2cm}
-\cvreference{Gopal Sapparapu, Ph.D., MBBS}{Research Assistant Professor}{Vanderbilt Vaccine Center, Molecular Biology Core}{Vanderbilt University Medical Center}{2213 Garland Ave.}{11475 MRB IV Nashville, TN 37232-0417}{615-343-2862}{GopalSapparapu@VVCenter.org}
 \end{document}
