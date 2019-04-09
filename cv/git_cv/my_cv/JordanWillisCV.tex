@@ -35,13 +35,16 @@
 \firstname{Jordan}
 \familyname{R. Willis}
 \title{Ph.D.} 
-\address{4586 32\textsuperscript{nd} St.}{San Diego, California 92116}    
+\address{1950 Elkhorn Ct.}{San Mateo CA, 94037}    
 \mobile{+1 816 674 5340}                    
-\email{jwillis0720@gmail.com}  
+\email{jwillis0720@gmail.com}
+\social[github]{jwillis0720}
+\social[linkedin]{jwillis0720}
 %\homepage{www.schieflab.com}
 
 %Photo goes to top
-\photo[50pt]{mypicture.jpg}   
+%\RenewDocumentCommand{\photo}{O{\hintscolumnwidth-0.8pt-2\fboxsep}O{0.4pt}m}{\def\@photowidth{#1}\def\@photoframewidth{#2}\def\@photo{#3}}%
+\photo[100pt]{mypicture.jpg}   
 
 %----------------------------------------------------------------------------------
 \begin{document}
@@ -53,14 +56,15 @@
 %Section - Profile
 \input{jordan/profile.tex}
 
+%Section - Research Experience
+\input{jordan/researchexperience}
+
 %Section - Education
 \input{jordan/education.tex}
 
 %Section - Skills
 \input{jordan/skills}
 
-%Section - Research Experience
-\input{jordan/researchexperience}
 
 %Section - Honors and Awards
 \input{jordan/honors}
@@ -72,7 +76,7 @@
 %\input{jordan/membership}
 
 %Section - Abstracts
-\input{jordan/abstracts}
+%\input{jordan/abstracts}
 
 %Section - Research Publications
 \input{jordan/publications}
