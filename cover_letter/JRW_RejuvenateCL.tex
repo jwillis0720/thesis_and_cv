@@ -1,0 +1,86 @@
+%% start of file `template.tex'.
+%% Copyright 2006-2013 Xavier Danaux (xdanaux@gmail.com).
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License version 1.3c,
+% available at http://www.latex-project.org/lppl/.
+
+
+\documentclass[11pt,a4paper,sans]{moderncv}        % possible options include font size ('10pt', '11pt' and '12pt'), paper size ('a4paper', 'letterpaper', 'a5paper', 'legalpaper', 'executivepaper' and 'landscape') and font family ('sans' and 'roman')
+
+% moderncv themes
+\moderncvstyle{casual}                             % style options are 'casual' (default), 'classic', 'oldstyle' and 'banking'
+\moderncvcolor{blue}                               % color options 'blue' (default), 'orange', 'green', 'red', 'purple', 'grey' and 'black'
+%\renewcommand{\familydefault}{\sfdefault}         % to set the default font; use '\sfdefault' for the default sans serif font, '\rmdefault' for the default roman one, or any tex font name
+%\nopagenumbers{}                                  % uncomment to suppress automatic page numbering for CVs longer than one page
+
+% character encoding
+\usepackage[utf8]{inputenc}                       % if you are not using xelatex ou lualatex, replace by the encoding you are using
+%\usepackage{CJKutf8}                              % if you need to use CJK to typeset your resume in Chinese, Japanese or Korean
+
+% adjust the page margins
+\usepackage[scale=0.75]{geometry}
+%\setlength{\hintscolumnwidth}{3cm}                % if you want to change the width of the column with the dates
+%\setlength{\makecvtitlenamewidth}{10cm}           % for the 'classic' style, if you want to force the width allocated to your name and avoid line breaks. be careful though, the length is normally calculated to avoid any overlap with your personal info; use this at your own typographical risks...
+
+% personal data
+\name{Jordan}{Willis, PhD}
+\title{}                               % optional, remove / comment the line if not wanted
+\address{1950 Elkhorn Ct}{San Mateo CA 94403}{USA}% optional, remove / comment the line if not wanted; the "postcode city" and and "country" arguments can be omitted or provided empty
+\phone[mobile]{+1~(816)~674~5340}                   % optional, remove / comment the line if not wanted
+\email{jwillis0720@gmail.com}                               % optional, remove / comment the line if not wanted
+\homepage{www.linkedin.com/in/jwillis0720/}                         % optional, remove / comment the line if not wanted
+
+% to show numerical labels in the bibliography (default is to show no labels); only useful if you make citations in your resume
+%\makeatletter
+%\renewcommand*{\bibliographyitemlabel}{\@biblabel{\arabic{enumiv}}}
+%\makeatother
+%\renewcommand*{\bibliographyitemlabel}{[\arabic{enumiv}]}% CONSIDER REPLACING THE ABOVE BY THIS
+
+% bibliography with mutiple entries
+%\usepackage{multibib}
+%\newcites{book,misc}{{Books},{Others}}
+%----------------------------------------------------------------------------------
+%            content
+%----------------------------------------------------------------------------------
+\begin{document}
+%-----       letter       ---------------------------------------------------------
+% recipient data
+\recipient{Rejuvenate Bio Recruitement}{Rejuvenate Bio\\San Diego CA}
+\date{April 10, 2019}
+\opening{Dear Hiring Manager}
+\closing{Sincerely}
+\enclosure[Enclosed]{JRW curriculum vit\ae{}}          % use an optional argument to use a string other than "Enclosure", or redefine \enclname
+\makelettertitle
+
+
+Considering my background as a protein engineer, I’m excited to be applying for the
+Scientist position at Rejuvenate Bio. 
+For the past 14 years I have developed diverse skillset that remarkably intersects with the qualifications you seek. Given the opportunity, 
+I'm eager to apply my talents at the ground floor of research at Rejuventae Bio.
+
+\vspace{0.1in}
+While working on my doctoral thesis in the field of antibody design, my research project involved one of the first applications of next-generation 
+sequencing to characterizing B cell repertoires.
+I also joined the Rosetta Commons as a developer and pioneered antibody redesign algorithms which incorporated NGS datasets. I was also in a unique dual 
+mentor program spending half my time in the wet-lab carrying out the experimentation necessary to validate my computational work. This gave me an advantage 
+of learning both the computational and experimental sides of protein engineering.
+
+\vspace{0.1in}
+My post doctoral work in the laboratory of William Schief expanded my skillset by adding display technology and library design. I used Rosetta to inform 
+mammalian and yeast 
+display and was able to engineer the first vaccine able to selectively target rare B cells. For the past seven months I have transitioned to industry as a 
+Senior Scientist in Protein Engineering. In my short time, I have developed new algorithms to design novel peptides to shape phage display libraries.
+
+\vspace{0.1in}
+I’m looking forward to learning more details about the Scientist position at Rejuvenate Bio. I'm very committed individual and have a tremendous amount
+ to offer a company in Rejuvenate's position.
+Feel free to contact my by email or phone attached at the bottom of this letter. I will also be in San Diego from April 17-25th.
+
+
+\makeletterclosing
+
+\end{document}
+
+
+%% end of file `template.tex'.
