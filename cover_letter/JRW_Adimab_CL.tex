@@ -1,0 +1,82 @@
+%% start of file `template.tex'.
+%% Copyright 2006-2013 Xavier Danaux (xdanaux@gmail.com).
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License version 1.3c,
+% available at http://www.latex-project.org/lppl/.
+
+
+\documentclass[11pt,a4paper,sans]{moderncv}        % possible options include font size ('10pt', '11pt' and '12pt'), paper size ('a4paper', 'letterpaper', 'a5paper', 'legalpaper', 'executivepaper' and 'landscape') and font family ('sans' and 'roman')
+
+% moderncv themes
+\moderncvstyle{casual}                             % style options are 'casual' (default), 'classic', 'oldstyle' and 'banking'
+\moderncvcolor{blue}                               % color options 'blue' (default), 'orange', 'green', 'red', 'purple', 'grey' and 'black'
+%\renewcommand{\familydefault}{\sfdefault}         % to set the default font; use '\sfdefault' for the default sans serif font, '\rmdefault' for the default roman one, or any tex font name
+%\nopagenumbers{}                                  % uncomment to suppress automatic page numbering for CVs longer than one page
+
+% character encoding
+\usepackage[utf8]{inputenc}       
+\usepackage[document]{ragged2e}                % if you are not using xelatex ou lualatex, replace by the encoding you are using
+%\usepackage{CJKutf8}                              % if you need to use CJK to typeset your resume in Chinese, Japanese or Korean
+
+% adjust the page margins
+\usepackage[scale=0.85]{geometry}
+%\setlength{\hintscolumnwidth}{3cm}                % if you want to change the width of the column with the dates
+%\setlength{\makecvtitlenamewidth}{10cm}           % for the 'classic' style, if you want to force the width allocated to your name and avoid line breaks. be careful though, the length is normally calculated to avoid any overlap with your personal info; use this at your own typographical risks...
+
+\newcommand{\Position}{Scientist, Antibody Engineering }
+\newcommand{\Company}{Adimab}
+\newcommand{\CompanyLoc}{Lebanon}
+\newcommand{\CompanyState}{NH}
+\newcommand{\Personal}{I am very familiar with the work of Adimab as they are the premeire antibody development company. I have many years of expereince in engineering antibodies and researching how they develop. I can bring a unique engienering skillset leveraging the power of computers to assist in the design process.} 
+\newcommand{\skills}{antibody discovery, familiarity with display systems and computational proficiency}
+
+% personal data
+\name{Jordan}{Willis, PhD}
+\title{}                               % optional, remove / comment the line if not wanted
+\address{}{San Diego/Kansas City}{USA}% optional, remove / comment the line if not wanted; the "postcode city" and and "country" arguments can be omitted or provided empty
+\phone[mobile]{+1~(816)~674~5340}                   % optional, remove / comment the line if not wanted
+\email{jwillis0720@gmail.com}                               % optional, remove / comment the line if not wanted
+\homepage{www.jordanrwillis.com}                         % optional, remove / comment the line if not wanted
+
+% to show numerical labels in the bibliography (default is to show no labels); only useful if you make citations in your resume
+%\makeatletter
+%\renewcommand*{\bibliographyitemlabel}{\@biblabel{\arabic{enumiv}}}
+%\makeatother
+%\renewcommand*{\bibliographyitemlabel}{[\arabic{enumiv}]}% CONSIDER REPLACING THE ABOVE BY THIS
+
+% bibliography with mutiple entries
+%\usepackage{multibib}
+%\newcites{book,misc}{{Books},{Others}}
+%----------------------------------------------------------------------------------
+%            content
+%----------------------------------------------------------------------------------
+\begin{document}
+%-----       letter       ---------------------------------------------------------
+% recipient data
+\recipient{\Company Team}{\CompanyLoc \\ \CompanyLoc, \CompanyState}
+\date{2020}
+\opening{Dear \Company Team,}
+\closing{Sincerely}
+%\enclosure[Attached]{JRW curriculum vit\ae{}}          % use an optional argument to use a string other than "Enclosure", or redefine \enclname
+\makelettertitle
+\justify
+I'm very excited to be applying to the position of \Position at \Company. \Personal
+
+Considering my background as a biologist in the fields of bioinformatics, deep learning and antibody engineering, I have much to offer a company like \Company.
+For the past 14 years I have developed diverse skillset that remarkably intersects with the qualifications you seek. In reviewing skills that are important for this position, I have a mastery or proficiency in all the required skills (\skills), as well as experience in working in a team of researchers.
+
+While working on my doctoral thesis in computational biology, my research project involved one of the first applications of next-generation sequencing to characterizing B cell repertoires. 
+I also joined the Rosetta Commons as a developer and pioneered antibody design algorithms which incorporated next-generation sequencing datasets. My research influenced the nexus of applied molecular modeling for antibodies as it's now a common part of most antibody development pipelines. I was also in a unique dual mentor program spending half my time in the wet-lab carrying out the experimentation necessary to validate my computational work. This gave me an advantage of learning both the computational and experimental sides of protein engineering and bioinformatics.
+
+My post doctoral work at the Scripps Research Institute expanded my skillset by adding display technology and library design. I used Rosetta to inform mammalian and yeast  display and was able to engineer the first vaccine able to selectively induce rare antibodies with long HCDR3 sequences.  In addition I developed, curated, and analyzed the largest antibody repertoire datasets to date with over 1 billion unique, searchable sequences.
+
+For the past year, I have transitioned to industry as a Senior and Principal Scientist in Computational and Protein Engineering. I have developed new algorithms to design novel peptides to shape phage display libraries to pulldown rare therapeutic antibodies. I also started integrating molecular modeling, protein dynamics and deep learning algorithms to design new functional protein topologies. Recently, I was recruited for a Principal Scientist of protein engineering to develop immunologically silent AAV capsids. I have also been independently developing deep learning algorithms to annotate NGS sequences for B cells as the current method is clunky and computationally intensive.
+
+I'm looking forward to learning more details about the \Position at \Company. I'm very committed individual and have a tremendous amount to offer a company like \Company. I'm extremely hard working and motivated. I'm always eager to learn the latest technology to solve any given scientific problem. Feel free to contact me by email or phone attached at the bottom of this letter to schedule a presentation for me to review my skillset. I look forward to working for a company I believe in. 
+
+\makeletterclosing
+\end{document}
+
+
+%% end of file `template.tex'.
